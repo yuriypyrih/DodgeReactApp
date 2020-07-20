@@ -1,7 +1,7 @@
 import { ENTITY_ID } from "./../enum/entitiy_id";
 import { COLOR } from "./../enum/colors";
 import Trail from "./trail";
-import Animation from "./animation";
+//import Animation from "./animation";
 export default class Player {
 
     constructor(game) {
@@ -100,14 +100,14 @@ export default class Player {
 
                 // You're immune to dmg when healed
                 if (object.id === ENTITY_ID.HEALTH_PACK) {
-                    Animation.pulseAqua();
+                    //Animation.pulseAqua();
                     this.game.gameObjects.splice(this.game.gameObjects.indexOf(object), 1);
                     this.health += 30;
                     this.recently_damaged = 0;
                 }
 
                 if (object.id === ENTITY_ID.STAR) {
-                    Animation.pulseGold();
+                    //Animation.pulseGold();
                     this.game.gameObjects.splice(this.game.gameObjects.indexOf(object), 1);
                     this.stars++;
                     this.milestone = true;
@@ -119,7 +119,7 @@ export default class Player {
                     // Take the damage only after the end of Immunity has expired
                     // And reset the recently_damaged
                     if (this.recently_damaged > this.IMMUNITY_IN_MILISEC) {
-                        Animation.pulseRed();
+                        //Animation.pulseRed();
                         this.health -= 25;
                         this.recently_damaged = 0;
                     }

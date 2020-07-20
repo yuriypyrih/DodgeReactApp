@@ -1,7 +1,7 @@
 import React from "react";
 import "./sass/main.scss";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import Canvas from "./pages/Canvas";
+import Game from "./pages/Game";
 import Home from "./pages/Home";
 import Selection from "./pages/Selection";
 
@@ -18,7 +18,7 @@ function App() {
               <Selection />
             </Route>
             <Route path="/Game">
-              <Canvas />
+              <Game />
             </Route>
             <Route path="/">
               <Home />

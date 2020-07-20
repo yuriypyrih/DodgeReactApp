@@ -153,6 +153,9 @@
     &_select {
       justify-self: center;
       align-self: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
       width: 75px;
       height: 75px;
@@ -160,6 +163,7 @@
       font-size: 26px;
       font-weight: 600;
       color: $color-white;
+      text-decoration: none;
 
       background-color: $color-primary-dark;
       border: 5px solid $color-primary;
@@ -183,6 +187,9 @@
       grid-column: 6 / 8;
       align-self: center;
       justify-self: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
       height: 60px;
       width: 80%;
