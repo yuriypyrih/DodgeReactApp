@@ -27,7 +27,6 @@ export default class Spawner {
     startLevel(level) {
         this.reset();
         //hud.reset():
-
         this.level = level;
     }
 

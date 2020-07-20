@@ -14,9 +14,12 @@ import Spawner from "./spawner";
 
 
 export default class Game {
-    constructor(gameWidth, gameHeight) {
+    constructor(level, gameWidth, gameHeight) {
         this.gameWidth = gameWidth;
         this.gameHeight = gameHeight;
+
+        // experimental level;
+        this.level = level;
 
         // Dev option for debugging
         this.dev = true;
@@ -37,15 +40,13 @@ export default class Game {
 
     // This function runs once per reload of the page
     start() {
-
         this.spawner = new Spawner(this);
         this.menu = new Menu(this, this.spawner);
         this.hud = new Hud(this, this.spawner);
         this.player = new Player(this);
 
         // TESTING
-        this.menu.playGame(2);
-
+        this.menu.playGame(this.level);
 
         new InputHandler(this.player, this);
     }

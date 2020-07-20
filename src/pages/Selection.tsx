@@ -3,8 +3,18 @@ import { BrowserRouter as Router, Link } from "react-router-dom";
 import Cube from "../components/Cube";
 
 let levels: {
-  title: string;
-}[] = [{ title: "1" }, { title: "2" }, { title: "3" }];
+  title: number;
+}[] = [
+  { title: 1 },
+  { title: 2 },
+  { title: 3 },
+  { title: 4 },
+  { title: 5 },
+  { title: 6 },
+  { title: 7 },
+  { title: 8 },
+  { title: 9 },
+];
 
 const Selection: React.FC = ({}) => {
   return (

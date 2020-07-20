@@ -1,7 +1,7 @@
 import Game from "./engine/game";
 
 
-const startGame = () => {
+const startGame = (level) => {
 
     const canvas = document.getElementById("gameScreen-canvas");
     const context = canvas.getContext("2d");
@@ -12,9 +12,8 @@ const startGame = () => {
     //console.log(GAME_HEIGHT);
     //console.log(GAME_WIDTH);
 
-
     // Initiating our game engine and run it.
-    let game = new Game(GAME_WIDTH, GAME_HEIGHT);
+    let game = new Game(level, GAME_WIDTH, GAME_HEIGHT);
     game.start();
 
     let lastTime = 0;
