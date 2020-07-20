@@ -17,7 +17,7 @@ const Selection: React.FC = ({}) => {
       </button>
       <div className="menu-levels_collection">
         {levels.map((i, key) => (
-          <Cube title={i.title} />
+          <Cube key={key} title={i.title} />
         ))}
       </div>
       <Link

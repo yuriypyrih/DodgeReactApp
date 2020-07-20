@@ -43,6 +43,8 @@ export default class Game {
         this.hud = new Hud(this, this.spawner);
         this.player = new Player(this);
 
+        // TESTING
+        this.menu.playGame(2);
 
 
         new InputHandler(this.player, this);

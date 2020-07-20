@@ -28,7 +28,6 @@ const startGame = () => {
 
         game.update(deltaTime);
         game.draw(context);
-
         requestAnimationFrame(gameLoop);
     }
 

@@ -15,7 +15,6 @@ export default class Spawner {
         this.level = 0;
         this.executionSequence = 0;
         this.roundTimer = 0; // Throu calculations 1 sec of real Time is about roundTimer = 60
-
     }
 
 
@@ -23,10 +22,6 @@ export default class Spawner {
         this.level = 0;
         this.executionSequence = 0;
         this.roundTimer = 0;
-
-        // TESTING
-        // this.executionSequence = 2;
-        // this.roundTimer = 2190;
     }
 
     startLevel(level) {
@@ -56,26 +51,26 @@ export default class Spawner {
 
         if (this.level === 1) {
             if (this.roundTimer === 60) {
-                Animation.tutorialCards(1);
+                //Animation.tutorialCards(1);
             }
             else if (this.roundTimer === 300) {
                 this.game.gameObjects.push(new BasicEnemy(this.game, 1, 1));
             }
             else if (this.roundTimer === 320) {
-                Animation.tutorialCards(2);
+                //Animation.tutorialCards(2);
             }
             else if (this.roundTimer === 860) {
                 this.game.gameObjects.push(new Healthpack(this.game, 600, 90));
-                Animation.tutorialCards(3);
+                //Animation.tutorialCards(3);
             }
             else if (this.roundTimer === 1230) {
                 this.game.gameObjects.push(new Star(this.game, this.game.gameWidth / 2 - 20, 50));
-                Animation.tutorialCards(4);
+                //Animation.tutorialCards(4);
             }
             else if (this.executionSequence === 1) {
                 this.executionSequence++;
                 this.roundTimer = 1231;
-                Animation.tutorialCards(5);
+                //Animation.tutorialCards(5);
             }
             else if (this.roundTimer === 1340 && this.executionSequence === 2) {
                 this.game.gameObjects.push(new BasicEnemy(this.game, 1, 20));
@@ -93,7 +88,7 @@ export default class Spawner {
                 this.executionSequence++;
                 this.roundTimer = 2201;
                 this.game.clearEnemies();
-                Animation.tutorialCards(6);
+                //Animation.tutorialCards(6);
             }
             else if (this.roundTimer === 2240 && this.executionSequence === 4) {
                 this.game.gameObjects.push(new BasicBoss(this.game, this.game.gameWidth / 2 - 25, -50));
