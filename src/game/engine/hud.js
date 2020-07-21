@@ -39,14 +39,14 @@ export default class Hud {
             context.fillText(`Stars: ${this.game.player.stars}`, 10, 130);
         }
 
-        context.fillStyle = "#51ECB3";
-        context.beginPath();
-        this.roundedRectangle(context, this.healthBar_x, this.healthBar_y, this.healthBar_player, this.healthBar_height, 8);
-        context.fill();
-        context.strokeStyle = "#F4F5F7";
-        context.beginPath();
-        this.roundedRectangle(context, this.healthBar_x, this.healthBar_y, this.healthBar_width, this.healthBar_height, 8);
-        context.stroke();
+        // context.fillStyle = "#51ECB3";
+        // context.beginPath();
+        // this.roundedRectangle(context, this.healthBar_x, this.healthBar_y, this.healthBar_player, this.healthBar_height, 8);
+        // context.fill();
+        // context.strokeStyle = "#F4F5F7";
+        // context.beginPath();
+        // this.roundedRectangle(context, this.healthBar_x, this.healthBar_y, this.healthBar_width, this.healthBar_height, 8);
+        // context.stroke();
 
 
 
