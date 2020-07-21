@@ -1,9 +1,9 @@
 import React from "react";
 import "./sass/main.scss";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import Game from "./pages/Game";
-import Home from "./pages/Home";
-import Selection from "./pages/Selection";
+import Game from "./layout/Game";
+import Home from "./layout/Home";
+import Selection from "./layout/Selection";
 
 function App() {
   return (

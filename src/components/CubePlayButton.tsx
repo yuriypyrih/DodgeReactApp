@@ -1,11 +1,11 @@
 import React from "react";
 import { BrowserRouter as Router, Link } from "react-router-dom";
 
-type CubeProps = {
+type CubePlayButtonProps = {
   title: number;
 };
 
-const Cube: React.FC<CubeProps> = ({ title }) => {
+const CubePlayButton: React.FC<CubePlayButtonProps> = ({ title }) => {
   return (
     <Link
       to={`/Game?level=${title}`}
@@ -17,4 +17,4 @@ const Cube: React.FC<CubeProps> = ({ title }) => {
   );
 };
 
-export default Cube;
+export default CubePlayButton;

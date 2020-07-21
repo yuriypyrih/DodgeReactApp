@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Link } from "react-router-dom";
-import Cube from "../components/Cube";
+import CubePlayButton from "../components/CubePlayButton";
 
 let levels: {
   title: number;
@@ -27,7 +27,7 @@ const Selection: React.FC = ({}) => {
       </button>
       <div className="menu-levels_collection">
         {levels.map((i, key) => (
-          <Cube key={key} title={i.title} />
+          <CubePlayButton key={key} title={i.title} />
         ))}
       </div>
       <Link

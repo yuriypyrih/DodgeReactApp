@@ -26,6 +26,7 @@ body {
 }
 
 .main-window {
+  position: relative;
   height: $CANVAS_HEIGHT;
   width: $CANVAS_WIDTH;
   border-radius: 3px;
