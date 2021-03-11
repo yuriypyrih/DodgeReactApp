@@ -21,16 +21,3 @@
   }
 }
 
-.progressBar {
-  position: absolute;
-  float: right;
-  top: 4px;
-  right: 4px;
-
-  & .MuiLinearProgress-barColorPrimary {
-    background-color: blue;
-  }
-  &.MuiLinearProgress-colorPrimary {
-    background-color: $color-gray-1;
-  }
-}

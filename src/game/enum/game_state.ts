@@ -1,0 +1,8 @@
+export enum GAME_STATE {
+  PAUSED,
+  PLAYING,
+  CLOSED,
+  MENU,
+  PAGE_VICTORY,
+  PAGE_DEFEAT,
+}

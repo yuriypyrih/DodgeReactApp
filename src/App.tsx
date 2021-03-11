@@ -1,30 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./sass/main.scss";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import Game from "./layout/Game";
-import Home from "./layout/Home";
-import Selection from "./layout/Selection";
+import VfxAnimation from "./layout/VfxAnimation";
+import { makeStyles } from "@material-ui/core";
+import Routes from "./Routes/Routes";
+import startEngine from "./game";
+import { useDispatch } from "react-redux";
+import { setEngine } from "./redux/slices/engineSlice";
+
+const useStyles = makeStyles({
+  mainWindow: {
+    position: "relative",
+    height: 500,
+    width: 900,
+    borderRadius: "3px",
+  },
+});
 
 function App() {
+  const classes = useStyles();
+
   return (
     <div className="App">
-      <div className="main-window">
-        <Router>
-          <Switch>
-            <Route path="/Home">
-              <Home />
-            </Route>
-            <Route path="/Selection">
-              <Selection />
-            </Route>
-            <Route path="/Game">
-              <Game />
-            </Route>
-            <Route path="/">
-              <Home />
-            </Route>
-          </Switch>
-        </Router>
+      <div className={classes.mainWindow}>
+        <VfxAnimation>
+          <Routes />
+        </VfxAnimation>
       </div>
     </div>
   );
