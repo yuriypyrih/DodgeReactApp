@@ -47,6 +47,9 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
     // animation: "$poisoned 1.4s infinite linear",
   },
+  healthPoisoned: {
+    animation: "$poisoned 1.4s infinite linear",
+  },
   healthInner: {
     zIndex: 4,
     position: "absolute",
@@ -139,7 +142,7 @@ const useStyles = makeStyles((theme) => ({
       background: "linear-gradient(135deg,  #1a1a1d 0%, #2b2b2c 60%)",
     },
     "50%": {
-      background: fade("#9451EC", 0.5),
+      background: fade("#9451EC", 0.8),
     },
     "100%": {
       background: "linear-gradient(135deg,  #1a1a1d 0%, #2b2b2c 60%)",
@@ -158,20 +161,31 @@ const Hud: React.FC<HudProps> = ({}) => {
     (state: RootState) => state.gameSlice.progress.total_stars_collected
   );
   const hp = useSelector((state: RootState) => state.gameSlice.hp);
+  const poisoned = useSelector((state: RootState) => state.gameSlice.poisoned);
+
+  const getHPMeter = () => {
+    if (hp <= 4) return 4;
+    else if (hp > 100) return 100;
+    else return hp;
+  };
 
   return (
     <div className={classes.root}>
       <div className={classes.container}>
         <div className={classes.power}></div>
         <div>
-          <div className={classes.health}>
+          <div
+            className={`${classes.health} ${
+              poisoned ? classes.healthPoisoned : null
+            }`}
+          >
             <div
               className={classes.healthRed}
-              style={{ width: `${hp}%` }}
+              style={{ width: `${getHPMeter()}%` }}
             ></div>
             <div
               className={classes.healthInner}
-              style={{ width: `${hp}%` }}
+              style={{ width: `${getHPMeter()}%` }}
             ></div>
           </div>
           <div className={classes.progress}>

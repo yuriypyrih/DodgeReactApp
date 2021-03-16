@@ -34,6 +34,14 @@ const useStyles = makeStyles({
     overflow: "hidden",
     transition: "all",
   },
+  innerContainer: {
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    overflow: "hidden",
+    transition: "all",
+  },
   "@keyframes pulseRed": createPulseKeyframes(COLOR.RED),
   PULSE_RED_ANIMATION: {
     animation: "$pulseRed 0.7s ease-in",
@@ -41,6 +49,34 @@ const useStyles = makeStyles({
   "@keyframes pulsePurple": createPulseKeyframes(COLOR.PURPLE, 0.4),
   PULSE_PURPLE_ANIMATION: {
     animation: "$pulsePurple 3s",
+  },
+  "@keyframes pulsePortalOrange": {
+    "0%": {
+      boxShadow: `inset 50px 0px 50px -50px ${fade("#2dd5c4", 0)}`,
+    },
+    "30%": {
+      boxShadow: `inset  50px 0px 50px -50px ${fade("#ff934d", 0.6)} `,
+    },
+    "100%": {
+      boxShadow: ` inset 50px 0px 50px -50px ${fade("#2dd5c4", 0)}`,
+    },
+  },
+  "@keyframes pulsePortalBlue": {
+    "0%": {
+      boxShadow: `inset -50px 0px 50px -50px ${fade("#2dd5c4", 0)}`,
+    },
+    "30%": {
+      boxShadow: `inset  -50px 0px 50px -50px ${fade("#4db9ff", 0.6)} `,
+    },
+    "100%": {
+      boxShadow: ` inset -50px 0px 50px -50px ${fade("#2dd5c4", 0)}`,
+    },
+  },
+  PULSE_PORTAL_ORANGE: {
+    animation: "$pulsePortalOrange 0.5s ease-out",
+  },
+  PULSE_PORTAL_BLUE: {
+    animation: "$pulsePortalBlue 0.5s ease-out",
   },
 });
 
@@ -50,6 +86,8 @@ const VfxAnimation: React.FC<VfxAnimationProps> = ({ children }) => {
   const classes = useStyles();
   const vfxObject = useSelector((state: RootState) => state.vfxSlice);
   const [containerClass, setContainerClass] = useState<string>("");
+  const [innercontainerClassA, setInnercontainerClassA] = useState<string>("");
+  const [innercontainerClassB, setInnercontainerClassB] = useState<string>("");
 
   useEffect(() => {
     // if (containerClass.length === 0) {
@@ -65,10 +103,26 @@ const VfxAnimation: React.FC<VfxAnimationProps> = ({ children }) => {
         setContainerClass("");
       }, 3000);
     }
+    if (vfxObject.run_animation === VFX.PULSE_PORTAL) {
+      setInnercontainerClassA(classes.PULSE_PORTAL_ORANGE);
+      setInnercontainerClassB(classes.PULSE_PORTAL_BLUE);
+      setTimeout(() => {
+        setInnercontainerClassA("");
+        setInnercontainerClassB("");
+      }, 500);
+    }
     //}
   }, [vfxObject]);
 
-  return <div className={`${classes.root} ${containerClass}`}>{children}</div>;
+  return (
+    <div className={`${classes.root} ${containerClass}`}>
+      <div className={`${classes.innerContainer} ${innercontainerClassA}`}>
+        <div className={`${classes.innerContainer} ${innercontainerClassB}`}>
+          {children}
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default VfxAnimation;

@@ -8,6 +8,7 @@ import {
   collectStar,
   setGameState,
   setHP,
+  setPoisoned,
   setProgress,
 } from "../../redux/slices/gameSlice";
 import Trail from "./trail";
@@ -26,13 +27,17 @@ export default class Player extends GameObject {
   health: number;
   death_thresholder: number;
   readonly IMMUNITY_IN_MILISEC: number;
+  readonly MAGNET_POWER: number;
   recently_damaged: number;
   stars: number;
   milestone: boolean;
   poisoned: boolean;
+  lastPoisonedDate: number;
   maxSpeed: number;
   maxDiagonialSpeed: number;
   developerMode: boolean;
+  magneticY: number;
+  magneticX: number;
 
   constructor({ game }: PlayerProps) {
     super({
@@ -50,13 +55,17 @@ export default class Player extends GameObject {
     this.gameHeight = game.canvas.canvasHeight;
     this.game = game;
     this.health = 100;
-    this.death_thresholder = 0;
+    this.death_thresholder = -10;
     this.IMMUNITY_IN_MILISEC = 1000;
+    this.MAGNET_POWER = 9;
     this.recently_damaged = 0;
     this.stars = 0;
     this.milestone = false;
     this.poisoned = false;
-    this.developerMode = false;
+    this.developerMode = true;
+    this.lastPoisonedDate = Date.now();
+    this.magneticY = 0;
+    this.magneticX = 0;
 
     this.gameObject.position = {
       x: game.canvas.canvasWidth / 2 - this.gameObject.width / 2,
@@ -135,23 +144,11 @@ export default class Player extends GameObject {
       this.gameObject.width,
       this.gameObject.height
     );
-    // context.fillStyle = COLOR.RED;
-    // context.fillRect(
-    //   this.gameObject.position.x,
-    //   this.gameObject.position.y,
-    //   this.gameObject.width,
-    //   this.gameObject.height
-    // );
-    // context.fillStyle = COLOR.WHITE;
-    // context.fillRect(
-    //   this.gameObject.position.x + 4,
-    //   this.gameObject.position.y + 4,
-    //   this.gameObject.width - 8,
-    //   this.gameObject.height - 8
-    // );
   }
 
   update(deltaTime: number) {
+    store.dispatch(setHP(this.health));
+
     if (this.stars >= 3 && !this.developerMode) {
       store.dispatch(setGameState(GAME_STATE.PAGE_VICTORY));
       this.game.close();
@@ -161,16 +158,15 @@ export default class Player extends GameObject {
       this.game.close();
       return null;
     }
-    store.dispatch(setHP(this.health));
-    if (this.health)
-      if (this.gameObject.velX !== 0 && this.gameObject.velY !== 0) {
-        this.gameObject.velX > 0
-          ? (this.gameObject.velX = this.maxDiagonialSpeed)
-          : (this.gameObject.velX = this.maxDiagonialSpeed * -1);
-        this.gameObject.velY > 0
-          ? (this.gameObject.velY = this.maxDiagonialSpeed)
-          : (this.gameObject.velY = this.maxDiagonialSpeed * -1);
-      }
+
+    if (this.gameObject.velX !== 0 && this.gameObject.velY !== 0) {
+      this.gameObject.velX > 0
+        ? (this.gameObject.velX = this.maxDiagonialSpeed)
+        : (this.gameObject.velX = this.maxDiagonialSpeed * -1);
+      this.gameObject.velY > 0
+        ? (this.gameObject.velY = this.maxDiagonialSpeed)
+        : (this.gameObject.velY = this.maxDiagonialSpeed * -1);
+    }
 
     // Updating the Player's position based on its velocity
     this.gameObject.position.x += this.gameObject.velX;
@@ -196,6 +192,15 @@ export default class Player extends GameObject {
 
     // Keeping track of when it was last time damaged, by default it start with 0 when the game start
     this.recently_damaged += deltaTime;
+
+    if (this.poisoned) {
+      const freshPoison = Date.now();
+      if (freshPoison - this.lastPoisonedDate > 1000) {
+        store.dispatch(setPoisoned(true));
+        this.lastPoisonedDate = freshPoison;
+        this.health -= 3;
+      }
+    }
 
     this.game.gameObjects.forEach((object: GameObject) => {
       if (this.collision(object.getBounds())) {
@@ -233,6 +238,25 @@ export default class Player extends GameObject {
           }
         }
 
+        if (object.gameObject.id === ENTITY_ID.VENOM) {
+          // Take the damage only after the end of Immunity has expired
+          // And reset the recently_damaged
+          if (this.recently_damaged > this.IMMUNITY_IN_MILISEC) {
+            //Animation.pulseRed();
+            store.dispatch(playAnimation(VFX.PULSE_PURPLE));
+            this.health -= 15;
+            this.recently_damaged = 0;
+            this.poisoned = true;
+          }
+        }
+
+        if (object.gameObject.id === ENTITY_ID.MAGNET_AURA_PLUS) {
+          this.applyMagneticForce(object, "plus");
+        }
+        if (object.gameObject.id === ENTITY_ID.MAGNET_AURA_MINUS) {
+          this.applyMagneticForce(object, "minus");
+        }
+
         //this.game.gameObjects.splice(this.game.gameObjects.indexOf(object), 1);
 
         //console.log("Yes collision");
@@ -259,6 +283,49 @@ export default class Player extends GameObject {
     // Player Collision with bottom wall
     if (this.gameObject.position.y + this.gameObject.height > this.gameHeight) {
       this.gameObject.position.y = this.gameHeight - this.gameObject.height;
+    }
+  }
+
+  private getMagneticForce(objPos: number, playerPos: number) {
+    const dif = Math.abs(playerPos - objPos);
+    const max_distance = 300;
+    const force = Math.min((max_distance - dif) / max_distance, 1);
+    return force * force * this.MAGNET_POWER;
+  }
+
+  private applyMagneticForce(obj: GameObject, type: "minus" | "plus") {
+    let diffY = Math.ceil(
+      this.gameObject.position.y - (obj.gameObject.position.y + 5)
+    );
+    let diffX = Math.ceil(
+      this.gameObject.position.x - (obj.gameObject.position.x + 5)
+    );
+    let distance = Math.ceil(
+      Math.sqrt(
+        (this.gameObject.position.x - obj.gameObject.position.x) *
+          (this.gameObject.position.x - obj.gameObject.position.x) +
+          (this.gameObject.position.y - obj.gameObject.position.y) *
+            (this.gameObject.position.y - obj.gameObject.position.y)
+      )
+    );
+
+    if (distance < 1) distance = 1;
+
+    if (distance < 30) return null;
+
+    const max_distance = 300;
+    const force = Math.min((max_distance - distance) / max_distance, 1);
+
+    if (type === "minus") {
+      this.gameObject.position.x +=
+        (-this.MAGNET_POWER / distance) * diffX * force;
+      this.gameObject.position.y +=
+        (-this.MAGNET_POWER / distance) * diffY * force;
+    } else {
+      this.gameObject.position.x -=
+        (-this.MAGNET_POWER / distance) * diffX * force;
+      this.gameObject.position.y -=
+        (-this.MAGNET_POWER / distance) * diffY * force;
     }
   }
 }

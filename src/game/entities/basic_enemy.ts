@@ -4,16 +4,17 @@ import { COLOR } from "../enum/colors";
 import GameObject from "../engine/gameObject";
 import { Rectangle } from "../models/Rectangle";
 import Trail from "../engine/trail";
+import Game from "../engine/game";
 
 type BasicEnemyProps = {
-  game: any;
+  game: Game;
   position: { x: number; y: number };
   velX?: number;
   velY?: number;
 };
 
 export default class BasicEnemy extends GameObject {
-  game: any;
+  game: Game;
 
   constructor({ game, position, velX = 5, velY = 5 }: BasicEnemyProps) {
     super({
@@ -54,7 +55,6 @@ export default class BasicEnemy extends GameObject {
     this.gameObject.position.y += this.gameObject.velY;
 
     // Creating a Trail particle and add it to the list
-
     this.game.particleObjects.push(
       new Trail({
         x: this.gameObject.position.x,
@@ -63,8 +63,8 @@ export default class BasicEnemy extends GameObject {
         color: COLOR.RED,
         width: this.gameObject.width,
         height: this.gameObject.height,
-        life: 0.7,
-        minus: 0.02,
+        life: 0.8,
+        minus: 0.04,
         game: this.game,
       })
     );

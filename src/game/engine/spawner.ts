@@ -1,15 +1,18 @@
 import BasicEnemy from "../entities/basic_enemy";
-import BasicBoss from "../entities/basic_boss";
-import SpeederEnemy from "../entities/speeder_enemy";
-import BouncerEnemy from "../entities/bouncer_enemy";
-import WormEnemy from "../entities/worm_enemy";
-import SmartEnemy from "../entities/smart_enemy";
-import VenomEnemy from "../entities/venom_enemy";
-import Healthpack from "../entities/healthpack";
 import Star from "../entities/star";
 import Game from "./game";
 import store from "../../redux/store";
 import { setProgress } from "../../redux/slices/gameSlice";
+import VenomEnemy from "../entities/venom_enemy";
+import SpeederEnemy from "../entities/speeder_enemy";
+import TracerEnemy from "../entities/tracer_enemy";
+import WormEnemy from "../entities/worm_enemy";
+import SlimeEnemy from "../entities/slime_enemy";
+import ShadowEnemy from "../entities/shadow_enemy";
+import TitanEnemy from "../entities/titan_enemy";
+import PortalEnemy from "../entities/portal_enemy";
+import MagnetEnemy from "../entities/magnet_enemy";
+import BasicBoss from "../entities/basic_boss";
 
 type SpawnerProps = {
   game: Game;
@@ -117,6 +120,17 @@ export default class Spawner {
         this.executionSequence++;
         this.roundTimer = 161;
         //store.dispatch(setTimer(this.roundTimer));
+      }
+    } else if (this.game.level === 2) {
+      if (this.executionSequence === 0) {
+        if (this.roundTimer === 20) {
+          this.game.gameObjects.push(
+            new BasicBoss({
+              game: this.game,
+              position: { x: this.game.canvas.canvasWidth / 2 - 30, y: -50 },
+            })
+          );
+        }
       }
     }
   }

@@ -7,4 +7,6 @@ export enum ENTITY_ID {
   HEALTH_PACK,
   TRAIL,
   VENOM,
+  MAGNET_AURA_PLUS,
+  MAGNET_AURA_MINUS,
 }

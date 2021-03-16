@@ -7,11 +7,14 @@ type TrailProps = {
   y: number;
   reductor: number;
   color: COLOR;
+  secondaryColor?: COLOR;
+  diagonialBottomRight?: boolean;
   width: number;
   height: number;
   life: number;
   minus: number;
   game: Game;
+  shadowAlpha?: number;
 };
 
 export default class Trail {
@@ -20,6 +23,8 @@ export default class Trail {
   y: number;
   reductor: number;
   color: COLOR;
+  secondaryColor?: COLOR;
+  diagonialBottomRight?: boolean;
   width: number;
   height: number;
   life: number;
@@ -31,6 +36,8 @@ export default class Trail {
     y,
     reductor,
     color,
+    secondaryColor,
+    diagonialBottomRight,
     width,
     height,
     life,
@@ -42,6 +49,8 @@ export default class Trail {
     this.y = y + reductor / 2;
     this.reductor = reductor;
     this.color = color;
+    this.secondaryColor = secondaryColor;
+    this.diagonialBottomRight = diagonialBottomRight;
     this.width = width - reductor;
     this.height = height - reductor;
     this.life = life;
@@ -50,10 +59,44 @@ export default class Trail {
   }
 
   draw(context: any) {
-    context.fillStyle = this.color;
-
     context.globalAlpha = this.life;
-    context.fillRect(this.x, this.y, this.width, this.height);
+    if (
+      this.diagonialBottomRight !== undefined &&
+      this.secondaryColor !== undefined
+    ) {
+      if (this.diagonialBottomRight) {
+        //top-left to bottom-right
+        context.fillStyle = this.color;
+        context.beginPath();
+        context.moveTo(this.x, this.y);
+        context.lineTo(this.x, this.y + this.height);
+        context.lineTo(this.x + this.width, this.y + this.height);
+        context.fill();
+        context.fillStyle = this.secondaryColor;
+        context.beginPath();
+        context.moveTo(this.x + this.width, this.y);
+        context.lineTo(this.x + this.width, this.y + this.height);
+        context.lineTo(this.x, this.y);
+        context.fill();
+      } else {
+        //bottom-right to top-left
+        context.fillStyle = this.secondaryColor;
+        context.beginPath();
+        context.moveTo(this.x, this.y);
+        context.lineTo(this.x + this.width, this.y);
+        context.lineTo(this.x, this.y + this.height);
+        context.fill();
+        context.fillStyle = this.color;
+        context.beginPath();
+        context.moveTo(this.x + this.width, this.y);
+        context.lineTo(this.x, this.y + this.height);
+        context.lineTo(this.x + this.width, this.y + this.height);
+        context.fill();
+      }
+    } else {
+      context.fillStyle = this.color;
+      context.fillRect(this.x, this.y, this.width, this.height);
+    }
 
     context.globalAlpha = 1;
   }

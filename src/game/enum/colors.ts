@@ -1,7 +1,7 @@
 export enum COLOR {
   PRIMARY = "#2DD5C4",
   RED = "#EC5151",
-  ORANGE = "#ECCD51",
+  ORANGE = "#ec8851",
   YELLOW = "#ECCD51",
   LIME = "#C3EC51",
   GREEN = "#63EC51",
@@ -12,5 +12,8 @@ export enum COLOR {
   VENOM = "#1f0036",
   PINK = "#E96AD0",
   WHITE = "#F4F5F7",
+  GREY = "#676767",
   GOLD = "#FFFFCC",
+  PORTAL_ORANGE = "#ff934d",
+  PORTAL_BLUE = "#4db9ff ",
 }

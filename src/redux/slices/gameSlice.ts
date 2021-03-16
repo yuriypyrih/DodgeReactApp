@@ -7,6 +7,7 @@ type gameSliceType = {
   level: number;
   hp: number;
   gameState: GAME_STATE;
+  poisoned: boolean;
   progress: {
     max_stars: number;
     total_stars_collected: number;
@@ -16,9 +17,10 @@ type gameSliceType = {
 
 const initialState: gameSliceType = {
   game: null,
-  level: 1,
+  level: 2,
   hp: 0,
   gameState: GAME_STATE.PLAYING,
+  poisoned: false,
   progress: {
     max_stars: 3,
     total_stars_collected: 0,
@@ -33,7 +35,7 @@ const gameSlice = createSlice({
   reducers: {
     reset: (state) => {
       state.hp = 0;
-      state.level = 1;
+      state.poisoned = false;
       state.progress = {
         max_stars: 3,
         total_stars_collected: 0,
@@ -48,6 +50,9 @@ const gameSlice = createSlice({
     },
     setGameState: (state, action) => {
       state.gameState = action.payload;
+    },
+    setPoisoned: (state, action) => {
+      state.poisoned = action.payload;
     },
     setProgress: (
       state,
@@ -68,6 +73,7 @@ const gameSlice = createSlice({
 
 export const {
   setHP,
+  setPoisoned,
   setLevel,
   setGameState,
   setProgress,
