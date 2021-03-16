@@ -15,6 +15,7 @@ import Trail from "./trail";
 import { playAnimation } from "../../redux/slices/vfxSlice";
 import { VFX } from "../enum/vfx";
 import { GAME_STATE } from "../enum/game_state";
+import { POWER } from "../enum/power";
 
 type PlayerProps = {
   game: Game;
@@ -38,6 +39,8 @@ export default class Player extends GameObject {
   developerMode: boolean;
   magneticY: number;
   magneticX: number;
+  power: POWER;
+  power_consumables: number;
 
   constructor({ game }: PlayerProps) {
     super({
@@ -66,6 +69,8 @@ export default class Player extends GameObject {
     this.lastPoisonedDate = Date.now();
     this.magneticY = 0;
     this.magneticX = 0;
+    this.power = POWER.HEAL;
+    this.power_consumables = 1;
 
     this.gameObject.position = {
       x: game.canvas.canvasWidth / 2 - this.gameObject.width / 2,
@@ -133,6 +138,13 @@ export default class Player extends GameObject {
       return true;
     } else {
       return false;
+    }
+  }
+
+  usePower() {
+    if (this.power === POWER.HEAL) {
+      this.health += 30;
+      store.dispatch(playAnimation(VFX.PULSE_GREEN));
     }
   }
 

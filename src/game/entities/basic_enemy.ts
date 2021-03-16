@@ -63,8 +63,8 @@ export default class BasicEnemy extends GameObject {
         color: COLOR.RED,
         width: this.gameObject.width,
         height: this.gameObject.height,
-        life: 0.8,
-        minus: 0.04,
+        life: 0.7,
+        minus: 0.02,
         game: this.game,
       })
     );

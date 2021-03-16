@@ -46,6 +46,10 @@ const useStyles = makeStyles({
   PULSE_RED_ANIMATION: {
     animation: "$pulseRed 0.7s ease-in",
   },
+  "@keyframes pulseGReen": createPulseKeyframes(COLOR.AQUA),
+  PULSE_GREEN_ANIMATION: {
+    animation: "$pulseGReen  0.7s ease-in",
+  },
   "@keyframes pulsePurple": createPulseKeyframes(COLOR.PURPLE, 0.4),
   PULSE_PURPLE_ANIMATION: {
     animation: "$pulsePurple 3s",
@@ -95,7 +99,13 @@ const VfxAnimation: React.FC<VfxAnimationProps> = ({ children }) => {
       setContainerClass(classes.PULSE_RED_ANIMATION);
       setTimeout(() => {
         setContainerClass("");
-      }, 1000);
+      }, 700);
+    }
+    if (vfxObject.run_animation === VFX.PULSE_GREEN) {
+      setContainerClass(classes.PULSE_GREEN_ANIMATION);
+      setTimeout(() => {
+        setContainerClass("");
+      }, 700);
     }
     if (vfxObject.run_animation === VFX.PULSE_PURPLE) {
       setContainerClass(classes.PULSE_PURPLE_ANIMATION);

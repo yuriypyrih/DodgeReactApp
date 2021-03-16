@@ -14,17 +14,17 @@ export default class InputHandler {
         case "ArrowLeft":
           this.game.player.moveLeft();
           break;
-
         case "ArrowUp":
           this.game.player.moveUp();
           break;
-
         case "ArrowRight":
           this.game.player.moveRight();
           break;
-
         case "ArrowDown":
           this.game.player.moveDown();
+          break;
+        case "KeyQ":
+          this.game.player.usePower();
           break;
         case "Space":
           this.game.togglePause();

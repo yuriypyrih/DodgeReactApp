@@ -3,6 +3,7 @@ import { fade, makeStyles } from "@material-ui/core";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { setgid } from "process";
+import { VFX } from "../game/enum/vfx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -148,6 +149,20 @@ const useStyles = makeStyles((theme) => ({
       background: "linear-gradient(135deg,  #1a1a1d 0%, #2b2b2c 60%)",
     },
   },
+  healed: {
+    animation: "$healed 0.7s ease-in",
+  },
+  "@keyframes healed": {
+    "0%": {
+      background: theme.palette.primary.main,
+    },
+    "30%": {
+      background: "#51ECB3",
+    },
+    "100%": {
+      background: theme.palette.primary.main,
+    },
+  },
 }));
 
 type HudProps = {};
@@ -161,6 +176,8 @@ const Hud: React.FC<HudProps> = ({}) => {
     (state: RootState) => state.gameSlice.progress.total_stars_collected
   );
   const hp = useSelector((state: RootState) => state.gameSlice.hp);
+  const [hpClass, setHpClass] = useState<string>("");
+  const vfxObject = useSelector((state: RootState) => state.vfxSlice);
   const poisoned = useSelector((state: RootState) => state.gameSlice.poisoned);
 
   const getHPMeter = () => {
@@ -168,6 +185,15 @@ const Hud: React.FC<HudProps> = ({}) => {
     else if (hp > 100) return 100;
     else return hp;
   };
+
+  useEffect(() => {
+    if (vfxObject.run_animation === VFX.PULSE_GREEN) {
+      setHpClass(classes.healed);
+      setTimeout(() => {
+        setHpClass("");
+      }, 700);
+    }
+  }, [vfxObject]);
 
   return (
     <div className={classes.root}>
@@ -184,7 +210,7 @@ const Hud: React.FC<HudProps> = ({}) => {
               style={{ width: `${getHPMeter()}%` }}
             ></div>
             <div
-              className={classes.healthInner}
+              className={`${classes.healthInner} ${hpClass}`}
               style={{ width: `${getHPMeter()}%` }}
             ></div>
           </div>
