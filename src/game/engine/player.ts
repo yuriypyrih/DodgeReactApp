@@ -2,7 +2,7 @@ import { ENTITY_ID } from "../enum/entitiy_id";
 import { COLOR } from "../enum/colors";
 import GameObject from "./gameObject";
 import Game from "./game";
-import { Rectangle } from "../models/Rectangle";
+import { Rectangle } from "../types/Rectangle";
 import store from "../../redux/store";
 import {
   collectStar,
@@ -224,17 +224,20 @@ export default class Player extends GameObject {
             1
           );
           this.health += 30;
+          store.dispatch(playAnimation(VFX.PULSE_GREEN));
           this.recently_damaged = 0;
         }
 
         if (object.gameObject.id === ENTITY_ID.STAR) {
-          store.dispatch(collectStar());
+          this.stars++;
+          //IMPORTANT: First update the stars and then the hudProgress
+          this.game.spawner.updateHudProgress();
+          //store.dispatch(collectStar());
           //Animation.pulseGold();
           this.game.gameObjects.splice(
             this.game.gameObjects.indexOf(object),
             1
           );
-          this.stars++;
           this.milestone = true;
           this.recently_damaged = 0;
         }
@@ -243,10 +246,29 @@ export default class Player extends GameObject {
           // Take the damage only after the end of Immunity has expired
           // And reset the recently_damaged
           if (this.recently_damaged > this.IMMUNITY_IN_MILISEC) {
-            //Animation.pulseRed();
             store.dispatch(playAnimation(VFX.PULSE_RED));
             this.health -= 25;
             this.recently_damaged = 0;
+          }
+        }
+
+        if (object.gameObject.id === ENTITY_ID.BOSS) {
+          if (this.recently_damaged > this.IMMUNITY_IN_MILISEC) {
+            store.dispatch(playAnimation(VFX.PULSE_RED));
+            this.health -= 30;
+            this.recently_damaged = 0;
+          }
+        }
+
+        if (object.gameObject.id === ENTITY_ID.BULLET) {
+          if (this.recently_damaged > this.IMMUNITY_IN_MILISEC) {
+            store.dispatch(playAnimation(VFX.PULSE_RED));
+            this.health -= 10;
+            this.recently_damaged = 0;
+            this.game.gameObjects.splice(
+              this.game.gameObjects.indexOf(object),
+              1
+            );
           }
         }
 

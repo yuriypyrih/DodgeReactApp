@@ -17,7 +17,7 @@ type gameSliceType = {
 
 const initialState: gameSliceType = {
   game: null,
-  level: 2,
+  level: 1,
   hp: 0,
   gameState: GAME_STATE.PLAYING,
   poisoned: false,

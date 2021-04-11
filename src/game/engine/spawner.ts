@@ -1,18 +1,8 @@
-import BasicEnemy from "../entities/basic_enemy";
-import Star from "../entities/star";
 import Game from "./game";
 import store from "../../redux/store";
 import { setProgress } from "../../redux/slices/gameSlice";
-import VenomEnemy from "../entities/venom_enemy";
-import SpeederEnemy from "../entities/speeder_enemy";
-import TracerEnemy from "../entities/tracer_enemy";
-import WormEnemy from "../entities/worm_enemy";
-import SlimeEnemy from "../entities/slime_enemy";
-import ShadowEnemy from "../entities/shadow_enemy";
-import TitanEnemy from "../entities/titan_enemy";
-import PortalEnemy from "../entities/portal_enemy";
-import MagnetEnemy from "../entities/magnet_enemy";
-import BasicBoss from "../entities/basic_boss";
+import { getLevel1, level1Stars } from "./levels/getLevel1";
+import { sec } from "../../utils/deltaTime";
 
 type SpawnerProps = {
   game: Game;
@@ -22,28 +12,39 @@ export default class Spawner {
   game: Game;
   executionSequence: number;
   roundTimer: number;
+  levelStars: number[][];
   constructor({ game }: SpawnerProps) {
     this.game = game;
 
     this.executionSequence = 0;
     this.roundTimer = 0; // Throu calculations 1 sec of real Time is about roundTimer = 60
+    this.levelStars = [level1Stars];
   }
 
   reset() {
     this.executionSequence = 0;
-    this.roundTimer = 0;
+    this.roundTimer = sec(0);
   }
 
   startLevel(level: number) {
-    store.dispatch(
-      setProgress({
-        max_stars: 3,
-        total_stars_collected: 0,
-        star_timers: [30, 120, 160],
-      })
-    );
+    this.updateHudProgress();
     this.reset();
     //hud.reset():
+  }
+
+  updateHudProgress() {
+    console.log(
+      "I tried",
+      this.levelStars[this.game.level - 1].length,
+      this.game.level
+    );
+    store.dispatch(
+      setProgress({
+        max_stars: this.levelStars[this.game.level - 1].length,
+        total_stars_collected: this.game.player.stars,
+        star_timers: this.levelStars[this.game.level - 1],
+      })
+    );
   }
 
   spawnRandomHealthpack() {
@@ -72,66 +73,8 @@ export default class Spawner {
     }
 
     if (this.game.level === 1) {
-      if (this.executionSequence === 0) {
-        if (this.roundTimer === 20) {
-          this.game.gameObjects.push(
-            new BasicEnemy({ game: this.game, position: { x: 1, y: 1 } })
-          );
-        } else if (this.roundTimer === 30) {
-          this.game.gameObjects.push(
-            new Star({ game: this.game, position: { x: 300, y: 100 } })
-          );
-        } else if (this.roundTimer > 31) {
-          this.roundTimer = 31;
-        }
-      } else if (this.executionSequence === 1) {
-        this.executionSequence++;
-        this.roundTimer = 31;
-        //store.dispatch(setTimer(this.roundTimer));
-      } else if (this.executionSequence === 2) {
-        if (this.roundTimer === 40) {
-          this.game.gameObjects.push(
-            new BasicEnemy({ game: this.game, position: { x: 1, y: 1 } })
-          );
-        } else if (this.roundTimer === 120) {
-          this.game.gameObjects.push(
-            new Star({ game: this.game, position: { x: 600, y: 200 } })
-          );
-        } else if (this.roundTimer > 121) {
-          this.roundTimer = 121;
-        }
-      } else if (this.executionSequence === 3) {
-        this.executionSequence++;
-        this.roundTimer = 121;
-        //store.dispatch(setTimer(this.roundTimer));
-      } else if (this.executionSequence === 4) {
-        if (this.roundTimer === 140) {
-          this.game.gameObjects.push(
-            new BasicEnemy({ game: this.game, position: { x: 1, y: 1 } })
-          );
-        } else if (this.roundTimer === 160) {
-          this.game.gameObjects.push(
-            new Star({ game: this.game, position: { x: 600, y: 400 } })
-          );
-        } else if (this.roundTimer > 161) {
-          this.roundTimer = 161;
-        }
-      } else if (this.executionSequence === 5) {
-        this.executionSequence++;
-        this.roundTimer = 161;
-        //store.dispatch(setTimer(this.roundTimer));
-      }
+      getLevel1(this.game);
     } else if (this.game.level === 2) {
-      if (this.executionSequence === 0) {
-        if (this.roundTimer === 20) {
-          this.game.gameObjects.push(
-            new BasicBoss({
-              game: this.game,
-              position: { x: this.game.canvas.canvasWidth / 2 - 30, y: -50 },
-            })
-          );
-        }
-      }
     }
   }
 }

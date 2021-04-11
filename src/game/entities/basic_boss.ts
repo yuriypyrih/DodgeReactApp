@@ -2,14 +2,14 @@ import { ENTITY_ID } from "../enum/entitiy_id";
 import { COLOR } from "../enum/colors";
 //import Trail from "../engine/trail";
 import GameObject from "../engine/gameObject";
-import { Rectangle } from "../models/Rectangle";
+import { Rectangle } from "../types/Rectangle";
 import Trail from "../engine/trail";
 import Game from "../engine/game";
 import BasicBullet from "./basic_bullet";
 
 type BasicBossProps = {
   game: Game;
-  position: { x: number; y: number };
+  position?: { x: number; y: number };
   velX?: number;
   velY?: number;
 };
@@ -25,7 +25,9 @@ export default class BasicBoss extends GameObject {
       id: ENTITY_ID.BOSS,
       width: 50,
       height: 50,
-      position,
+      position: position
+        ? position
+        : { x: game.canvas.canvasWidth / 2 - 25, y: -60 },
       velY,
       velX,
     });

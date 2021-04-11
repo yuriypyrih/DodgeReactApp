@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { fade, makeStyles } from "@material-ui/core";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { setgid } from "process";
 import { VFX } from "../game/enum/vfx";
+import { finishedTextAnimation } from "../redux/slices/vfxSlice";
+import Game from "../game/engine/game";
+import { GAME_STATE } from "../game/enum/game_state";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     position: "absolute",
     display: "inline-block",
     //backgroundColor: "grey",
-    top: 10,
-    left: 10,
+    left: 0,
+    top: 0,
+    padding: 10,
+    width: "100%",
   },
   container: {
     display: "inline-flex",
@@ -85,10 +90,11 @@ const useStyles = makeStyles((theme) => ({
     background: "linear-gradient(135deg,#676767 0%, #ffffcc 100%)",
     borderBottomRightRadius: "15% 20px",
     marginBottom: 4,
-    width: "100%",
+    width: "0%",
     height: "100%",
     overflow: "hidden",
-    animation: `$progress 8s forwards linear`,
+    animation: `$progress 1s forwards linear`,
+    //transition: "0.2s all",
     "&:before": {
       content: '""',
       display: "block",
@@ -163,28 +169,89 @@ const useStyles = makeStyles((theme) => ({
       background: theme.palette.primary.main,
     },
   },
+  textAnimation: {
+    position: "absolute",
+    width: 300,
+    right: 100,
+    top: 20,
+    textAlign: "center",
+    lineHeight: 1.2,
+    opacity: 0,
+    color: "#f4f5f7",
+    animation: "$textMessage 4s linear forwards",
+  },
+  "@keyframes textMessage": {
+    "0%": {
+      opacity: 0,
+      right: 120,
+    },
+    "5%": {
+      opacity: 0.7,
+      right: 100,
+    },
+    "20%": {
+      opacity: 1,
+    },
+    "95%": {
+      opacity: 0.8,
+      right: 60,
+    },
+    "99%": {
+      opacity: 0,
+      right: 50,
+    },
+  },
 }));
 
-type HudProps = {};
+type HudProps = {
+  game: Game | null;
+  reset: boolean;
+};
 
-const Hud: React.FC<HudProps> = ({}) => {
+const Hud: React.FC<HudProps> = ({ game, reset }) => {
   const classes = useStyles();
-  const maxStars = useSelector(
-    (state: RootState) => state.gameSlice.progress.max_stars
+  const dispatch = useDispatch();
+
+  const { max_stars, total_stars_collected, star_timers } = useSelector(
+    (state: RootState) => state.gameSlice.progress
   );
-  const totalStarsCollected = useSelector(
-    (state: RootState) => state.gameSlice.progress.total_stars_collected
-  );
+  const [reloadProgress, setReloadProgress] = useState<boolean>(true);
+  //const [virginCheck, setVirginCheck] = useState<boolean>(false);
+  const [localDuration, setLocalDuration] = useState<number>(0);
   const hp = useSelector((state: RootState) => state.gameSlice.hp);
   const [hpClass, setHpClass] = useState<string>("");
   const vfxObject = useSelector((state: RootState) => state.vfxSlice);
   const poisoned = useSelector((state: RootState) => state.gameSlice.poisoned);
+  const [paused, setPaused] = useState<boolean>(false);
+  const { text_message, play_text } = useSelector(
+    (state: RootState) => state.vfxSlice
+  );
 
   const getHPMeter = () => {
     if (hp <= 4) return 4;
     else if (hp > 100) return 100;
     else return hp;
   };
+
+  useEffect(() => {
+    if (game && game.gameState === GAME_STATE.PAUSED) {
+      setPaused(true);
+    } else {
+      setPaused(false);
+    }
+  }, [game?.gameState]);
+
+  useEffect(() => {
+    setReloadProgress(!reloadProgress);
+    if (total_stars_collected === 0) {
+      setLocalDuration(star_timers[total_stars_collected]);
+    } else {
+      setLocalDuration(
+        star_timers[total_stars_collected] -
+          star_timers[total_stars_collected - 1]
+      );
+    }
+  }, [total_stars_collected, max_stars, star_timers, reset]);
 
   useEffect(() => {
     if (vfxObject.run_animation === VFX.PULSE_GREEN) {
@@ -194,6 +261,14 @@ const Hud: React.FC<HudProps> = ({}) => {
       }, 700);
     }
   }, [vfxObject]);
+
+  useEffect(() => {
+    if (play_text) {
+      setTimeout(() => {
+        dispatch(finishedTextAnimation());
+      }, 4000);
+    }
+  }, [play_text]);
 
   return (
     <div className={classes.root}>
@@ -214,21 +289,49 @@ const Hud: React.FC<HudProps> = ({}) => {
               style={{ width: `${getHPMeter()}%` }}
             ></div>
           </div>
-          <div className={classes.progress}>
-            <div className={classes.progressInner}></div>
-          </div>
+          {reloadProgress ? (
+            <div className={classes.progress} key="progress-default">
+              <div
+                className={classes.progressInner}
+                style={{
+                  animationDuration: `${localDuration}s`,
+                  animationPlayState: paused ? "paused" : "running",
+                }}
+              ></div>
+            </div>
+          ) : (
+            <div className={classes.progress} key="progress-reload">
+              <div
+                className={classes.progressInner}
+                style={{
+                  animationDuration: `${localDuration}s`,
+                  animationPlayState: paused ? "paused" : "running",
+                }}
+              ></div>
+            </div>
+          )}
         </div>
       </div>
       <div className={classes.dotContainer}>
-        {[...Array(maxStars)].map((dummy, index) => (
+        {[...Array(max_stars)].map((dummy, index) => (
           <div
             key={index}
             className={`${classes.dot} ${
-              totalStarsCollected > index ? " " + classes.dotStar : ""
+              total_stars_collected > index ? " " + classes.dotStar : ""
             }`}
           />
         ))}
       </div>
+      {play_text && (
+        <div className={classes.textAnimation}>
+          {text_message.map((text, index) => (
+            <div key={index}>
+              {text}
+              <br />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

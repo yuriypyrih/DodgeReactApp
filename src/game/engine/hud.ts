@@ -1,3 +1,4 @@
+import { getSec } from "../../utils/deltaTime";
 import Game from "./game";
 import Spawner from "./spawner";
 
@@ -39,7 +40,13 @@ export default class Hud {
     if (this.game.dev) {
       context.fillStyle = "white";
       context.font = "12px Arial";
-      context.fillText(`Timer: ${this.game.spawner.roundTimer}`, 10, 90);
+      context.fillText(
+        `Timer: ${this.game.spawner.roundTimer}, ${getSec(
+          this.game.spawner.roundTimer
+        )}`,
+        10,
+        90
+      );
       context.fillText(`gameObjects: ${this.game.gameObjects.length}`, 10, 105);
       context.fillText(
         `Particles: ${this.game.particleObjects.length}`,
