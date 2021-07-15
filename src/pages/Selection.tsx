@@ -1,6 +1,24 @@
+import { Box, Button, Grid, makeStyles } from "@material-ui/core";
 import React from "react";
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import CubePlayButton from "../components/CubePlayButton";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    padding: theme.spacing(2),
+  },
+  container: {
+    marginTop: theme.spacing(4),
+  },
+  journalBtn: {
+    padding: theme.spacing(1, 4),
+    background: "#00AFA3",
+    border: "2px solid #2DD5C4",
+    borderRadius: 4,
+    color: "white",
+  },
+  backBtn: {},
+}));
 
 let levels: {
   title: number;
@@ -17,19 +35,24 @@ let levels: {
 ];
 
 const Selection: React.FC = ({}) => {
+  const classes = useStyles();
+
   return (
-    <div className="menu menu-levels" id="menu-levels">
-      <button className="menu-levels_journal">
-        <svg className="menu-icon menu-icon--white">
-          <use href="assets/svg/symbol-defs.svg#icon-book"></use>
-        </svg>
-        Journal
-      </button>
-      <div className="menu-levels_collection">
+    <Box className={classes.root}>
+      <Button className={classes.journalBtn}>Journal</Button>
+      <Grid container className={classes.container}>
         {levels.map((i, key) => (
-          <CubePlayButton key={key} title={i.title} />
+          <Grid
+            item
+            xs={2}
+            container
+            justify={"center"}
+            style={{ marginBottom: 32 }}
+          >
+            <CubePlayButton key={key} title={i.title} />
+          </Grid>
         ))}
-      </div>
+      </Grid>
       <Link
         to="/Home"
         className="menu-levels_back button-style"
@@ -37,7 +60,7 @@ const Selection: React.FC = ({}) => {
       >
         Back
       </Link>
-    </div>
+    </Box>
   );
 };
 

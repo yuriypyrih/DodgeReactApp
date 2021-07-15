@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./sass/main.scss";
 import VfxAnimation from "./layout/VfxAnimation";
 import { makeStyles } from "@material-ui/core";
 import Routes from "./Routes/Routes";
-import startEngine from "./game";
-import { useDispatch } from "react-redux";
-import { setEngine } from "./redux/slices/engineSlice";
+// import startEngine from "./game";
+// import { useDispatch } from "react-redux";
+// import { setEngine } from "./redux/slices/engineSlice";
 
 const useStyles = makeStyles({
   mainWindow: {
