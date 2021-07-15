@@ -1,6 +1,6 @@
-import { Box, Button, Grid, makeStyles } from "@material-ui/core";
+import {Box, Button, Grid, makeStyles, Typography} from "@material-ui/core";
 import React from "react";
-import { BrowserRouter as Router, Link } from "react-router-dom";
+import {BrowserRouter as Router, Link, useHistory} from "react-router-dom";
 import CubePlayButton from "../components/CubePlayButton";
 
 const useStyles = makeStyles((theme) => ({
@@ -11,13 +11,22 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(4),
   },
   journalBtn: {
+    marginTop: theme.spacing(4),
     padding: theme.spacing(1, 4),
     background: "#00AFA3",
     border: "2px solid #2DD5C4",
     borderRadius: 4,
     color: "white",
   },
-  backBtn: {},
+  backBtn: {
+    marginTop: theme.spacing(4),
+    padding: theme.spacing(1, 4),
+    background: "#00AFA3",
+    border: "2px solid #2DD5C4",
+    borderRadius: 4,
+    color: "white",
+  }
+  ,
 }));
 
 let levels: {
@@ -36,10 +45,18 @@ let levels: {
 
 const Selection: React.FC = ({}) => {
   const classes = useStyles();
+  const history = useHistory();
 
   return (
     <Box className={classes.root}>
-      <Button className={classes.journalBtn}>Journal</Button>
+      <Grid item xs={12} container justify={'center'}>
+        <Button className={classes.journalBtn}>
+          <Typography variant={'h4'}>
+            Journal
+          </Typography>
+        </Button>
+      </Grid>
+
       <Grid container className={classes.container}>
         {levels.map((i, key) => (
           <Grid
@@ -53,13 +70,17 @@ const Selection: React.FC = ({}) => {
           </Grid>
         ))}
       </Grid>
-      <Link
-        to="/Home"
-        className="menu-levels_back button-style"
-        id="btn-levels-back"
-      >
-        Back
-      </Link>
+      <Grid item container xs={12} justify={'flex-end'}>
+        <Button
+            className={classes.backBtn}
+            onClick={()=>history.goBack()}
+        >
+          <Typography variant={'h4'}>
+            Back
+          </Typography>
+        </Button>
+      </Grid>
+
     </Box>
   );
 };
