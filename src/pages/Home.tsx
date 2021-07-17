@@ -1,30 +1,86 @@
 import React from "react";
-import { BrowserRouter as Router, Link } from "react-router-dom";
+import { BrowserRouter as Router, Link, useHistory } from "react-router-dom";
+import { Box, Button, Grid, makeStyles, Typography } from "@material-ui/core";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    padding: theme.spacing(2),
+    height: "100%",
+    background: "#2b2b2c",
+  },
+  title: {
+    background: `linear-gradient(
+                180deg,
+               ${theme.palette.primary.dark} 45%,
+               ${theme.palette.primary.main} 65%
+            )`,
+    " -webkit-background-clip": "text",
+    "-webkit-text-fill-color": "transparent",
+    textAlign: "center",
+    userSelect: "none",
+    fontWeight: 500,
+  },
+  menuContainer: {
+    width: 400,
+  },
+  btn: {
+    marginTop: theme.spacing(4),
+    padding: theme.spacing(2, 4),
+    minWidth: 300,
+    background: "#00AFA3",
+    border: "2px solid #2DD5C4",
+    borderRadius: 4,
+    color: "white",
+  },
+}));
 
 const Home: React.FC = ({}) => {
-  return (
-    <div className="menu menu-main">
-      <div className="menu-main_username">
-        <svg className="menu-icon menu-icon--blue">
-          <use href="../assets/svg/symbol-defs.svg#icon-user"></use>
-        </svg>
+  const history = useHistory();
+  const classes = useStyles();
 
-        <p>Guest</p>
-      </div>
-      <p className="menu-main_title">Dodge</p>
-      <button className="menu-main_login">LOGIN</button>
-      <div className="menu-main_buttons">
-        <Link to="/Selection" className="menu-main_buttons_item button-style">
-          PLAY
-        </Link>
-        <Link to="/Game" className="menu-main_buttons_item button-style">
-          ACHIEVEMENTS
-        </Link>
-        <Link to="/Game" className="menu-main_buttons_item button-style">
-          SETTINGS
-        </Link>
-      </div>
-    </div>
+  const handleGoSelection = () => {
+    history.push("/Selection");
+  };
+  const handleGoAchievements = () => {
+    // history.push("/Achievements")
+  };
+  const handleGoSettings = () => {
+    // history.push("/Settings")
+  };
+
+  return (
+    <Box className={classes.root}>
+      <Grid container>
+        <Grid item xs={12}>
+          <Box mt={4}>
+            <Typography variant={"h1"} className={classes.title}>
+              Dodge
+            </Typography>
+          </Box>
+        </Grid>
+        <Grid item xs={12} container className={classes.menuContainer}>
+          <Grid item xs={12} container justify={"center"}>
+            <Button onClick={handleGoSelection} className={classes.btn}>
+              <Typography variant={"h4"}>PLAY</Typography>
+            </Button>
+          </Grid>
+          <Grid item xs={12} container justify={"center"}>
+            <Button
+              onClick={handleGoAchievements}
+              className={classes.btn}
+              disabled
+            >
+              <Typography variant={"h4"}>ACHIEVEMENTS</Typography>
+            </Button>
+          </Grid>
+          <Grid item xs={12} container justify={"center"}>
+            <Button onClick={handleGoSettings} className={classes.btn} disabled>
+              <Typography variant={"h4"}>SETTINGS</Typography>
+            </Button>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 
