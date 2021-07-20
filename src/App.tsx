@@ -1,5 +1,4 @@
 import React from "react";
-import "./sass/main.scss";
 import VfxAnimation from "./layout/VfxAnimation";
 import { makeStyles } from "@material-ui/core";
 import Routes from "./Routes/Routes";
@@ -8,6 +7,13 @@ import Routes from "./Routes/Routes";
 // import { setEngine } from "./redux/slices/engineSlice";
 
 const useStyles = makeStyles({
+  app: {
+    display: "flex",
+    width: "100vw",
+    height: "100vh",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   mainWindow: {
     position: "relative",
     height: 500,
@@ -20,7 +26,7 @@ function App() {
   const classes = useStyles();
 
   return (
-    <div className="App">
+    <div className={classes.app}>
       <div className={classes.mainWindow}>
         <VfxAnimation>
           <Routes />

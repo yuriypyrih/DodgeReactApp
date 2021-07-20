@@ -3,7 +3,10 @@ import { Box, Button, Grid, makeStyles, Typography } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
-  root: {},
+  root: {
+    background: "#2b2b2c",
+    height: "100%",
+  },
   container: {
     padding: theme.spacing(6),
     minWidth: 400,
@@ -13,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     color: "white",
     minWidth: "200px",
+    background: "#00AFA3",
     border: "2px solid " + theme.palette.primary.main,
   },
 }));
@@ -26,13 +30,15 @@ const Victory: React.FC<unknown> = ({}) => {
   };
 
   const handleQuit = () => {
-    history.push("/Selection");
+    history.replace("/Selection");
   };
 
   return (
     <Box className={classes.root}>
       <Box className={classes.container}>
-        <Typography variant="h1">Victory</Typography>
+        <Typography variant="h2" style={{ color: "white" }}>
+          Victory
+        </Typography>
         <Grid
           container
           justify="center"
@@ -43,13 +49,13 @@ const Victory: React.FC<unknown> = ({}) => {
         >
           <Grid item>
             <Button className={classes.button} disabled onClick={handleNext}>
-              <Typography variant="h4">NEXT</Typography>
+              <Typography variant="h5">NEXT</Typography>
             </Button>
           </Grid>
 
           <Grid item>
             <Button className={classes.button} onClick={handleQuit}>
-              <Typography variant="h4">EXIT</Typography>
+              <Typography variant="h5">EXIT</Typography>
             </Button>
           </Grid>
         </Grid>

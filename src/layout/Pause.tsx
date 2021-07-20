@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
           #c6c6c632 60%, #c6c6c632 75%,  #98989825 76% , #98989825 100%)`,
   },
   container: {
-    background: "#1a1a1d",
+    background: "#2b2b2c",
     border: "1px solid #2dd5c4",
     boxShadow: `0 0 2rem ${fade("#2dd5c4", 0.2)}`,
     padding: theme.spacing(6),
@@ -37,6 +37,8 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     color: "white",
     minWidth: "200px",
+    background: "#00AFA3",
+
     border: "2px solid " + theme.palette.primary.main,
   },
 }));
@@ -61,13 +63,15 @@ const Pause: React.FC<PauseProps> = ({ game, toggleReset }) => {
 
   const handleQuit = () => {
     if (game) game.close();
-    history.push("/Selection");
+    history.replace("/Selection");
   };
 
   return (
     <Box className={classes.root}>
       <Box className={classes.container}>
-        <Typography variant="h1">Paused</Typography>
+        <Typography variant="h2" style={{ color: "white" }}>
+          Paused
+        </Typography>
         <Grid
           container
           justify="center"
@@ -78,19 +82,19 @@ const Pause: React.FC<PauseProps> = ({ game, toggleReset }) => {
         >
           <Grid item>
             <Button className={classes.button} onClick={handleResume}>
-              <Typography variant="h4">RESUME</Typography>
+              <Typography variant="h5">RESUME</Typography>
             </Button>
           </Grid>
 
           <Grid item>
             <Button className={classes.button} onClick={handleReset}>
-              <Typography variant="h4">RESET</Typography>
+              <Typography variant="h5">RESET</Typography>
             </Button>
           </Grid>
 
           <Grid item>
             <Button className={classes.button} onClick={handleQuit}>
-              <Typography variant="h4">QUIT</Typography>
+              <Typography variant="h5">QUIT</Typography>
             </Button>
           </Grid>
         </Grid>

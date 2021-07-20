@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   btn: {
     marginTop: theme.spacing(4),
     padding: theme.spacing(2, 4),
-    minWidth: 300,
+    minWidth: 350,
     background: "#00AFA3",
     border: "2px solid #2DD5C4",
     borderRadius: 4,
@@ -61,7 +61,7 @@ const Home: React.FC = ({}) => {
         <Grid item xs={12} container className={classes.menuContainer}>
           <Grid item xs={12} container justify={"center"}>
             <Button onClick={handleGoSelection} className={classes.btn}>
-              <Typography variant={"h4"}>PLAY</Typography>
+              <Typography variant={"h5"}>PLAY</Typography>
             </Button>
           </Grid>
           <Grid item xs={12} container justify={"center"}>
@@ -70,12 +70,12 @@ const Home: React.FC = ({}) => {
               className={classes.btn}
               disabled
             >
-              <Typography variant={"h4"}>ACHIEVEMENTS</Typography>
+              <Typography variant={"h5"}>ACHIEVEMENTS</Typography>
             </Button>
           </Grid>
           <Grid item xs={12} container justify={"center"}>
             <Button onClick={handleGoSettings} className={classes.btn} disabled>
-              <Typography variant={"h4"}>SETTINGS</Typography>
+              <Typography variant={"h5"}>SETTINGS</Typography>
             </Button>
           </Grid>
         </Grid>

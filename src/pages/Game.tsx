@@ -28,10 +28,11 @@ const Game: React.FC = ({}) => {
   }, []);
 
   useEffect(() => {
+    const lvl = window.location.pathname.split("/")[2];
     if (gameState === GAME_STATE.PAGE_DEFEAT) {
-      history.push("/Defeat");
+      history.push(`/Defeat/${lvl}`);
     } else if (gameState === GAME_STATE.PAGE_VICTORY) {
-      history.push("/Victory");
+      history.push(`/Victory/${lvl}`);
     }
   }, [gameState]);
 

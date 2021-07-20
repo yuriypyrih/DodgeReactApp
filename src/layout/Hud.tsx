@@ -111,7 +111,7 @@ const useStyles = makeStyles((theme) => ({
   dotContainer: {
     display: "flex",
     position: "relative",
-    marginTop: -18,
+    marginTop: -10,
     paddingLeft: 42,
   },
   dot: {

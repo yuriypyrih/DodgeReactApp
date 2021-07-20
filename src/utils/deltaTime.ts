@@ -1,5 +1,5 @@
 export const sec = (seconds: number) => {
-  // Throu calculations 1 sec of real Time is about roundTimer = 60
+  // Through calculations 1 sec of real Time is about roundTimer = 60
   // It returns roundTimer value
   return Math.trunc(seconds * 60);
 };

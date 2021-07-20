@@ -14,8 +14,8 @@ const Routes: React.FC<unknown> = ({}) => {
         <Route exact path="/Home" component={Home} />
         <Route exact path="/Selection" component={Selection} />
         <Route exact path="/Game/:level" component={Game} />
-        <Route exact path="/Victory" component={Victory} />
-        <Route exact path="/Defeat" component={Defeat} />
+        <Route exact path="/Victory/:level" component={Victory} />
+        <Route exact path="/Defeat/:level" component={Defeat} />
         <Route exact path="/Codex" component={Codex} />
         <Route path="/">
           <Home />

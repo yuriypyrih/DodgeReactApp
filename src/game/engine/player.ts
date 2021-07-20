@@ -65,7 +65,7 @@ export default class Player extends GameObject {
     this.stars = 0;
     this.milestone = false;
     this.poisoned = false;
-    this.developerMode = true;
+    this.developerMode = false;
     this.lastPoisonedDate = Date.now();
     this.magneticY = 0;
     this.magneticX = 0;
@@ -77,7 +77,7 @@ export default class Player extends GameObject {
       y: game.canvas.canvasHeight / 2 - this.gameObject.height / 2,
     };
 
-    this.maxSpeed = 8;
+    this.maxSpeed = 6;
     this.maxDiagonialSpeed = Math.ceil(this.maxSpeed / Math.sqrt(2));
   }
 
@@ -141,6 +141,26 @@ export default class Player extends GameObject {
     }
   }
 
+  victoryConditionCheck() {
+    if (this.stars >= 3 && !this.developerMode) {
+      store.dispatch(setGameState(GAME_STATE.PAGE_VICTORY));
+      this.game.close();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  defeatConditionCheck() {
+    if (this.health <= this.death_thresholder && !this.developerMode) {
+      store.dispatch(setGameState(GAME_STATE.PAGE_DEFEAT));
+      this.game.close();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   usePower() {
     if (this.power === POWER.HEAL) {
       this.health += 30;
@@ -161,15 +181,8 @@ export default class Player extends GameObject {
   update(deltaTime: number) {
     store.dispatch(setHP(this.health));
 
-    if (this.stars >= 3 && !this.developerMode) {
-      store.dispatch(setGameState(GAME_STATE.PAGE_VICTORY));
-      this.game.close();
-      return null;
-    } else if (this.health <= this.death_thresholder && !this.developerMode) {
-      store.dispatch(setGameState(GAME_STATE.PAGE_DEFEAT));
-      this.game.close();
-      return null;
-    }
+    if (this.victoryConditionCheck()) return null;
+    if (this.defeatConditionCheck()) return null;
 
     if (this.gameObject.velX !== 0 && this.gameObject.velY !== 0) {
       this.gameObject.velX > 0
