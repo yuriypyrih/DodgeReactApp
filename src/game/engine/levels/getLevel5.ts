@@ -3,21 +3,23 @@ import store from "../../../redux/store";
 import { sec } from "../../../utils/deltaTime";
 import { Stars } from "../../types/Stars";
 import Game from "../game";
-import SpeederEnemy from "../../entities/speeder_enemy";
+import TracerEnemy from "../../entities/tracer_enemy";
+import { level2Stars } from "./getLevel2";
 import Star from "../../entities/star";
 import BasicEnemy from "../../entities/basic_enemy";
-import { level2Stars } from "./getLevel2";
-import TracerEnemy from "../../entities/tracer_enemy";
+import SpeederEnemy from "../../entities/speeder_enemy";
+import SlimeEnemy from "../../entities/slime_enemy";
+import WormEnemy from "../../entities/worm_enemy";
 
-export const level3Stars: Stars = [7, 42, 52];
+export const level5Stars: Stars = [7, 42, 52];
 
-export const getLevel3 = (game: Game): null => {
+export const getLevel5 = (game: Game): null => {
   if (game.spawner.executionSequence === 0) {
     if (game.spawner.roundTimer === sec(0.1)) {
-      store.dispatch(playText(["LEVEL 3", "Tracer"]));
+      store.dispatch(playText(["LEVEL 5", "Slime"]));
     } else if (game.spawner.roundTimer === sec(1.5)) {
       game.gameObjects.push(
-        new TracerEnemy({ game, position: { x: 1, y: 40 } })
+        new SlimeEnemy({ game, position: { x: 1, y: 40 } })
       );
     } else if (game.spawner.roundTimer === sec(level2Stars[0])) {
       game.gameObjects.push(
@@ -41,7 +43,11 @@ export const getLevel3 = (game: Game): null => {
       );
     } else if (game.spawner.roundTimer === sec(10)) {
       game.gameObjects.push(
-        new BasicEnemy({ game, position: { x: 1, y: 120 } })
+        new TracerEnemy({ game, position: { x: 1, y: 120 } })
+      );
+    } else if (game.spawner.roundTimer === sec(11)) {
+      game.gameObjects.push(
+        new WormEnemy({ game, position: { x: 1, y: 120 } })
       );
     }
   }

@@ -63,11 +63,14 @@ export default class TitanEnemy extends GameObject {
       new Trail({
         x: this.gameObject.position.x,
         y: this.gameObject.position.y,
-        reductor: this.gameObject.width / 2,
+        reductor: Math.min(this.gameObject.width / 2, 20),
         color: COLOR.DARK_BLUE,
         width: this.gameObject.width,
         height: this.gameObject.height,
-        life: 0.7,
+        life: Math.max(
+          0.7 * ((this.MAX_SIZE - this.gameObject.width) / this.MAX_SIZE),
+          0.2
+        ),
         minus: 0.02,
         game: this.game,
       })

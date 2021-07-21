@@ -15,15 +15,16 @@ const Game: React.FC = ({}) => {
   const gameState = useSelector(
     (state: RootState) => state.gameSlice.gameState
   );
-  const level = useSelector((state: RootState) => state.gameSlice.level);
+  // const level = useSelector((state: RootState) => state.gameSlice.level);
 
   const handleResetToggle = () => {
     setResetToggle(!resetToggle);
   };
 
   useEffect(() => {
+    const lvl = window.location.pathname.split("/")[2];
     const engine = startEngine();
-    engine.start(level);
+    engine.start(Number(lvl));
     setGame(engine);
   }, []);
 
