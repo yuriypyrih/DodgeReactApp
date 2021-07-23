@@ -10,6 +10,8 @@ import Game from "../game";
 
 export const level1Stars: Stars = [24, 42, 52];
 
+const levelStars = level1Stars;
+
 export const getLevel1 = (game: Game): null => {
   if (game.spawner.executionSequence === 0) {
     if (game.spawner.roundTimer === sec(0.1)) {
@@ -27,7 +29,7 @@ export const getLevel1 = (game: Game): null => {
       game.gameObjects.push(
         new Healthpack({ game, position: { x: 650, y: 100 } })
       );
-    } else if (game.spawner.roundTimer === sec(level1Stars[0])) {
+    } else if (game.spawner.roundTimer === sec(levelStars[0])) {
       store.dispatch(playText(["Collect all stars", "to win!"]));
       game.gameObjects.push(
         new Star({
@@ -38,7 +40,7 @@ export const getLevel1 = (game: Game): null => {
     }
   } else if (game.spawner.executionSequence === 1) {
     game.spawner.executionSequence++;
-    game.spawner.roundTimer = sec(level1Stars[0]) + 1;
+    game.spawner.roundTimer = sec(levelStars[0]) + 1;
   } else if (game.spawner.executionSequence === 2) {
     if (game.spawner.roundTimer === sec(25)) {
       game.gameObjects.push(
@@ -48,7 +50,7 @@ export const getLevel1 = (game: Game): null => {
       game.gameObjects.push(
         new BasicEnemy({ game, position: { x: 1, y: 60 } })
       );
-    } else if (game.spawner.roundTimer === sec(level1Stars[1])) {
+    } else if (game.spawner.roundTimer === sec(levelStars[1])) {
       game.gameObjects.push(
         new Star({
           game,
@@ -59,7 +61,7 @@ export const getLevel1 = (game: Game): null => {
   } else if (game.spawner.executionSequence === 3) {
     game.clearEnemies();
     game.spawner.executionSequence++;
-    game.spawner.roundTimer = sec(level1Stars[1]) + 1;
+    game.spawner.roundTimer = sec(levelStars[1]) + 1;
   } else if (game.spawner.executionSequence === 4) {
     if (game.spawner.roundTimer === sec(42.5)) {
       game.gameObjects.push(
@@ -67,7 +69,7 @@ export const getLevel1 = (game: Game): null => {
           game,
         })
       );
-    } else if (game.spawner.roundTimer === sec(level1Stars[2])) {
+    } else if (game.spawner.roundTimer === sec(levelStars[2])) {
       game.gameObjects.push(
         new Star({
           game,

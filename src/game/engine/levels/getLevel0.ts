@@ -1,0 +1,25 @@
+import { playText } from "../../../redux/slices/vfxSlice";
+import store from "../../../redux/store";
+import { sec } from "../../../utils/deltaTime";
+import { Stars } from "../../types/Stars";
+import Game from "../game";
+import BasicEnemy from "../../entities/basic_enemy";
+import BasicBoss from "../../entities/basic_boss";
+import SpeederBoss from "../../entities/speeder_boss";
+import SpeederEnemy from "../../entities/speeder_enemy";
+import MagnetEnemy from "../../entities/magnet_enemy";
+import TracerBoss from "../../entities/tracer_boss";
+import WormBoss from "../../entities/worm_boss";
+
+export const level0Stars: Stars = [3, 15, 30];
+
+export const getLevel0 = (game: Game): null => {
+  if (game.spawner.executionSequence === 0) {
+    if (game.spawner.roundTimer === sec(0.1)) {
+      store.dispatch(playText(["LEVEL 0", "TESTING"]));
+    } else if (game.spawner.roundTimer === sec(1)) {
+      game.gameObjects.push(new WormBoss({ game }));
+    }
+  }
+  return null;
+};

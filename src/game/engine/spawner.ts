@@ -12,6 +12,7 @@ import { getLevel7, level7Stars } from "./levels/getLevel7";
 import { getLevel8, level8Stars } from "./levels/getLevel8";
 import { getLevel9, level9Stars } from "./levels/getLevel9";
 import { getLevel10, level10Stars } from "./levels/getLevel10";
+import { getLevel0, level0Stars } from "./levels/getLevel0";
 
 type SpawnerProps = {
   game: Game;
@@ -53,18 +54,23 @@ export default class Spawner {
   }
 
   updateHudProgress() {
-    // console.log(
-    //   "I tried",
-    //   this.levelStars[this.game.level - 1].length,
-    //   this.game.level
-    // );
-    store.dispatch(
-      setProgress({
-        max_stars: this.levelStars[this.game.level - 1].length,
-        total_stars_collected: this.game.player.stars,
-        star_timers: this.levelStars[this.game.level - 1],
-      })
-    );
+    if (this.game.level === 0) {
+      store.dispatch(
+        setProgress({
+          max_stars: level0Stars.length,
+          total_stars_collected: this.game.player.stars,
+          star_timers: level0Stars,
+        })
+      );
+    } else {
+      store.dispatch(
+        setProgress({
+          max_stars: this.levelStars[this.game.level - 1].length,
+          total_stars_collected: this.game.player.stars,
+          star_timers: this.levelStars[this.game.level - 1],
+        })
+      );
+    }
   }
 
   spawnRandomHealthpack() {
@@ -91,8 +97,9 @@ export default class Spawner {
     ) {
       //  this.spawnRandomHealthpack();
     }
-
-    if (this.game.level === 1) {
+    if (this.game.level === 0) {
+      getLevel0(this.game);
+    } else if (this.game.level === 1) {
       getLevel1(this.game);
     } else if (this.game.level === 2) {
       getLevel2(this.game);

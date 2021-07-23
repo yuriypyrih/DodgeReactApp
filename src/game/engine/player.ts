@@ -65,7 +65,7 @@ export default class Player extends GameObject {
     this.stars = 0;
     this.milestone = false;
     this.poisoned = false;
-    this.developerMode = false;
+    this.developerMode = true;
     this.lastPoisonedDate = Date.now();
     this.magneticY = 0;
     this.magneticX = 0;
