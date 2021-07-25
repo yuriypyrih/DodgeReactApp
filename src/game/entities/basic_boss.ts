@@ -48,26 +48,16 @@ export default class BasicBoss extends GameObject {
     return rectange;
   }
 
-  draw(context: any) {
-    context.fillStyle = COLOR.RED;
-    context.fillRect(
-      this.gameObject.position.x,
-      this.gameObject.position.y,
-      this.gameObject.width,
-      this.gameObject.height
-    );
-  }
-
-  update(deltaTime: number) {
-    // this.awakening_timer += deltaTime;
-    this.bullet_timer++;
-
+  awakenFunction() {
     if (!this.awaken && this.gameObject.position.y >= 10) {
       this.awaken = true;
       this.gameObject.velY = 0;
       this.gameObject.velX = 5;
     }
+  }
 
+  fireBullets() {
+    this.bullet_timer++;
     if (this.awaken && this.bullet_timer % 40 === 0) {
       let offset = this.gameObject.velX > 0 ? 20 : -20;
       let origin_x =
@@ -98,7 +88,21 @@ export default class BasicBoss extends GameObject {
         })
       );
     }
+  }
 
+  draw(context: any) {
+    context.fillStyle = COLOR.RED;
+    context.fillRect(
+      this.gameObject.position.x,
+      this.gameObject.position.y,
+      this.gameObject.width,
+      this.gameObject.height
+    );
+  }
+
+  update(deltaTime: number) {
+    this.awakenFunction();
+    this.fireBullets();
     // Updating the entity's position based on its velocity (if it has one)
     this.gameObject.position.x += this.gameObject.velX;
     this.gameObject.position.y += this.gameObject.velY;

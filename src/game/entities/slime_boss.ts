@@ -1,25 +1,26 @@
 import { ENTITY_ID } from "../enum/entitiy_id";
 import { COLOR } from "../enum/colors";
+import Trail from "../engine/trail";
 import GameObject from "../engine/gameObject";
 import { Rectangle } from "../types/Rectangle";
 import Game from "../engine/game";
-import TracerBullet from "./tracer_bullet";
+import BasicBullet from "./basic_bullet";
+import SpeederBullet from "./speeder_bullet";
+import SlimeBullet from "./slime_bullet";
 
-type TracerBossProps = {
+type SlimeBossProps = {
   game: Game;
   position?: { x: number; y: number };
   velX?: number;
   velY?: number;
 };
 
-export default class TracerBoss extends GameObject {
+export default class SlimeBoss extends GameObject {
   game: Game;
   awaken: boolean;
   bullet_timer: number;
-  awakening_timer: number;
-  MAX_SPEED: number;
 
-  constructor({ game, position, velX = 0, velY = 0.3 }: TracerBossProps) {
+  constructor({ game, position, velX = 0, velY = 0.3 }: SlimeBossProps) {
     super({
       id: ENTITY_ID.BOSS,
       width: 50,
@@ -33,9 +34,7 @@ export default class TracerBoss extends GameObject {
 
     this.game = game;
     this.awaken = false;
-    this.awakening_timer = 0;
     this.bullet_timer = 0;
-    this.MAX_SPEED = 25;
   }
 
   getBounds() {
@@ -48,35 +47,43 @@ export default class TracerBoss extends GameObject {
     return rectange;
   }
 
+  awakenFunction() {
+    if (!this.awaken && this.gameObject.position.y >= 10) {
+      this.awaken = true;
+      this.gameObject.velY = 0;
+      this.gameObject.velX = 2;
+    }
+  }
+
   fireBullets() {
     this.bullet_timer++;
 
-    if (this.awaken && this.bullet_timer % 40 === 0) {
+    if (this.awaken && this.bullet_timer % 10 === 0) {
       let offset = this.gameObject.velX > 0 ? 20 : -20;
       let origin_x =
         this.gameObject.position.x + this.gameObject.width / 2 + offset;
       let origin_y = this.gameObject.position.y + this.gameObject.height - 5;
       this.game.gameObjects.push(
-        new TracerBullet({
+        new SlimeBullet({
           game: this.game,
           position: { x: origin_x, y: origin_y },
-          velX: 0,
-          velY: 6,
+          velX: 5,
+          velY: 0,
+        })
+      );
+      this.game.gameObjects.push(
+        new SlimeBullet({
+          game: this.game,
+          position: { x: origin_x, y: origin_y },
+          velX: -5,
+          velY: 0,
         })
       );
     }
   }
 
-  awakenFunction() {
-    if (!this.awaken && this.gameObject.position.y >= 10) {
-      this.awaken = true;
-      this.gameObject.velY = 0;
-      this.gameObject.velX = 5;
-    }
-  }
-
   draw(context: any) {
-    context.fillStyle = COLOR.YELLOW;
+    context.fillStyle = COLOR.GREEN;
     context.fillRect(
       this.gameObject.position.x,
       this.gameObject.position.y,
@@ -89,16 +96,39 @@ export default class TracerBoss extends GameObject {
     this.awakenFunction();
     this.fireBullets();
 
+    // Creating a Trail particle and add it to the list
+    this.game.particleObjects.push(
+      new Trail({
+        x: this.gameObject.position.x,
+        y: this.gameObject.position.y,
+        reductor: (this.gameObject.width * 5) / 6,
+        color: COLOR.GREEN,
+        width: this.gameObject.width,
+        height: this.gameObject.height,
+        life: 0.8,
+        minus: 0.01,
+        game: this.game,
+      })
+    );
+
     // Updating the entity's position based on its velocity (if it has one)
     this.gameObject.position.x += this.gameObject.velX;
     this.gameObject.position.y += this.gameObject.velY;
 
-    if (
-      this.gameObject.position.x <= 0 ||
-      this.gameObject.position.x >=
-        this.game.canvas.canvasWidth - this.gameObject.width
-    ) {
-      this.gameObject.velX *= -1;
+    if (this.awaken) {
+      this.gameObject.velY += 0.14;
+
+      if (
+        this.gameObject.position.y >=
+        this.game.canvas.canvasHeight - this.gameObject.height
+      )
+        this.gameObject.velY = -11;
+      if (
+        this.gameObject.position.x <= 0 ||
+        this.gameObject.position.x >=
+          this.game.canvas.canvasWidth - this.gameObject.width
+      )
+        this.gameObject.velX *= -1;
     }
   }
 }

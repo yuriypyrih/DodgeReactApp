@@ -50,6 +50,14 @@ export default class SpeederBoss extends GameObject {
     return rectange;
   }
 
+  awakenFunction() {
+    if (!this.awaken && this.gameObject.position.y >= 10) {
+      this.awaken = true;
+      this.gameObject.velY = 0;
+      this.gameObject.velX = 5;
+    }
+  }
+
   fireBullets() {
     this.bullet_timer++;
 
@@ -91,7 +99,7 @@ export default class SpeederBoss extends GameObject {
   }
 
   update(deltaTime: number) {
-    // this.awakening_timer += deltaTime;
+    this.awakenFunction();
     this.fireBullets();
 
     // Creating a Trail particle and add it to the list
