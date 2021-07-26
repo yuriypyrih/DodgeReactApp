@@ -15,5 +15,5 @@ export enum COLOR {
   GREY = "#676767",
   GOLD = "#FFFFCC",
   PORTAL_ORANGE = "#ff934d",
-  PORTAL_BLUE = "#4db9ff ",
+  PORTAL_BLUE = "#4db9ff",
 }

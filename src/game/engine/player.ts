@@ -272,7 +272,13 @@ export default class Player extends GameObject {
             this.recently_damaged = 0;
           }
         }
-
+        if (object.gameObject.id === ENTITY_ID.EXPLOSION) {
+          if (this.recently_damaged > this.IMMUNITY_IN_MILISEC) {
+            store.dispatch(playAnimation(VFX.PULSE_RED));
+            this.health -= 50;
+            this.recently_damaged = 0;
+          }
+        }
         if (object.gameObject.id === ENTITY_ID.BULLET) {
           if (this.recently_damaged > this.IMMUNITY_IN_MILISEC) {
             store.dispatch(playAnimation(VFX.PULSE_RED));

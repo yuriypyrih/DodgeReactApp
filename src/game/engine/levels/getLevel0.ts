@@ -11,6 +11,7 @@ import MagnetEnemy from "../../entities/magnet_enemy";
 import TracerBoss from "../../entities/tracer_boss";
 import WormBoss from "../../entities/worm_boss";
 import SlimeBoss from "../../entities/slime_boss";
+import BomberEnemy from "../../entities/bomber_enemy";
 
 export const level0Stars: Stars = [3, 15, 30];
 
@@ -19,7 +20,9 @@ export const getLevel0 = (game: Game): null => {
     if (game.spawner.roundTimer === sec(0.1)) {
       store.dispatch(playText(["LEVEL 0", "TESTING"]));
     } else if (game.spawner.roundTimer === sec(1)) {
-      game.gameObjects.push(new SlimeBoss({ game }));
+      game.gameObjects.push(
+        new BomberEnemy({ game, position: { x: 1, y: 60 } })
+      );
     }
   }
   return null;
