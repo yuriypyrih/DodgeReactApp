@@ -1,30 +1,32 @@
 import { ENTITY_ID } from "../enum/entitiy_id";
 import { COLOR } from "../enum/colors";
+//import Trail from "../engine/trail";
 import GameObject from "../engine/gameObject";
 import { Rectangle } from "../types/Rectangle";
 import Trail from "../engine/trail";
 import Game from "../engine/game";
 import Explosion from "./explosion";
 
-type BomberEnemyProps = {
+type BomberBulletProps = {
   game: Game;
   position: { x: number; y: number };
   velX?: number;
   velY?: number;
 };
 
-export default class BomberEnemy extends GameObject {
+export default class BomberBullet extends GameObject {
   game: Game;
 
-  constructor({ game, position, velX = 5, velY = 5 }: BomberEnemyProps) {
+  constructor({ game, position, velX = 0, velY = 5 }: BomberBulletProps) {
     super({
-      id: ENTITY_ID.BASIC_ENEMY,
-      width: 20,
-      height: 20,
+      id: ENTITY_ID.BULLET,
+      width: 5,
+      height: 5,
       position,
       velY,
       velX,
     });
+
     this.game = game;
   }
 
@@ -46,14 +48,6 @@ export default class BomberEnemy extends GameObject {
       this.gameObject.width,
       this.gameObject.height
     );
-    context.fillStyle = COLOR.ORANGE;
-    const shift = 6;
-    context.fillRect(
-      this.gameObject.position.x + (this.gameObject.velX > 0 ? 0 : shift),
-      this.gameObject.position.y + (this.gameObject.velY > 0 ? 0 : shift),
-      this.gameObject.width - shift,
-      this.gameObject.height - shift
-    );
   }
 
   update(deltaTime: number) {
@@ -66,12 +60,12 @@ export default class BomberEnemy extends GameObject {
       new Trail({
         x: this.gameObject.position.x,
         y: this.gameObject.position.y,
-        reductor: 12,
+        reductor: 0,
         color: COLOR.ORANGE,
         width: this.gameObject.width,
         height: this.gameObject.height,
-        life: 0.7,
-        minus: 0.02,
+        life: 0.8,
+        minus: 0.04,
         game: this.game,
       })
     );
@@ -81,7 +75,6 @@ export default class BomberEnemy extends GameObject {
       this.gameObject.position.y >=
         this.game.canvas.canvasHeight - this.gameObject.height
     ) {
-      this.gameObject.velY *= -1;
       this.game.gameObjects.push(
         new Explosion({
           game: this.game,
@@ -91,14 +84,13 @@ export default class BomberEnemy extends GameObject {
           },
         })
       );
+      this.game.gameObjects.splice(this.game.gameObjects.indexOf(this), 1);
     }
-
     if (
       this.gameObject.position.x <= 0 ||
       this.gameObject.position.x >=
         this.game.canvas.canvasWidth - this.gameObject.width
     ) {
-      this.gameObject.velX *= -1;
       this.game.gameObjects.push(
         new Explosion({
           game: this.game,
@@ -108,6 +100,7 @@ export default class BomberEnemy extends GameObject {
           },
         })
       );
+      this.game.gameObjects.splice(this.game.gameObjects.indexOf(this), 1);
     }
   }
 }
