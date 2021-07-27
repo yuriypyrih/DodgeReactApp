@@ -5,27 +5,31 @@ import { Rectangle } from "../types/Rectangle";
 import Trail from "../engine/trail";
 import Game from "../engine/game";
 
-type BasicEnemyProps = {
+type TitanBulletProps = {
   game: Game;
   position: { x: number; y: number };
   velX?: number;
   velY?: number;
+  boss: GameObject;
 };
 
-export default class BasicEnemy extends GameObject {
+export default class TitanBullet extends GameObject {
   game: Game;
+  boss: GameObject;
+  maxSpeed: number;
 
-  constructor({ game, position, velX = 5, velY = 5 }: BasicEnemyProps) {
+  constructor({ game, position, velX = 5, velY = 5, boss }: TitanBulletProps) {
     super({
-      id: ENTITY_ID.BASIC_ENEMY,
-      width: 20,
-      height: 20,
+      id: ENTITY_ID.BULLET,
+      width: 5,
+      height: 5,
       position,
       velY,
       velX,
     });
-
+    this.boss = boss;
     this.game = game;
+    this.maxSpeed = 3;
   }
 
   getBounds() {
@@ -39,7 +43,7 @@ export default class BasicEnemy extends GameObject {
   }
 
   draw(context: any) {
-    context.fillStyle = COLOR.RED;
+    context.fillStyle = COLOR.DARK_BLUE;
     context.fillRect(
       this.gameObject.position.x,
       this.gameObject.position.y,
@@ -58,27 +62,34 @@ export default class BasicEnemy extends GameObject {
       new Trail({
         x: this.gameObject.position.x,
         y: this.gameObject.position.y,
-        reductor: 12,
-        color: COLOR.RED,
+        reductor: 0,
+        color: COLOR.DARK_BLUE,
         width: this.gameObject.width,
         height: this.gameObject.height,
-        life: 0.7,
-        minus: 0.02,
+        life: 0.8,
+        minus: 0.04,
         game: this.game,
       })
     );
 
-    if (
-      this.gameObject.position.y <= 0 ||
-      this.gameObject.position.y >=
-        this.game.canvas.canvasHeight - this.gameObject.height
-    )
-      this.gameObject.velY *= -1;
-    if (
-      this.gameObject.position.x <= 0 ||
-      this.gameObject.position.x >=
-        this.game.canvas.canvasWidth - this.gameObject.width
-    )
-      this.gameObject.velX *= -1;
+    let diffY = Math.ceil(
+      this.gameObject.position.y - (this.boss.gameObject.position.y + 5)
+    );
+    let diffX = Math.ceil(
+      this.gameObject.position.x - (this.boss.gameObject.position.x + 5)
+    );
+    let distance = Math.ceil(
+      Math.sqrt(
+        (this.gameObject.position.x - this.boss.gameObject.position.x) *
+          (this.gameObject.position.x - this.boss.gameObject.position.x) +
+          (this.gameObject.position.y - this.boss.gameObject.position.y) *
+            (this.gameObject.position.y - this.boss.gameObject.position.y)
+      )
+    );
+
+    if (distance < 1) distance = 1;
+
+    this.gameObject.velX = (-this.maxSpeed / distance) * diffX;
+    this.gameObject.velY = (-this.maxSpeed / distance) * diffY;
   }
 }

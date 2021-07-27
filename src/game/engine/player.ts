@@ -12,7 +12,7 @@ import {
   setProgress,
 } from "../../redux/slices/gameSlice";
 import Trail from "./trail";
-import { playAnimation } from "../../redux/slices/vfxSlice";
+import { playAnimation, playText } from "../../redux/slices/vfxSlice";
 import { VFX } from "../enum/vfx";
 import { GAME_STATE } from "../enum/game_state";
 import { POWER } from "../enum/power";
@@ -265,7 +265,10 @@ export default class Player extends GameObject {
           }
         }
 
-        if (object.gameObject.id === ENTITY_ID.BOSS) {
+        if (
+          object.gameObject.id === ENTITY_ID.BOSS ||
+          object.gameObject.id === ENTITY_ID.TITAN_BOSS
+        ) {
           if (this.recently_damaged > this.IMMUNITY_IN_MILISEC) {
             store.dispatch(playAnimation(VFX.PULSE_RED));
             this.health -= 30;
@@ -295,11 +298,33 @@ export default class Player extends GameObject {
           // Take the damage only after the end of Immunity has expired
           // And reset the recently_damaged
           if (this.recently_damaged > this.IMMUNITY_IN_MILISEC) {
-            //Animation.pulseRed();
+            //Animation.pulsePurple();
+            if (!this.poisoned) {
+              this.poisoned = true;
+              store.dispatch(playText(["POISONED"]));
+            }
             store.dispatch(playAnimation(VFX.PULSE_PURPLE));
             this.health -= 15;
             this.recently_damaged = 0;
-            this.poisoned = true;
+          }
+        }
+
+        if (object.gameObject.id === ENTITY_ID.VENOM_BULLET) {
+          // Take the damage only after the end of Immunity has expired
+          // And reset the recently_damaged
+          if (this.recently_damaged > this.IMMUNITY_IN_MILISEC) {
+            //Animation.pulsePurple();
+            if (!this.poisoned) {
+              this.poisoned = true;
+              store.dispatch(playText(["POISONED"]));
+            }
+            store.dispatch(playAnimation(VFX.PULSE_PURPLE));
+            this.health -= 10;
+            this.recently_damaged = 0;
+            this.game.gameObjects.splice(
+              this.game.gameObjects.indexOf(object),
+              1
+            );
           }
         }
 

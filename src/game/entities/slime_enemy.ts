@@ -78,7 +78,7 @@ export default class SlimeEnemy extends GameObject {
       this.gameObject.position.y >=
         this.game.canvas.canvasHeight - this.gameObject.height
     )
-      this.gameObject.velY = -10;
+      this.gameObject.velY = -11;
     if (
       this.gameObject.position.x <= 0 ||
       this.gameObject.position.x >=
