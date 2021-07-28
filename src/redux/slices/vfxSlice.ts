@@ -5,6 +5,7 @@ type vfxSliceType = {
   run_animation: VFX | null;
   animation_counter: number;
   text_message: string[];
+  darkness: number;
   play_text: boolean;
 };
 
@@ -12,6 +13,7 @@ const initialState: vfxSliceType = {
   run_animation: null,
   text_message: ["Dodge", "Game"],
   play_text: false,
+  darkness: 0,
   animation_counter: 0,
 };
 
@@ -31,13 +33,13 @@ const vfxSlice = createSlice({
     finishedTextAnimation: (state) => {
       state.play_text = false;
     },
+    setDarkness: (state, action) => {
+      state.darkness = action.payload;
+    },
   },
 });
 
-export const {
-  playAnimation,
-  playText,
-  finishedTextAnimation,
-} = vfxSlice.actions;
+export const { playAnimation, playText, finishedTextAnimation, setDarkness } =
+  vfxSlice.actions;
 
 export default vfxSlice.reducer;

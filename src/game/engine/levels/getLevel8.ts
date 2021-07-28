@@ -4,7 +4,6 @@ import { sec } from "../../../utils/deltaTime";
 import { Stars } from "../../types/Stars";
 import Game from "../game";
 import BomberEnemy from "../../entities/bomber_enemy";
-import VenomEnemy from "../../entities/venom_enemy";
 import SlimeEnemy from "../../entities/slime_enemy";
 import BasicEnemy from "../../entities/basic_enemy";
 import SpeederEnemy from "../../entities/speeder_enemy";

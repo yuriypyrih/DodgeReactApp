@@ -13,7 +13,9 @@ export enum COLOR {
   PINK = "#E96AD0",
   WHITE = "#F4F5F7",
   GREY = "#676767",
+  LIGHT_GREY = "#989898",
   GOLD = "#FFFFCC",
   PORTAL_ORANGE = "#ff934d",
   PORTAL_BLUE = "#4db9ff",
+  BLACK = "black",
 }

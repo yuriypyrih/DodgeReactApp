@@ -76,7 +76,10 @@ export default class Game {
 
   clearEnemies() {
     for (let i = 0; i < this.gameObjects.length; i++) {
-      if (this.gameObjects[i].gameObject.id === ENTITY_ID.BASIC_ENEMY) {
+      if (
+        this.gameObjects[i].gameObject.id === ENTITY_ID.BASIC_ENEMY ||
+        this.gameObjects[i].gameObject.id === ENTITY_ID.VENOM
+      ) {
         this.gameObjects.splice(i, 1);
         i--;
       }

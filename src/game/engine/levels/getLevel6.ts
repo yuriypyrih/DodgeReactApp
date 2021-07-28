@@ -3,7 +3,6 @@ import store from "../../../redux/store";
 import { sec } from "../../../utils/deltaTime";
 import { Stars } from "../../types/Stars";
 import Game from "../game";
-import SpeederEnemy from "../../entities/speeder_enemy";
 import Star from "../../entities/star";
 import TracerEnemy from "../../entities/tracer_enemy";
 import BomberBoss from "../../entities/bomber_boss";

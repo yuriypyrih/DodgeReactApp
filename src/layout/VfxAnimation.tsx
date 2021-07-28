@@ -4,6 +4,7 @@ import { COLOR } from "../game/enum/colors";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { VFX } from "../game/enum/vfx";
+import clsx from "clsx";
 
 const createPulseKeyframes = (color: string, maxOpacity?: number) => {
   return {
@@ -126,9 +127,12 @@ const VfxAnimation: React.FC<VfxAnimationProps> = ({ children }) => {
   }, [vfxObject.animation_counter]);
 
   return (
-    <div className={`${classes.root} ${containerClass}`}>
-      <div className={`${classes.innerContainer} ${innercontainerClassA}`}>
-        <div className={`${classes.innerContainer} ${innercontainerClassB}`}>
+    <div
+      className={clsx(classes.root, containerClass)}
+      style={{ background: fade("#000", vfxObject.darkness) }}
+    >
+      <div className={clsx(classes.innerContainer, innercontainerClassA)}>
+        <div className={clsx(classes.innerContainer, innercontainerClassB)}>
           {children}
         </div>
       </div>

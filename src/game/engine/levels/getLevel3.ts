@@ -6,10 +6,7 @@ import Game from "../game";
 import SpeederEnemy from "../../entities/speeder_enemy";
 import Star from "../../entities/star";
 import BasicEnemy from "../../entities/basic_enemy";
-import { level2Stars } from "./getLevel2";
 import TracerEnemy from "../../entities/tracer_enemy";
-import SpeederBoss from "../../entities/speeder_boss";
-import { level1Stars } from "./getLevel1";
 import TracerBoss from "../../entities/tracer_boss";
 
 export const level3Stars: Stars = [7, 15, 30];

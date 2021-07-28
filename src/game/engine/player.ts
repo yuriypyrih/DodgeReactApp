@@ -12,7 +12,11 @@ import {
   setProgress,
 } from "../../redux/slices/gameSlice";
 import Trail from "./trail";
-import { playAnimation, playText } from "../../redux/slices/vfxSlice";
+import {
+  playAnimation,
+  playText,
+  setDarkness,
+} from "../../redux/slices/vfxSlice";
 import { VFX } from "../enum/vfx";
 import { GAME_STATE } from "../enum/game_state";
 import { POWER } from "../enum/power";
@@ -39,14 +43,15 @@ export default class Player extends GameObject {
   developerMode: boolean;
   magneticY: number;
   magneticX: number;
+  darkness: number;
   power: POWER;
   power_consumables: number;
 
   constructor({ game }: PlayerProps) {
     super({
       id: ENTITY_ID.PLAYER,
-      width: 20,
-      height: 20,
+      width: 25,
+      height: 25,
       position: {
         x: 0,
         y: 0,
@@ -69,6 +74,7 @@ export default class Player extends GameObject {
     this.lastPoisonedDate = Date.now();
     this.magneticY = 0;
     this.magneticX = 0;
+    this.darkness = 0;
     this.power = POWER.HEAL;
     this.power_consumables = 1;
 
@@ -115,6 +121,7 @@ export default class Player extends GameObject {
     this.stars = 0;
     this.milestone = false;
     this.poisoned = false;
+    this.darkness = 0;
   }
 
   getBounds() {
@@ -227,6 +234,14 @@ export default class Player extends GameObject {
       }
     }
 
+    if (this.darkness > 0) {
+      this.darkness -= 0.01;
+      if (this.darkness < 0) {
+        this.darkness = 0;
+      }
+      store.dispatch(setDarkness(this.darkness));
+    }
+
     this.game.gameObjects.forEach((object: GameObject) => {
       if (this.collision(object.getBounds())) {
         // You're immune to dmg when healed
@@ -328,6 +343,15 @@ export default class Player extends GameObject {
           }
         }
 
+        if (object.gameObject.id === ENTITY_ID.SHADOW_AURA) {
+          this.getHitByBodyAura(object, 25);
+          this.darkness += 0.02;
+          if (this.darkness > 1) {
+            this.darkness = 1;
+          }
+          store.dispatch(setDarkness(this.darkness));
+        }
+
         if (object.gameObject.id === ENTITY_ID.MAGNET_AURA_PLUS) {
           this.applyMagneticForce(object, "plus");
         }
@@ -364,14 +388,25 @@ export default class Player extends GameObject {
     }
   }
 
-  private getMagneticForce(objPos: number, playerPos: number) {
-    const dif = Math.abs(playerPos - objPos);
-    const max_distance = 300;
-    const force = Math.min((max_distance - dif) / max_distance, 1);
-    return force * force * this.MAGNET_POWER;
+  private getHitByBodyAura(obj: GameObject, damage: number) {
+    if (this.recently_damaged > this.IMMUNITY_IN_MILISEC) {
+      if (
+        this.collision({
+          x: obj.gameObject.position.x,
+          y: obj.gameObject.position.y,
+          width: obj.gameObject.width,
+          height: obj.gameObject.height,
+        })
+      ) {
+        this.health -= damage;
+        this.recently_damaged = 0;
+      }
+    }
   }
 
   private applyMagneticForce(obj: GameObject, type: "minus" | "plus") {
+    this.getHitByBodyAura(obj, 25);
+
     let diffY = Math.ceil(
       this.gameObject.position.y - (obj.gameObject.position.y + 5)
     );

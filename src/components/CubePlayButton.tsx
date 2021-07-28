@@ -19,9 +19,10 @@ const useStyles = makeStyles((theme) => ({
 
 type CubePlayButtonProps = {
   title: number;
+  disabled?: boolean;
 };
 
-const CubePlayButton: React.FC<CubePlayButtonProps> = ({ title }) => {
+const CubePlayButton: React.FC<CubePlayButtonProps> = ({ title, disabled }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const history = useHistory();
@@ -32,7 +33,7 @@ const CubePlayButton: React.FC<CubePlayButtonProps> = ({ title }) => {
   };
 
   return (
-    <Button className={classes.root} onClick={handleClick}>
+    <Button className={classes.root} onClick={handleClick} disabled={disabled}>
       {title}
     </Button>
   );

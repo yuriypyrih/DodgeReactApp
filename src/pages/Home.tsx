@@ -54,7 +54,7 @@ const Home: React.FC = ({}) => {
         <Grid item xs={12}>
           <Box mt={4}>
             <Typography variant={"h1"} className={classes.title}>
-              Dodge
+              Dodger
             </Typography>
           </Box>
         </Grid>

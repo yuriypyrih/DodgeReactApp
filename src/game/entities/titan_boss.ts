@@ -3,7 +3,6 @@ import { COLOR } from "../enum/colors";
 import GameObject from "../engine/gameObject";
 import { Rectangle } from "../types/Rectangle";
 import Game from "../engine/game";
-import BasicBullet from "./basic_bullet";
 import TitanBullet from "./titan_bullet";
 
 type TitanBossProps = {
@@ -136,7 +135,7 @@ export default class TitanBoss extends GameObject {
       1,
       this.gameObject.position.x + this.gameObject.width / 2,
       this.gameObject.position.y + this.gameObject.height / 2,
-      this.gameObject.width / 2
+      this.gameObject.width
     );
     gradient.addColorStop(0, "transparent");
     gradient.addColorStop(

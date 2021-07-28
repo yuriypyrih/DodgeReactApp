@@ -3,12 +3,10 @@ import store from "../../../redux/store";
 import { sec } from "../../../utils/deltaTime";
 import { Stars } from "../../types/Stars";
 import Game from "../game";
-import { level2Stars } from "./getLevel2";
 import Star from "../../entities/star";
 import BasicEnemy from "../../entities/basic_enemy";
 import SpeederEnemy from "../../entities/speeder_enemy";
 import WormEnemy from "../../entities/worm_enemy";
-import { level1Stars } from "./getLevel1";
 import WormBoss from "../../entities/worm_boss";
 
 export const level4Stars: Stars = [7, 15, 30];

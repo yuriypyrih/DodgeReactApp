@@ -4,13 +4,11 @@ import { sec } from "../../../utils/deltaTime";
 import { Stars } from "../../types/Stars";
 import Game from "../game";
 import TracerEnemy from "../../entities/tracer_enemy";
-import { level2Stars } from "./getLevel2";
 import Star from "../../entities/star";
 import BasicEnemy from "../../entities/basic_enemy";
 import SpeederEnemy from "../../entities/speeder_enemy";
 import SlimeEnemy from "../../entities/slime_enemy";
 import WormEnemy from "../../entities/worm_enemy";
-import SpeederBoss from "../../entities/speeder_boss";
 import SlimeBoss from "../../entities/slime_boss";
 
 export const level5Stars: Stars = [7, 14, 20];
