@@ -11,6 +11,7 @@ import { useHistory } from "react-router-dom";
 import CubePlayButton from "../components/CubePlayButton";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
+import ImportContactsIcon from "@material-ui/icons/ImportContacts";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -103,8 +104,12 @@ const Selection: React.FC = ({}) => {
     <Box className={classes.root}>
       <Grid container style={{ height: "100%" }} alignContent={"space-between"}>
         <Grid item xs={12} container justify={"center"}>
-          <Button className={classes.journalBtn}>
-            <Typography variant={"h5"}>JOURNAL</Typography>
+          <Button
+            className={classes.journalBtn}
+            onClick={() => history.push("/Wiki")}
+          >
+            <ImportContactsIcon style={{ marginRight: 8 }} />
+            <Typography variant={"h5"}>Wiki</Typography>
           </Button>
         </Grid>
         <Grid container className={classes.container} item>
