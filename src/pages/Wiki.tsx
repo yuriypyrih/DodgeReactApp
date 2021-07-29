@@ -51,6 +51,41 @@ const relicsContent: ContentType[] = [
     title: "Healthpack Generator",
     description: "(Passive ∞) Periodically generates healthpacks",
   },
+  {
+    title: "Immunity",
+    description: "(Active x1) Grants damage immunity for 3s",
+  },
+  {
+    title: "Poison Cure",
+    description: "(Active x1) Removes poison effect and heals you a bit",
+  },
+  {
+    title: "Night Vision",
+    description:
+      "(Active x2) For 3s you can see through darkness and spot ghosts easier",
+  },
+  {
+    title: "Fear (Coming Soon)",
+    description: "(Active x1) Scare all enemies and bullets away from you",
+  },
+  {
+    title: "Guardian Angel (Coming Soon)",
+    description:
+      "(Passive x1) Instead of dying you gain immunity for 2s and heals you a bit",
+  },
+  {
+    title: "Portal (Coming Soon)",
+    description: "(Passive ∞) You can pass through the Left and Right wall",
+  },
+  {
+    title: "Teleport Beacon (Coming Soon)",
+    description:
+      "(Active x3) Press once to deploy a beacon, press again to teleport to it",
+  },
+  {
+    title: "Stabilizer (Coming Soon)",
+    description: "(Passive ∞) You are immune to immobilizing effects",
+  },
 ];
 
 const Wiki: React.FC<unknown> = ({}) => {
@@ -81,7 +116,7 @@ const Wiki: React.FC<unknown> = ({}) => {
             <DescriptionIcon style={{ width: 30, height: 30 }} />
           )}
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={2} style={{ marginRight: 16 }}>
           <Typography>{item.title}</Typography>
         </Grid>
         <Grid item>

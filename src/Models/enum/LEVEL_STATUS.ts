@@ -1,0 +1,6 @@
+export enum LEVEL_STATUS {
+  UNLOCKED,
+  LOCKED,
+  DISABLED,
+  COMING_SOON,
+}
