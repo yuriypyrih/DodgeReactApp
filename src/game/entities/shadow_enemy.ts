@@ -10,6 +10,7 @@ type ShadowEnemyProps = {
   position: { x: number; y: number };
   velX?: number;
   velY?: number;
+  maxRadius?: number;
 };
 
 export default class ShadowEnemy extends GameObject {
@@ -18,7 +19,13 @@ export default class ShadowEnemy extends GameObject {
   aura_radius_1: number;
   aura_radius_2: number;
 
-  constructor({ game, position, velX = 5, velY = 5 }: ShadowEnemyProps) {
+  constructor({
+    game,
+    position,
+    velX = 5,
+    velY = 5,
+    maxRadius = 300,
+  }: ShadowEnemyProps) {
     super({
       id: ENTITY_ID.SHADOW_AURA,
       width: 20,
@@ -29,7 +36,7 @@ export default class ShadowEnemy extends GameObject {
     });
 
     this.game = game;
-    this.ΜΑΧ_AURA_RADIUS = 300;
+    this.ΜΑΧ_AURA_RADIUS = maxRadius;
     this.aura_radius_1 = this.ΜΑΧ_AURA_RADIUS;
     this.aura_radius_2 = this.ΜΑΧ_AURA_RADIUS / 2;
   }
