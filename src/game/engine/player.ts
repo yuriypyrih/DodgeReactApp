@@ -4,13 +4,7 @@ import GameObject from "./gameObject";
 import Game from "./game";
 import { Rectangle } from "../types/Rectangle";
 import store from "../../redux/store";
-import {
-  collectStar,
-  setGameState,
-  setHP,
-  setPoisoned,
-  setProgress,
-} from "../../redux/slices/gameSlice";
+import { setGameState, setHP, setPoisoned } from "../../redux/slices/gameSlice";
 import Trail from "./trail";
 import {
   playAnimation,
@@ -19,7 +13,8 @@ import {
 } from "../../redux/slices/vfxSlice";
 import { VFX } from "../enum/vfx";
 import { GAME_STATE } from "../enum/game_state";
-import { POWER } from "../enum/power";
+import { RELICS_NAME } from "../enum/relics_name";
+import { RelicType } from "../types/RelicType";
 
 type PlayerProps = {
   game: Game;
@@ -44,8 +39,8 @@ export default class Player extends GameObject {
   magneticY: number;
   magneticX: number;
   darkness: number;
-  power: POWER;
-  power_consumables: number;
+  relic: RelicType | null;
+  relic_available_uses: number;
 
   constructor({ game }: PlayerProps) {
     super({
@@ -75,8 +70,8 @@ export default class Player extends GameObject {
     this.magneticY = 0;
     this.magneticX = 0;
     this.darkness = 0;
-    this.power = POWER.HEAL;
-    this.power_consumables = 1;
+    this.relic = null;
+    this.relic_available_uses = 0;
 
     this.gameObject.position = {
       x: game.canvas.canvasWidth / 2 - this.gameObject.width / 2,
@@ -122,6 +117,12 @@ export default class Player extends GameObject {
     this.milestone = false;
     this.poisoned = false;
     this.darkness = 0;
+
+    if (this.relic) {
+      this.relic_available_uses = this.relic.max_uses;
+    } else {
+      this.relic_available_uses = 0;
+    }
   }
 
   getBounds() {
@@ -168,10 +169,21 @@ export default class Player extends GameObject {
     }
   }
 
-  usePower() {
-    if (this.power === POWER.HEAL) {
-      this.health += 30;
-      store.dispatch(playAnimation(VFX.PULSE_GREEN));
+  assignRelic(relic: RelicType | null) {
+    this.relic = relic;
+    if (relic) {
+      this.relic_available_uses = relic.max_uses;
+    } else {
+      this.relic_available_uses = 0;
+    }
+  }
+
+  useActiveRelic() {
+    if (this.relic && this.relic_available_uses > 0) {
+      this.relic_available_uses--;
+      if (this.relic.name === RELICS_NAME.IMMUNITY) {
+        this.recently_damaged = -40;
+      }
     }
   }
 
@@ -210,10 +222,7 @@ export default class Player extends GameObject {
         x: this.gameObject.position.x,
         y: this.gameObject.position.y,
         reductor: 0,
-        color:
-          this.recently_damaged > this.IMMUNITY_IN_MILISEC
-            ? COLOR.WHITE
-            : COLOR.RED,
+        color: COLOR.WHITE,
         width: this.gameObject.width,
         height: this.gameObject.height,
         life: 0.2,

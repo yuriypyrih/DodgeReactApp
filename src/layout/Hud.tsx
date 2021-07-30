@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { fade, makeStyles } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { setgid } from "process";
 import { VFX } from "../game/enum/vfx";
 import { finishedTextAnimation } from "../redux/slices/vfxSlice";
 import Game from "../game/engine/game";
 import { GAME_STATE } from "../game/enum/game_state";
+import { RELICS_NAME } from "../game/enum/relics_name";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import SecurityIcon from "@material-ui/icons/Security";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,6 +44,10 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "50%",
     border: "1px solid #808080",
     backgroundColor: "#1a1a1d",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    color: "white",
   },
   health: {
     background: "linear-gradient(45deg,  #1a1a1d 0%, #2b2b2c 60%)",
@@ -222,6 +228,9 @@ const Hud: React.FC<HudProps> = ({ game, reset }) => {
   const [hpClass, setHpClass] = useState<string>("");
   const vfxObject = useSelector((state: RootState) => state.vfxSlice);
   const poisoned = useSelector((state: RootState) => state.gameSlice.poisoned);
+  const relic = useSelector(
+    (state: RootState) => state.gameSlice.selectedRelic
+  );
   const [paused, setPaused] = useState<boolean>(false);
   const { text_message, play_text } = useSelector(
     (state: RootState) => state.vfxSlice
@@ -270,10 +279,18 @@ const Hud: React.FC<HudProps> = ({ game, reset }) => {
     }
   }, [play_text]);
 
+  const getRelic = () => {
+    if (relic.name === RELICS_NAME.HP_GENERATOR) {
+      return <FavoriteIcon />;
+    } else if (relic.name === RELICS_NAME.IMMUNITY) {
+      return <SecurityIcon />;
+    }
+  };
+
   return (
     <div className={classes.root}>
       <div className={classes.container}>
-        <div className={classes.power}></div>
+        <div className={classes.power}>{getRelic()}</div>
         <div>
           <div
             className={`${classes.health} ${
@@ -283,11 +300,11 @@ const Hud: React.FC<HudProps> = ({ game, reset }) => {
             <div
               className={classes.healthRed}
               style={{ width: `${getHPMeter()}%` }}
-            ></div>
+            />
             <div
               className={`${classes.healthInner} ${hpClass}`}
               style={{ width: `${getHPMeter()}%` }}
-            ></div>
+            />
           </div>
           {reloadProgress ? (
             <div className={classes.progress} key="progress-default">
@@ -297,7 +314,7 @@ const Hud: React.FC<HudProps> = ({ game, reset }) => {
                   animationDuration: `${localDuration}s`,
                   animationPlayState: paused ? "paused" : "running",
                 }}
-              ></div>
+              />
             </div>
           ) : (
             <div className={classes.progress} key="progress-reload">
@@ -307,7 +324,7 @@ const Hud: React.FC<HudProps> = ({ game, reset }) => {
                   animationDuration: `${localDuration}s`,
                   animationPlayState: paused ? "paused" : "running",
                 }}
-              ></div>
+              />
             </div>
           )}
         </div>

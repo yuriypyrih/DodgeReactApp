@@ -3,11 +3,15 @@ import Game from "../../game/engine/game";
 import { GAME_STATE } from "../../game/enum/game_state";
 import { Level } from "../../Models/level";
 import { LEVEL_STATUS } from "../../Models/enum/LEVEL_STATUS";
+import { RelicType } from "../../game/types/RelicType";
+import { relics } from "../../game/engine/relics/relics_collection";
 
 type gameSliceType = {
   game: Game | null;
   level: number;
   levels: Level[];
+  relics: RelicType[];
+  selectedRelic: RelicType;
   hp: number;
   gameState: GAME_STATE;
   poisoned: boolean;
@@ -51,6 +55,8 @@ const initialState: gameSliceType = {
     },
     { level: 20, description: "Final BOss", status: LEVEL_STATUS.COMING_SOON },
   ],
+  relics: relics,
+  selectedRelic: relics[1],
   hp: 0,
   gameState: GAME_STATE.PLAYING,
   poisoned: false,

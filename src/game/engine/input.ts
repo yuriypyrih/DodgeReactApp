@@ -24,7 +24,7 @@ export default class InputHandler {
           this.game.player.moveDown();
           break;
         case "KeyQ":
-          this.game.player.usePower();
+          this.game.player.useActiveRelic();
           break;
         case "Space":
           this.game.togglePause();

@@ -58,6 +58,12 @@ export default class Hud {
       context.fillText(`HP: ${this.game.player.health}`, 10, 165);
       context.fillText(`Stars: ${this.game.player.stars}`, 10, 180);
       context.fillText(`LVL: ${this.game.level}`, 10, 195);
+      context.fillText(`Relic_id: ${this.game.player.relic?.name}`, 10, 210);
+      context.fillText(
+        `uses: ${this.game.player.relic_available_uses}`,
+        10,
+        225
+      );
     }
 
     // context.fillStyle = "#51ECB3";

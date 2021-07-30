@@ -9,6 +9,8 @@ import Spawner from "./spawner";
 import Trail from "./trail";
 import { setGameState } from "../../redux/slices/gameSlice";
 import store from "../../redux/store";
+import { RelicType } from "../types/RelicType";
+import { relics } from "./relics/relics_collection";
 
 type GameProps = {
   canvasWidth: number;
@@ -25,6 +27,7 @@ export default class Game {
   player: Player;
   spawner: Spawner;
   hud: Hud;
+  selectedRelic: RelicType | null;
 
   constructor({ canvasHeight, canvasWidth }: GameProps) {
     this.canvas = { canvasHeight, canvasWidth };
@@ -47,6 +50,8 @@ export default class Game {
     this.hud = new Hud({ game: this });
     this.player = new Player({ game: this });
 
+    this.selectedRelic = relics[0];
+
     // TESTING
     // this.menu.playGame(this.level);
 
@@ -56,6 +61,7 @@ export default class Game {
   //This function runs once per reload of the page
   start(level: number) {
     this.level = level;
+    this.player.assignRelic(this.selectedRelic);
     this.spawner.startLevel(this.level);
   }
 
