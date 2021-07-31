@@ -7,7 +7,7 @@ import Star from "../../entities/star";
 import ShadowEnemy from "../../entities/shadow_enemy";
 import ShadowBoss from "../../entities/shadow_boss";
 
-export const level11Stars: Stars = [7, 15, 30];
+export const level11Stars: Stars = [7, 35, 52];
 
 const levelStars = level11Stars;
 
@@ -56,7 +56,7 @@ export const getLevel11 = (game: Game): null => {
     game.spawner.executionSequence++;
     game.spawner.roundTimer = sec(levelStars[1]) + 1;
   } else if (game.spawner.executionSequence === 4) {
-    if (game.spawner.roundTimer === sec(15.5)) {
+    if (game.spawner.roundTimer === sec(levelStars[1] + 1)) {
       game.gameObjects.push(
         new ShadowBoss({
           game,

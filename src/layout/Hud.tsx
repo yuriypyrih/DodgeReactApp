@@ -176,6 +176,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   textAnimation: {
+    ...theme.typography.h6,
     position: "absolute",
     width: 300,
     right: 100,

@@ -84,7 +84,8 @@ export default class Game {
     for (let i = 0; i < this.gameObjects.length; i++) {
       if (
         this.gameObjects[i].gameObject.id === ENTITY_ID.BASIC_ENEMY ||
-        this.gameObjects[i].gameObject.id === ENTITY_ID.VENOM
+        this.gameObjects[i].gameObject.id === ENTITY_ID.VENOM ||
+        this.gameObjects[i].gameObject.id === ENTITY_ID.SHADOW_AURA
       ) {
         this.gameObjects.splice(i, 1);
         i--;

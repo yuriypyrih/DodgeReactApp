@@ -8,7 +8,7 @@ import Star from "../../entities/star";
 import BasicEnemy from "../../entities/basic_enemy";
 import SpeederBoss from "../../entities/speeder_boss";
 
-export const level2Stars: Stars = [7, 15, 30];
+export const level2Stars: Stars = [7, 25, 45];
 
 const levelStars = level2Stars;
 
@@ -32,11 +32,11 @@ export const getLevel2 = (game: Game): null => {
     game.spawner.executionSequence++;
     game.spawner.roundTimer = sec(levelStars[0]) + 1;
   } else if (game.spawner.executionSequence === 2) {
-    if (game.spawner.roundTimer === sec(8)) {
+    if (game.spawner.roundTimer === sec(levelStars[0] + 1)) {
       game.gameObjects.push(
         new BasicEnemy({ game, position: { x: 40, y: 10 } })
       );
-    } else if (game.spawner.roundTimer === sec(10)) {
+    } else if (game.spawner.roundTimer === sec(levelStars[0] + 2)) {
       game.gameObjects.push(
         new BasicEnemy({ game, position: { x: 1, y: 120 } })
       );
@@ -53,7 +53,7 @@ export const getLevel2 = (game: Game): null => {
     game.spawner.executionSequence++;
     game.spawner.roundTimer = sec(levelStars[1]) + 1;
   } else if (game.spawner.executionSequence === 4) {
-    if (game.spawner.roundTimer === sec(15.5)) {
+    if (game.spawner.roundTimer === sec(levelStars[1] + 1)) {
       game.gameObjects.push(
         new SpeederBoss({
           game,

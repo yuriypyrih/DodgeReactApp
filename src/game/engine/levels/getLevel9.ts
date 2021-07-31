@@ -10,7 +10,7 @@ import VenomEnemy from "../../entities/venom_enemy";
 import SlimeEnemy from "../../entities/slime_enemy";
 import TitanBoss from "../../entities/titan_boss";
 
-export const level9Stars: Stars = [7, 15, 30];
+export const level9Stars: Stars = [7, 33, 70];
 
 const levelStars = level9Stars;
 
@@ -34,15 +34,15 @@ export const getLevel9 = (game: Game): null => {
     game.spawner.executionSequence++;
     game.spawner.roundTimer = sec(levelStars[0]) + 1;
   } else if (game.spawner.executionSequence === 2) {
-    if (game.spawner.roundTimer === sec(8)) {
+    if (game.spawner.roundTimer === sec(levelStars[0] + 1)) {
       game.gameObjects.push(
         new VenomEnemy({ game, position: { x: 40, y: 10 } })
       );
-    } else if (game.spawner.roundTimer === sec(9)) {
+    } else if (game.spawner.roundTimer === sec(levelStars[0] + 2)) {
       game.gameObjects.push(
         new SlimeEnemy({ game, position: { x: 1, y: 120 } })
       );
-    } else if (game.spawner.roundTimer === sec(10)) {
+    } else if (game.spawner.roundTimer === sec(levelStars[0] + 3)) {
       game.gameObjects.push(
         new BasicEnemy({ game, position: { x: 1, y: 120 } })
       );
@@ -59,7 +59,7 @@ export const getLevel9 = (game: Game): null => {
     game.spawner.executionSequence++;
     game.spawner.roundTimer = sec(levelStars[1]) + 1;
   } else if (game.spawner.executionSequence === 4) {
-    if (game.spawner.roundTimer === sec(levelStars[1] + 1.2)) {
+    if (game.spawner.roundTimer === sec(levelStars[1] + 1)) {
       game.gameObjects.push(
         new TitanBoss({
           game,

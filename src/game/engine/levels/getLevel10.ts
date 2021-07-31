@@ -7,7 +7,7 @@ import GhostEnemy from "../../entities/ghost_enemy";
 import Star from "../../entities/star";
 import GhostBoss from "../../entities/ghost_boss";
 
-export const level10Stars: Stars = [7, 15, 30];
+export const level10Stars: Stars = [7, 35, 50];
 
 const levelStars = level10Stars;
 
@@ -41,6 +41,8 @@ export const getLevel10 = (game: Game): null => {
       game.gameObjects.push(
         new GhostEnemy({ game, position: { x: 60, y: 1 } })
       );
+    } else if (game.spawner.roundTimer === sec(levelStars[0] + 5)) {
+      game.gameObjects.push(new GhostEnemy({ game, position: { x: 0, y: 0 } }));
     } else if (game.spawner.roundTimer === sec(levelStars[1])) {
       game.gameObjects.push(
         new Star({
@@ -54,7 +56,7 @@ export const getLevel10 = (game: Game): null => {
     game.spawner.executionSequence++;
     game.spawner.roundTimer = sec(levelStars[1]) + 1;
   } else if (game.spawner.executionSequence === 4) {
-    if (game.spawner.roundTimer === sec(15.5)) {
+    if (game.spawner.roundTimer === sec(levelStars[1] + 1)) {
       game.gameObjects.push(
         new GhostBoss({
           game,

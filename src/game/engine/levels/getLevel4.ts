@@ -9,7 +9,7 @@ import SpeederEnemy from "../../entities/speeder_enemy";
 import WormEnemy from "../../entities/worm_enemy";
 import WormBoss from "../../entities/worm_boss";
 
-export const level4Stars: Stars = [7, 15, 30];
+export const level4Stars: Stars = [7, 18, 36];
 
 const levelStars = level4Stars;
 
@@ -31,15 +31,15 @@ export const getLevel4 = (game: Game): null => {
     game.spawner.executionSequence++;
     game.spawner.roundTimer = sec(levelStars[0]) + 1;
   } else if (game.spawner.executionSequence === 2) {
-    if (game.spawner.roundTimer === sec(8)) {
+    if (game.spawner.roundTimer === sec(levelStars[0] + 1)) {
       game.gameObjects.push(
         new BasicEnemy({ game, position: { x: 40, y: 10 } })
       );
-    } else if (game.spawner.roundTimer === sec(9)) {
+    } else if (game.spawner.roundTimer === sec(levelStars[0] + 2)) {
       game.gameObjects.push(
         new SpeederEnemy({ game, position: { x: 1, y: 30 } })
       );
-    } else if (game.spawner.roundTimer === sec(10)) {
+    } else if (game.spawner.roundTimer === sec(levelStars[0] + 3)) {
       game.gameObjects.push(
         new SpeederEnemy({ game, position: { x: 1, y: 120 } })
       );
@@ -56,7 +56,7 @@ export const getLevel4 = (game: Game): null => {
     game.spawner.executionSequence++;
     game.spawner.roundTimer = sec(levelStars[1]) + 1;
   } else if (game.spawner.executionSequence === 4) {
-    if (game.spawner.roundTimer === sec(15.5)) {
+    if (game.spawner.roundTimer === sec(levelStars[1] + 1)) {
       game.gameObjects.push(
         new WormBoss({
           game,

@@ -39,19 +39,22 @@ export default class Healthpack extends GameObject {
 
   draw(context: any) {
     context.fillStyle = COLOR.AQUA;
-    // context.fillRect(
-    //   this.gameObject.position.x,
-    //   this.gameObject.position.y,
-    //   this.gameObject.width,
-    //   this.gameObject.height
-    // );
     context.beginPath();
-    context.arc(
+    context.moveTo(
       this.gameObject.position.x + this.gameObject.width / 2,
-      this.gameObject.position.y + this.gameObject.height / 2,
-      15,
-      0,
-      2 * Math.PI
+      this.gameObject.position.y
+    );
+    context.lineTo(
+      this.gameObject.position.x + this.gameObject.width,
+      this.gameObject.position.y + this.gameObject.height / 2
+    );
+    context.lineTo(
+      this.gameObject.position.x + this.gameObject.width / 2,
+      this.gameObject.position.y + this.gameObject.height
+    );
+    context.lineTo(
+      this.gameObject.position.x,
+      this.gameObject.position.y + this.gameObject.height / 2
     );
     context.stroke();
     context.fill();

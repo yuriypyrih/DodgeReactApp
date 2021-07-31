@@ -11,7 +11,7 @@ import SlimeEnemy from "../../entities/slime_enemy";
 import WormEnemy from "../../entities/worm_enemy";
 import SlimeBoss from "../../entities/slime_boss";
 
-export const level5Stars: Stars = [7, 14, 20];
+export const level5Stars: Stars = [7, 24, 43];
 
 const levelStars = level5Stars;
 
@@ -35,19 +35,19 @@ export const getLevel5 = (game: Game): null => {
     game.spawner.executionSequence++;
     game.spawner.roundTimer = sec(levelStars[0]) + 1;
   } else if (game.spawner.executionSequence === 2) {
-    if (game.spawner.roundTimer === sec(8)) {
+    if (game.spawner.roundTimer === sec(levelStars[0] + 1)) {
       game.gameObjects.push(
         new BasicEnemy({ game, position: { x: 40, y: 10 } })
       );
-    } else if (game.spawner.roundTimer === sec(9)) {
+    } else if (game.spawner.roundTimer === sec(levelStars[0] + 2)) {
       game.gameObjects.push(
         new SpeederEnemy({ game, position: { x: 1, y: 30 } })
       );
-    } else if (game.spawner.roundTimer === sec(10)) {
+    } else if (game.spawner.roundTimer === sec(levelStars[0] + 3)) {
       game.gameObjects.push(
         new TracerEnemy({ game, position: { x: 1, y: 120 } })
       );
-    } else if (game.spawner.roundTimer === sec(11)) {
+    } else if (game.spawner.roundTimer === sec(levelStars[0] + 4)) {
       game.gameObjects.push(
         new WormEnemy({ game, position: { x: 1, y: 120 } })
       );
@@ -64,7 +64,7 @@ export const getLevel5 = (game: Game): null => {
     game.spawner.executionSequence++;
     game.spawner.roundTimer = sec(levelStars[1]) + 1;
   } else if (game.spawner.executionSequence === 4) {
-    if (game.spawner.roundTimer === sec(15.5)) {
+    if (game.spawner.roundTimer === sec(levelStars[1] + 1)) {
       game.gameObjects.push(
         new SlimeBoss({
           game,

@@ -19,11 +19,11 @@ export const getLevel8 = (game: Game): null => {
     if (game.spawner.roundTimer === sec(0.1)) {
       store.dispatch(playText(["LEVEL 8", "Marathon", "V0.1"]));
     } else if (game.spawner.roundTimer === sec(2)) {
-      game.gameObjects.push(new BasicEnemy({ game, position: { x: 1, y: 1 } }));
+      game.gameObjects.push(new BasicEnemy({ game, position: { x: 0, y: 0 } }));
       game.gameObjects.push(
         new BasicEnemy({
           game,
-          position: { x: 1, y: game.canvas.canvasHeight - 40 },
+          position: { x: 0, y: game.canvas.canvasHeight - 20 },
           velX: 5,
           velY: -5,
         })
@@ -32,8 +32,8 @@ export const getLevel8 = (game: Game): null => {
         new BasicEnemy({
           game,
           position: {
-            x: game.canvas.canvasWidth - 40,
-            y: game.canvas.canvasHeight - 40,
+            x: game.canvas.canvasWidth - 20,
+            y: game.canvas.canvasHeight - 20,
           },
           velX: -5,
           velY: -5,
@@ -43,8 +43,8 @@ export const getLevel8 = (game: Game): null => {
         new BasicEnemy({
           game,
           position: {
-            x: game.canvas.canvasWidth - 40,
-            y: 1,
+            x: game.canvas.canvasWidth - 20,
+            y: 0,
           },
           velX: -5,
           velY: 5,
@@ -68,12 +68,12 @@ export const getLevel8 = (game: Game): null => {
   } else if (game.spawner.executionSequence === 2) {
     if (game.spawner.roundTimer === sec(levelStars[0] + 1.2)) {
       game.gameObjects.push(
-        new SpeederEnemy({ game, position: { x: 1, y: 1 } })
+        new SpeederEnemy({ game, position: { x: 0, y: 0 } })
       );
       game.gameObjects.push(
         new SpeederEnemy({
           game,
-          position: { x: 1, y: game.canvas.canvasHeight - 40 },
+          position: { x: 0, y: game.canvas.canvasHeight - 20 },
           velX: 2,
           velY: -11,
         })
@@ -82,8 +82,8 @@ export const getLevel8 = (game: Game): null => {
         new SpeederEnemy({
           game,
           position: {
-            x: game.canvas.canvasWidth - 40,
-            y: game.canvas.canvasHeight - 40,
+            x: game.canvas.canvasWidth - 20,
+            y: game.canvas.canvasHeight - 20,
           },
           velX: -2,
           velY: -11,
@@ -93,8 +93,8 @@ export const getLevel8 = (game: Game): null => {
         new SpeederEnemy({
           game,
           position: {
-            x: game.canvas.canvasWidth - 40,
-            y: 1,
+            x: game.canvas.canvasWidth - 20,
+            y: 0,
           },
           velX: -2,
           velY: 11,
@@ -186,12 +186,12 @@ export const getLevel8 = (game: Game): null => {
   } else if (game.spawner.executionSequence === 8) {
     if (game.spawner.roundTimer === sec(levelStars[3] + 1.2)) {
       game.gameObjects.push(
-        new BomberEnemy({ game, position: { x: 1, y: 1 } })
+        new BomberEnemy({ game, position: { x: 0, y: 0 } })
       );
       game.gameObjects.push(
         new BomberEnemy({
           game,
-          position: { x: 1, y: game.canvas.canvasHeight - 40 },
+          position: { x: 0, y: game.canvas.canvasHeight - 20 },
           velX: 5,
           velY: -5,
         })
@@ -200,8 +200,8 @@ export const getLevel8 = (game: Game): null => {
         new BomberEnemy({
           game,
           position: {
-            x: game.canvas.canvasWidth - 40,
-            y: game.canvas.canvasHeight - 40,
+            x: game.canvas.canvasWidth - 20,
+            y: game.canvas.canvasHeight - 20,
           },
           velX: -5,
           velY: -5,
@@ -211,8 +211,8 @@ export const getLevel8 = (game: Game): null => {
         new BomberEnemy({
           game,
           position: {
-            x: game.canvas.canvasWidth - 40,
-            y: 1,
+            x: game.canvas.canvasWidth - 20,
+            y: 0,
           },
           velX: -5,
           velY: 5,

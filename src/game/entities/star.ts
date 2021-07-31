@@ -10,6 +10,8 @@ type StarProps = {
 
 export default class Star extends GameObject {
   game: any;
+  pulseTimer: number;
+  readonly MAX_PULSE: number;
 
   constructor({ game, position }: StarProps) {
     super({
@@ -22,6 +24,8 @@ export default class Star extends GameObject {
     });
 
     this.game = game;
+    this.pulseTimer = 0;
+    this.MAX_PULSE = 60;
   }
 
   getBounds() {
@@ -36,23 +40,44 @@ export default class Star extends GameObject {
 
   draw(context: any) {
     context.fillStyle = COLOR.GOLD;
-    // context.fillRect(
-    //   this.gameObject.position.x,
-    //   this.gameObject.position.y,
-    //   this.gameObject.width,
-    //   this.gameObject.height
-    // );
+    context.beginPath();
+    context.moveTo(
+      this.gameObject.position.x + this.gameObject.width / 2,
+      this.gameObject.position.y
+    );
+    context.lineTo(
+      this.gameObject.position.x + this.gameObject.width,
+      this.gameObject.position.y + this.gameObject.height / 2
+    );
+    context.lineTo(
+      this.gameObject.position.x + this.gameObject.width / 2,
+      this.gameObject.position.y + this.gameObject.height
+    );
+    context.lineTo(
+      this.gameObject.position.x,
+      this.gameObject.position.y + this.gameObject.height / 2
+    );
+    context.stroke();
+    context.fill();
+    context.globalAlpha = Math.max(
+      0,
+      (this.MAX_PULSE - this.pulseTimer) / this.MAX_PULSE
+    );
+    context.strokeStyle = COLOR.GOLD;
     context.beginPath();
     context.arc(
       this.gameObject.position.x + this.gameObject.width / 2,
       this.gameObject.position.y + this.gameObject.height / 2,
-      15,
+      this.pulseTimer / Math.sqrt(2),
       0,
       2 * Math.PI
     );
     context.stroke();
-    context.fill();
+    context.globalAlpha = 1;
   }
 
-  update(deltaTime: number) {}
+  update(deltaTime: number) {
+    this.pulseTimer++;
+    if (this.pulseTimer > this.MAX_PULSE) this.pulseTimer = 0;
+  }
 }

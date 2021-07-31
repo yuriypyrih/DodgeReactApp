@@ -260,7 +260,7 @@ export default class Player extends GameObject {
             this.game.gameObjects.indexOf(object),
             1
           );
-          this.health += 30;
+          this.health += 40;
           store.dispatch(playAnimation(VFX.PULSE_GREEN));
           this.recently_damaged = 0;
         }
