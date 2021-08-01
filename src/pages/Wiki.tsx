@@ -88,7 +88,7 @@ const relicsContent: ContentType[] = [
   },
 ];
 
-const Wiki: React.FC<unknown> = ({}) => {
+const Wiki: React.FC<unknown> = () => {
   const classes = useStyles();
   const history = useHistory();
   const [tab, setTab] = React.useState(0);

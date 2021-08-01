@@ -7,7 +7,7 @@ import Home from "../pages/Home";
 import Defeat from "../pages/Defeat";
 import Wiki from "../pages/Wiki";
 
-const Routes: React.FC<unknown> = ({}) => {
+const Routes: React.FC<unknown> = () => {
   return (
     <Router>
       <Switch>

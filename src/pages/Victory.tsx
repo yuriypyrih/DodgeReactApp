@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Victory: React.FC<unknown> = ({}) => {
+const Victory: React.FC<unknown> = () => {
   const classes = useStyles();
   const history = useHistory();
 

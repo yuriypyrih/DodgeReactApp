@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Box, Button, Grid, makeStyles, Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Home: React.FC = ({}) => {
+const Home: React.FC = () => {
   const history = useHistory();
   const classes = useStyles();
 

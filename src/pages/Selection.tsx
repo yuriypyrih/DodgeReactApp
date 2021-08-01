@@ -12,8 +12,6 @@ import CubePlayButton from "../components/CubePlayButton";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import ImportContactsIcon from "@material-ui/icons/ImportContacts";
-import { Level } from "../Models/level";
-import { LEVEL_STATUS } from "../Models/enum/LEVEL_STATUS";
 import { RootState } from "../redux/store";
 import { useSelector } from "react-redux";
 
@@ -51,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 //   levels.push({ title: i });
 // }
 
-const Selection: React.FC = ({}) => {
+const Selection: React.FC<unknown> = () => {
   const MAX_PAGE_SIZE = 12;
   const classes = useStyles();
   const history = useHistory();

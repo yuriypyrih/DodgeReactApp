@@ -8,7 +8,7 @@ import { GAME_STATE } from "../game/enum/game_state";
 import Engine from "../game/engine/game";
 import startEngine from "../game";
 
-const Game: React.FC = ({}) => {
+const Game: React.FC = () => {
   const history = useHistory();
   const [game, setGame] = useState<Engine | null>(null);
   const [resetToggle, setResetToggle] = useState<boolean>(false);
@@ -41,7 +41,7 @@ const Game: React.FC = ({}) => {
     <div
       style={{ cursor: gameState === GAME_STATE.PLAYING ? "none" : undefined }}
     >
-      <canvas id={"gameScreen-canvas"} width="900" height="500"></canvas>
+      <canvas id={"gameScreen-canvas"} width="900" height="500" />
       <Hud game={game} reset={resetToggle} />
       {gameState === GAME_STATE.PAUSED ? (
         <Pause game={game} toggleReset={handleResetToggle} />
