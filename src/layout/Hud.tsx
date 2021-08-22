@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { VFX } from "../game/enum/vfx";
 import { finishedTextAnimation } from "../redux/slices/vfxSlice";
+import { setPoisoned } from "../redux/slices/gameSlice";
 import Game from "../game/engine/game";
 import { GAME_STATE } from "../game/enum/game_state";
 import { RELICS_NAME } from "../game/enum/relics_name";
@@ -262,6 +263,10 @@ const Hud: React.FC<HudProps> = ({ game, reset }) => {
       );
     }
   }, [total_stars_collected, max_stars, star_timers, reset]);
+
+  useEffect(() => {
+    dispatch(setPoisoned(false));
+  }, [reset]);
 
   useEffect(() => {
     if (vfxObject.run_animation === VFX.PULSE_GREEN) {

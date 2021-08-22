@@ -2,9 +2,6 @@ import React from "react";
 import VfxAnimation from "./layout/VfxAnimation";
 import { makeStyles } from "@material-ui/core";
 import Routes from "./Routes/Routes";
-// import startEngine from "./game";
-// import { useDispatch } from "react-redux";
-// import { setEngine } from "./redux/slices/engineSlice";
 
 const useStyles = makeStyles({
   app: {

@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, Grid, makeStyles, Typography } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,9 +26,21 @@ const useStyles = makeStyles((theme) => ({
 const Victory: React.FC<unknown> = () => {
   const classes = useStyles();
   const history = useHistory();
+  const levels = useSelector((state: RootState) => state.gameSlice.levels);
+  const [nextLevel, setNextLevel] = useState<number>(-1);
+
+  useEffect(() => {
+    const lvl = window.location.pathname.split("/")[2];
+    const tempNextLevel = Number(lvl) + 1;
+    if (levels.find((level) => level.level === tempNextLevel)) {
+      setNextLevel(tempNextLevel);
+    }
+  }, []);
 
   const handleNext = () => {
-    //next
+    if (nextLevel !== -1) {
+      history.replace(`/Game/${nextLevel}`);
+    }
   };
 
   const handleQuit = () => {
@@ -47,11 +61,13 @@ const Victory: React.FC<unknown> = () => {
           spacing={1}
           style={{ marginTop: 24 }}
         >
-          <Grid item>
-            <Button className={classes.button} disabled onClick={handleNext}>
-              <Typography variant="h5">NEXT</Typography>
-            </Button>
-          </Grid>
+          {nextLevel !== -1 && (
+            <Grid item>
+              <Button className={classes.button} onClick={handleNext}>
+                <Typography variant="h5">NEXT</Typography>
+              </Button>
+            </Grid>
+          )}
 
           <Grid item>
             <Button className={classes.button} onClick={handleQuit}>
