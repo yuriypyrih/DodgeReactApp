@@ -3,6 +3,7 @@ import { Box, Button, Grid, makeStyles, Typography } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
+import { LEVEL_STATUS } from "../Models/enum/LEVEL_STATUS";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,7 +33,12 @@ const Victory: React.FC<unknown> = () => {
   useEffect(() => {
     const lvl = window.location.pathname.split("/")[2];
     const tempNextLevel = Number(lvl) + 1;
-    if (levels.find((level) => level.level === tempNextLevel)) {
+    const foundLevel = levels.find((level) => level.level === tempNextLevel);
+    if (
+      foundLevel &&
+      foundLevel.status !== LEVEL_STATUS.DISABLED &&
+      foundLevel.status !== LEVEL_STATUS.COMING_SOON
+    ) {
       setNextLevel(tempNextLevel);
     }
   }, []);

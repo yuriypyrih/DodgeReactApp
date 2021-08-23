@@ -15,6 +15,27 @@ export const getLevel11 = (game: Game): null => {
   if (game.spawner.executionSequence === 0) {
     if (game.spawner.roundTimer === sec(0.1)) {
       store.dispatch(playText(["LEVEL 11", "Shadow"]));
+      game.gameObjects.push(
+        new ShadowEnemy({
+          game,
+          position: { x: 10, y: game.canvas.canvasHeight - 30 },
+          velX: 0,
+          velY: 0,
+          maxRadius: 550,
+        })
+      );
+      game.gameObjects.push(
+        new ShadowEnemy({
+          game,
+          position: {
+            x: game.canvas.canvasWidth - 30,
+            y: game.canvas.canvasHeight - 30,
+          },
+          velX: 0,
+          velY: 0,
+          maxRadius: 550,
+        })
+      );
     } else if (game.spawner.roundTimer === sec(1.5)) {
       game.gameObjects.push(
         new ShadowEnemy({ game, position: { x: 1, y: 1 } })
