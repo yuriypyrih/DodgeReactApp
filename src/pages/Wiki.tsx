@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 type ContentType = { image?: string; title: string; description: string };
 
 const generalContent: ContentType[] = [
-  { title: "Basics", description: "Dodge the enemies" },
+  { title: "Basics", description: "Collect all the " },
 ];
 const enemiesContent: ContentType[] = [
   { title: "Scout", description: "Basic enemy" },

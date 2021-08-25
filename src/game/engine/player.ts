@@ -65,7 +65,7 @@ export default class Player extends GameObject {
     this.stars = 0;
     this.milestone = false;
     this.poisoned = false;
-    this.developerMode = true;
+    this.developerMode = false;
     this.lastPoisonedDate = Date.now();
     this.magneticY = 0;
     this.magneticX = 0;
@@ -150,7 +150,8 @@ export default class Player extends GameObject {
   }
 
   victoryConditionCheck() {
-    if (this.stars >= 3 && !this.developerMode) {
+    const maxStars = this.game.spawner.levelStars[this.game.level - 1];
+    if (this.stars >= maxStars.length && !this.developerMode) {
       store.dispatch(setGameState(GAME_STATE.PAGE_VICTORY));
       this.game.close();
       return true;
