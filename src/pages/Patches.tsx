@@ -79,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
 
 const PATCH_NOTES: Array<{ title: string; content: string }> = [
   {
-    title: "Patch v1.0 : Backend",
+    title: "Patch v1.2 : Backend",
     content: "Login and level progression is now stored in a server.",
   },
   {

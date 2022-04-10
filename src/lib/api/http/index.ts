@@ -4,6 +4,8 @@ import Cookies from "js-cookie";
 // import { setToken, setRefreshToken } from '../../../redux/slices/authSlice';
 import { dispatch } from "../../../index";
 
+//REACT_APP_API_URL=http://127.0.0.1:3005/api/v1
+
 const URL = process.env["REACT_APP_API_URL"];
 
 console.log("URL", URL);
