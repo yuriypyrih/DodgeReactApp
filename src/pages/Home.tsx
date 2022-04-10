@@ -42,13 +42,15 @@ const useStyles = makeStyles((theme) => ({
     border: "2px solid #2DD5C4",
     borderRadius: 4,
     color: "white",
+    marginLeft: 8,
     display: "none",
-    right: "calc(-100% - 8px)",
-    top: -28,
+    position: "relative",
   },
   profile: {
-    cursor: "pointer",
     position: "absolute",
+    display: "flex",
+    flexWrap: "nowrap",
+    alignItems: "flex-start",
     "&:hover #logoutBtn": {
       display: "unset",
     },

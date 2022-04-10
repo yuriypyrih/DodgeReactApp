@@ -226,6 +226,7 @@ const Hud: React.FC<HudProps> = ({ game, reset }) => {
     (state: RootState) => state.gameSlice.progress
   );
   const [reloadProgress, setReloadProgress] = useState<boolean>(true);
+  const [prevCollectedStars, setPrevCollectedStars] = useState<number>(0);
   //const [virginCheck, setVirginCheck] = useState<boolean>(false);
   const [localDuration, setLocalDuration] = useState<number>(0);
   const hp = useSelector((state: RootState) => state.gameSlice.hp);
@@ -256,6 +257,10 @@ const Hud: React.FC<HudProps> = ({ game, reset }) => {
   }, [game]);
 
   useEffect(() => {
+    if (total_stars_collected !== prevCollectedStars) {
+      setPrevCollectedStars(total_stars_collected);
+      setReloadProgress(!reloadProgress);
+    }
     if (total_stars_collected === 0) {
       setLocalDuration(star_timers[total_stars_collected]);
     } else {
@@ -265,6 +270,7 @@ const Hud: React.FC<HudProps> = ({ game, reset }) => {
       );
     }
     console.log("HUD: Star Progress");
+    // eslint-disable-next-line
   }, [total_stars_collected, max_stars, star_timers, reset]);
 
   useEffect(() => {
