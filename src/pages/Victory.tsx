@@ -41,7 +41,7 @@ const Victory: React.FC<unknown> = () => {
     ) {
       setNextLevel(tempNextLevel);
     }
-  }, []);
+  }, [levels]);
 
   const handleNext = () => {
     if (nextLevel !== -1) {

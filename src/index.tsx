@@ -5,6 +5,9 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 import { CssBaseline, ThemeProvider } from "@material-ui/core";
 import theme from "./Theme";
+import "./Theme/globassCss.css";
+
+export const dispatch = store.dispatch;
 
 ReactDOM.render(
   <React.StrictMode>

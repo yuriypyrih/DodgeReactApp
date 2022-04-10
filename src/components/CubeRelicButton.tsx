@@ -1,13 +1,10 @@
 import { Button, makeStyles, Typography } from "@material-ui/core";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { setLevel } from "../redux/slices/gameSlice";
 import { LEVEL_STATUS } from "../Models/enum/LEVEL_STATUS";
 import clsx from "clsx";
-import { Level } from "../Models/level";
 import LockIcon from "@material-ui/icons/Lock";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
+import { Relic } from "../Models/relic";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,23 +30,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-type CubePlayButtonProps = {
-  level: Level;
-  clickBuy: () => void;
+type CubeRelicButtonProps = {
+  relic: Relic;
 };
 
-const CubePlayButton: React.FC<CubePlayButtonProps> = ({ level, clickBuy }) => {
-  const dispatch = useDispatch();
+const CubeRelicButton: React.FC<CubeRelicButtonProps> = ({ relic }) => {
   const classes = useStyles();
-  const history = useHistory();
+
   const [hovered, setHovered] = useState<boolean>(false);
 
   const handleClick = () => {
-    if (level.status === LEVEL_STATUS.UNLOCKED) {
-      dispatch(setLevel(level));
-      history.push(`/Game/${level.level}`);
-    } else if (level.status === LEVEL_STATUS.LOCKED) {
-      clickBuy();
+    if (relic.status === LEVEL_STATUS.UNLOCKED) {
+      // Try to select it
+    } else if (relic.status === LEVEL_STATUS.LOCKED) {
+      // Try to buy it
     }
   };
 
@@ -57,31 +51,31 @@ const CubePlayButton: React.FC<CubePlayButtonProps> = ({ level, clickBuy }) => {
     <Button
       className={clsx(
         classes.root,
-        (level.status === LEVEL_STATUS.LOCKED ||
-          level.status === LEVEL_STATUS.COMING_SOON) &&
+        (relic.status === LEVEL_STATUS.LOCKED ||
+          relic.status === LEVEL_STATUS.COMING_SOON) &&
           classes.locked
       )}
       onClick={handleClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       disabled={
-        level.status !== LEVEL_STATUS.UNLOCKED &&
-        level.status !== LEVEL_STATUS.LOCKED
+        relic.status !== LEVEL_STATUS.UNLOCKED &&
+        relic.status !== LEVEL_STATUS.LOCKED
       }
     >
-      {level.status === LEVEL_STATUS.LOCKED &&
+      {relic.status === LEVEL_STATUS.LOCKED &&
         (hovered ? (
           <LockOpenIcon className={classes.locker} />
         ) : (
           <LockIcon className={classes.locker} />
         ))}
-      {level.status !== LEVEL_STATUS.COMING_SOON ? (
-        <Typography variant={"h6"}>{level.level}</Typography>
+      {relic.status !== LEVEL_STATUS.COMING_SOON ? (
+        <Typography variant={"h6"}>{relic.name}</Typography>
       ) : (
-        <Typography variant={"caption"}>{level.level} Coming Soon!</Typography>
+        <Typography variant={"caption"}>{relic.name} Coming Soon!</Typography>
       )}
     </Button>
   );
 };
 
-export default CubePlayButton;
+export default CubeRelicButton;

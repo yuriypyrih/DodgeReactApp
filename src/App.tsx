@@ -1,6 +1,7 @@
 import React from "react";
 import VfxAnimation from "./layout/VfxAnimation";
 import { makeStyles } from "@material-ui/core";
+import initialize from "./utils/initialize";
 import Routes from "./Routes/Routes";
 
 const useStyles = makeStyles({
@@ -18,6 +19,8 @@ const useStyles = makeStyles({
     borderRadius: "3px",
   },
 });
+
+initialize();
 
 function App() {
   const classes = useStyles();
