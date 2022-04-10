@@ -39,11 +39,27 @@ const useStyles = makeStyles((theme) => ({
 type ContentType = { image?: string; title: string; description: string };
 
 const generalContent: ContentType[] = [
-  { title: "Basics", description: "Collect all the " },
+  {
+    title: "Basics",
+    description:
+      "Dodge all the enemies along your path and collect the stars along the way to progress." +
+      " After surviving a boss, the next level will be automatically unlocked." +
+      " Alternatively you can unlock any level with your stars!",
+  },
+  {
+    title: "Enemies",
+    description:
+      "Each type of enemy is color coded. Pay attention to each color since it has a specific behavioral pattern. ",
+  },
+  {
+    title: "Relics",
+    description:
+      "Relics are powerful upgrades that either work passively or you have to activate during the game. ",
+  },
 ];
 const enemiesContent: ContentType[] = [
   { title: "Scout", description: "Basic enemy" },
-  { title: "Speeder", description: "A faster enemy" },
+  { title: "Speeder", description: "A faster version the basic enemy" },
 ];
 
 const relicsContent: ContentType[] = [
@@ -116,7 +132,7 @@ const Wiki: React.FC<unknown> = () => {
             <DescriptionIcon style={{ width: 30, height: 30 }} />
           )}
         </Grid>
-        <Grid item xs={2} style={{ marginRight: 16 }}>
+        <Grid item style={{ marginRight: 16, minWidth: 70 }}>
           <Typography>{item.title}</Typography>
         </Grid>
         <Grid item>

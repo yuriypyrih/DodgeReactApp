@@ -7,9 +7,11 @@ import { finishedTextAnimation } from "../redux/slices/vfxSlice";
 import { setPoisoned } from "../redux/slices/gameSlice";
 import Game from "../game/engine/game";
 import { GAME_STATE } from "../game/enum/game_state";
-import { RELICS_NAME } from "../game/enum/relics_name";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import SecurityIcon from "@material-ui/icons/Security";
+// import { RELICS_NAME } from "../game/enum/relics_name";
+import HealIcon from "@material-ui/icons/Favorite";
+// import ImmunityIcon from "@material-ui/icons/Security";
+// import { LocalRelics } from "../Models/data/LocalRelics";
+import DefaultIcon from "@material-ui/icons/Description";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -250,10 +252,10 @@ const Hud: React.FC<HudProps> = ({ game, reset }) => {
     } else {
       setPaused(false);
     }
-  }, [game?.gameState]);
+    console.log("HUD: GAME_STATE");
+  }, [game]);
 
   useEffect(() => {
-    setReloadProgress(!reloadProgress);
     if (total_stars_collected === 0) {
       setLocalDuration(star_timers[total_stars_collected]);
     } else {
@@ -262,11 +264,13 @@ const Hud: React.FC<HudProps> = ({ game, reset }) => {
           star_timers[total_stars_collected - 1]
       );
     }
+    console.log("HUD: Star Progress");
   }, [total_stars_collected, max_stars, star_timers, reset]);
 
   useEffect(() => {
     dispatch(setPoisoned(false));
-  }, [reset]);
+    console.log("HUD: POISONED");
+  }, [dispatch, reset]);
 
   useEffect(() => {
     if (vfxObject.run_animation === VFX.PULSE_GREEN) {
@@ -275,7 +279,8 @@ const Hud: React.FC<HudProps> = ({ game, reset }) => {
         setHpClass("");
       }, 700);
     }
-  }, [vfxObject]);
+    console.log("HUD: VFX");
+  }, [classes.healed, vfxObject]);
 
   useEffect(() => {
     if (play_text) {
@@ -283,14 +288,15 @@ const Hud: React.FC<HudProps> = ({ game, reset }) => {
         dispatch(finishedTextAnimation());
       }, 4000);
     }
-  }, [play_text]);
+    console.log("HUD: TEXT");
+  }, [dispatch, play_text]);
 
   const getRelic = () => {
-    if (relic.name === RELICS_NAME.HP_GENERATOR) {
-      return <FavoriteIcon />;
-    } else if (relic.name === RELICS_NAME.IMMUNITY) {
-      return <SecurityIcon />;
-    }
+    let Icon = HealIcon;
+    // LocalRelics.forEach((r) => {
+    //   if (r.name === relic.name) Icon = r.Icon;
+    // });
+    return <Icon />;
   };
 
   return (

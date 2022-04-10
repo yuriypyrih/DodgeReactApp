@@ -7,19 +7,22 @@ import { RootState } from "../redux/store";
 import { GAME_STATE } from "../game/enum/game_state";
 import Engine from "../game/engine/game";
 import startEngine from "../game";
+import { beatLevel } from "../redux/slices/authSlice";
+import { dispatch } from "../index";
 
 const Game: React.FC = () => {
   const history = useHistory();
   const [game, setGame] = useState<Engine | null>(null);
   const [resetToggle, setResetToggle] = useState<boolean>(false);
+  const { total_stars_collected } = useSelector(
+    (state: RootState) => state.gameSlice.progress
+  );
+
   const gameState = useSelector(
     (state: RootState) => state.gameSlice.gameState
   );
-  // const level = useSelector((state: RootState) => state.gameSlice.level);
 
-  const handleResetToggle = () => {
-    setResetToggle(!resetToggle);
-  };
+  const level = useSelector((state: RootState) => state.gameSlice.level);
 
   useEffect(() => {
     const lvl = window.location.pathname.split("/")[2];
@@ -31,11 +34,25 @@ const Game: React.FC = () => {
   useEffect(() => {
     const lvl = window.location.pathname.split("/")[2];
     if (gameState === GAME_STATE.PAGE_DEFEAT) {
+      dispatch(
+        beatLevel({ level: level.levelId, stars: total_stars_collected })
+      );
       history.push(`/Defeat/${lvl}`);
     } else if (gameState === GAME_STATE.PAGE_VICTORY) {
+      dispatch(
+        beatLevel({
+          level: level.levelId,
+          stars: total_stars_collected,
+          unlockNext: true,
+        })
+      );
       history.push(`/Victory/${lvl}`);
     }
-  }, [gameState]);
+  }, [gameState, history, level, total_stars_collected]);
+
+  const handleResetToggle = () => {
+    setResetToggle(!resetToggle);
+  };
 
   return (
     <div

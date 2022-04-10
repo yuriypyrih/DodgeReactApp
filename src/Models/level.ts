@@ -4,4 +4,5 @@ export type Level = {
   level: number;
   description: string;
   status: LEVEL_STATUS;
+  levelId: string;
 };
