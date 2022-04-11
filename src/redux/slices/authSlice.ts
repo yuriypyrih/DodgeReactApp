@@ -251,6 +251,15 @@ const authSlice = createSlice({
       state.accessToken = null;
       state.meta.loading = false;
     });
+    builder.addCase(register.fulfilled, (state) => {
+      state.meta.loading = false;
+    });
+    builder.addCase(register.pending, (state) => {
+      state.meta.loading = true;
+    });
+    builder.addCase(register.rejected, (state) => {
+      state.meta.loading = false;
+    });
   },
 });
 

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { Box, Button, Grid, makeStyles, Typography } from "@material-ui/core";
+import { Box, Grid, makeStyles, Typography } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import { login, register, setStatusMsg } from "../redux/slices/authSlice";
 import { RootState } from "../redux/store";
 import CustomTextfield from "../components/CustomTextfield";
+import CustomButton from "../components/CustomButton";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,11 +26,6 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     fontWeight: 500,
     fontSize: 32,
-    top: 8,
-    left: 0,
-    position: "absolute",
-    display: "flex",
-    justifyContent: "center",
     width: "100%",
   },
   menuContainer: {
@@ -61,7 +57,7 @@ const AuthPage: React.FC = () => {
   const [regConfPass, setRegConfPass] = useState<string>("");
   const [regName, setRegName] = useState<string>("");
 
-  const { msgIsError, statusMsg } = useSelector(
+  const { msgIsError, statusMsg, loading } = useSelector(
     (state: RootState) => state.authSlice.meta
   );
 
@@ -77,10 +73,25 @@ const AuthPage: React.FC = () => {
     dispatch,
   ]);
 
+  useEffect(() => {
+    const listener = (event: KeyboardEvent) => {
+      if (event.code === "Enter") {
+        event.preventDefault();
+        if (state === "login") handleLogin();
+        else handleRegister();
+      }
+    };
+    document.addEventListener("keydown", listener);
+    return () => {
+      document.removeEventListener("keydown", listener);
+    };
+    //eslint-disable-next-line
+  }, [state, loginEmail, loginPass, regEmail, regPass, regConfPass, regName]);
+
   const handleLogin = () => {
     if (!loginEmail || !loginEmail) {
       dispatch(
-        setStatusMsg({ statusMsg: "Fill all the fields!", msgIsError: true })
+        setStatusMsg({ statusMsg: " a Fill all the fields!", msgIsError: true })
       );
     } else {
       dispatch(login({ email: loginEmail, password: loginPass }));
@@ -193,9 +204,11 @@ const AuthPage: React.FC = () => {
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <Button className={classes.btn} onClick={handleLogin}>
-            Login
-          </Button>
+          <CustomButton
+            onClick={handleLogin}
+            text={"Login"}
+            loading={loading}
+          />
         </Grid>
         {getStatusMsg()}
       </Grid>
@@ -208,7 +221,7 @@ const AuthPage: React.FC = () => {
         container
         item
         xs={12}
-        style={{ maxWidth: 360, position: "relative" }}
+        style={{ maxWidth: 360, position: "relative", marginBottom: "8px" }}
       >
         <Grid item xs={12} container justify={"center"}>
           <CustomTextfield
@@ -274,9 +287,11 @@ const AuthPage: React.FC = () => {
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <Button className={classes.btn} onClick={handleRegister}>
-            Register
-          </Button>
+          <CustomButton
+            onClick={handleRegister}
+            text={"Register"}
+            loading={loading}
+          />
         </Grid>
         {getStatusMsg()}
       </Grid>
@@ -285,13 +300,13 @@ const AuthPage: React.FC = () => {
 
   return (
     <Box className={classes.root}>
-      <Box className={classes.title}>DODGE</Box>
       <Grid
         container
         justify={"center"}
         alignItems={"center"}
         style={{ width: "100%", height: "100%" }}
       >
+        <Box className={classes.title}>DODGE</Box>
         {state === "login" ? getLogin() : getRegister()}
       </Grid>
     </Box>

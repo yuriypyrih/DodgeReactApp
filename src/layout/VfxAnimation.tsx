@@ -95,7 +95,6 @@ const VfxAnimation: React.FC<VfxAnimationProps> = ({ children }) => {
   const [innercontainerClassB, setInnercontainerClassB] = useState<string>("");
 
   useEffect(() => {
-    // if (containerClass.length === 0) {
     if (vfxObject.run_animation === VFX.PULSE_RED) {
       console.log("RED_PULSE", vfxObject);
       setContainerClass(classes.PULSE_RED_ANIMATION);
@@ -123,7 +122,7 @@ const VfxAnimation: React.FC<VfxAnimationProps> = ({ children }) => {
         setInnercontainerClassB("");
       }, 500);
     }
-    //}
+    // eslint-disable-next-line
   }, [vfxObject.animation_counter]);
 
   return (

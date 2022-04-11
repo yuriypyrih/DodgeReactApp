@@ -4,6 +4,9 @@ import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { LEVEL_STATUS } from "../Models/enum/LEVEL_STATUS";
+import { Level } from "../Models/level";
+import { setLevel } from "../redux/slices/gameSlice";
+import { dispatch } from "../index";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,7 +31,7 @@ const Victory: React.FC<unknown> = () => {
   const classes = useStyles();
   const history = useHistory();
   const levels = useSelector((state: RootState) => state.gameSlice.levels);
-  const [nextLevel, setNextLevel] = useState<number>(-1);
+  const [nextLevel, setNextLevel] = useState<Level | null>(null);
 
   useEffect(() => {
     const lvl = window.location.pathname.split("/")[2];
@@ -39,13 +42,14 @@ const Victory: React.FC<unknown> = () => {
       foundLevel.status !== LEVEL_STATUS.DISABLED &&
       foundLevel.status !== LEVEL_STATUS.COMING_SOON
     ) {
-      setNextLevel(tempNextLevel);
+      setNextLevel(foundLevel);
     }
   }, [levels]);
 
   const handleNext = () => {
-    if (nextLevel !== -1) {
-      history.replace(`/Game/${nextLevel}`);
+    if (nextLevel) {
+      dispatch(setLevel(nextLevel));
+      history.replace(`/Game/${nextLevel.level}`);
     }
   };
 
@@ -67,7 +71,7 @@ const Victory: React.FC<unknown> = () => {
           spacing={1}
           style={{ marginTop: 24 }}
         >
-          {nextLevel !== -1 && (
+          {nextLevel && (
             <Grid item>
               <Button className={classes.button} onClick={handleNext}>
                 <Typography variant="h5">NEXT</Typography>
