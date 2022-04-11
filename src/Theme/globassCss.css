@@ -22,3 +22,18 @@ body *::-webkit-scrollbar-thumb {
 body *::-webkit-scrollbar-track:hover {
     background: #1a1a1d;
 }
+
+@-webkit-keyframes autofill {
+    0%,100% {
+        color: #666;
+        background: transparent;
+    }
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active  {
+    transition: all 5000s 5000s ease-in-out ;
+}
+

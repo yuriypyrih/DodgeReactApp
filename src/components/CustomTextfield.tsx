@@ -4,10 +4,11 @@ import React from "react";
 const useStyles = makeStyles((theme) => ({
   root: {
     "& .MuiInputLabel-root": {
-      color: theme.palette.primary.main,
+      color: theme.palette.primary.main + " !important",
     },
     "& .MuiOutlinedInput-root": {
-      color: theme.palette.primary.main,
+      color: theme.palette.primary.main + " !important",
+      background: "unset !important",
       "& fieldset": {
         borderRadius: "99px",
         borderColor: theme.palette.primary.main,
