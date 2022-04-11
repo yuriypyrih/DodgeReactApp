@@ -115,7 +115,7 @@ const Home: React.FC = () => {
                 color={"primary"}
                 onClick={handleGoPatches}
               >
-                Patch Notes v1
+                Patch Notes v1.2.5
               </Typography>
             </Grid>
           </Box>

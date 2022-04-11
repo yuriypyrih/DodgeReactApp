@@ -35,7 +35,7 @@ export default class Game {
 
     this.level = 1;
     // Dev option for debugging
-    this.dev = true;
+    this.dev = process.env.NODE_ENV === "development";
     /**
      * gameObjects -> Player can interact with (Player excluded)
      * particleObject -> Player usually cannot interact with
