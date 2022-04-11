@@ -1,6 +1,5 @@
 import { getSec } from "../../utils/deltaTime";
 import Game from "./game";
-import Spawner from "./spawner";
 
 type HudProps = {
   game: Game;

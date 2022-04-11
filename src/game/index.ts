@@ -21,6 +21,7 @@ const startEngine = () => {
   //game.spawner.startLevel(1);
 
   let lastTime = 0;
+  let elapsed = 0;
 
   function gameLoop(timestamp: number) {
     if (game.gameState === GAME_STATE.CLOSED) {
@@ -30,13 +31,20 @@ const startEngine = () => {
     }
 
     let deltaTime = timestamp - lastTime;
+    elapsed += deltaTime;
     lastTime = timestamp;
 
-    // Clear Screen
-    context?.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+    // elapsed >= 1000 / 100 Throttling the game aat 60fps
+    if (elapsed >= 1000 / 100) {
+      // Clear Screen
+      context?.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+      // Update Logic and Redraw
+      game.update(elapsed);
+      game.draw(context);
+      //Resetting elapsed after passing it into the game
+      elapsed = 0;
+    }
 
-    game.update(deltaTime);
-    game.draw(context);
     requestAnimationFrame(gameLoop);
   }
 
