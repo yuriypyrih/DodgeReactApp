@@ -123,7 +123,7 @@ const VfxAnimation: React.FC<VfxAnimationProps> = ({ children }) => {
       }, 500);
     }
     // eslint-disable-next-line
-  }, [vfxObject, vfxObject.animation_counter]);
+  }, [vfxObject.animation_counter]);
 
   return (
     <div
