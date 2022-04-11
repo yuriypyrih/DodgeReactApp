@@ -3,7 +3,7 @@ import { fade, makeStyles } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { VFX } from "../game/enum/vfx";
-import { finishedTextAnimation } from "../redux/slices/vfxSlice";
+import { finishedTextAnimation, setDarkness } from "../redux/slices/vfxSlice";
 import { setPoisoned } from "../redux/slices/gameSlice";
 import Game from "../game/engine/game";
 import { GAME_STATE } from "../game/enum/game_state";
@@ -255,6 +255,15 @@ const Hud: React.FC<HudProps> = ({ game, reset }) => {
     }
     console.log("HUD: GAME_STATE");
   }, [game]);
+
+  useEffect(() => {
+    //RESET VARIOUS VFX
+    if (vfxObject.darkness !== 0) {
+      dispatch(setDarkness(0));
+      console.log("HUD: DARKNESS RESET");
+    }
+    // eslint-disable-next-line
+  }, [reset]);
 
   useEffect(() => {
     if (total_stars_collected !== prevCollectedStars) {
