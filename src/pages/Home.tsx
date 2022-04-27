@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/slices/authSlice";
 import { RootState } from "../redux/store";
 import PersonIcon from "@material-ui/icons/Person";
+import { PATCH_NOTES } from "../Models/data/PatchNotes";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -101,7 +102,7 @@ const Home: React.FC = () => {
           </Box>
           <Box mt={4}>
             <Typography variant={"h1"} className={classes.title}>
-              Dodger
+              DODGE
             </Typography>
           </Box>
           <Box style={{ position: "absolute", right: 0, top: 0 }}>
@@ -115,7 +116,7 @@ const Home: React.FC = () => {
                 color={"primary"}
                 onClick={handleGoPatches}
               >
-                Patch Notes v1.2.5
+                {`Patch Notes ${PATCH_NOTES[0].tag}`}
               </Typography>
             </Grid>
           </Box>

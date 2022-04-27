@@ -1,4 +1,10 @@
-import { Button, makeStyles, Typography } from "@material-ui/core";
+import {
+  Button,
+  makeStyles,
+  Tooltip,
+  Typography,
+  withStyles,
+} from "@material-ui/core";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -31,14 +37,31 @@ const useStyles = makeStyles((theme) => ({
     right: -12,
     top: -12,
   },
+  tooltip: {
+    "&.tooltip": { backgroundColor: "#2dd5c4", color: "white" },
+  },
 }));
 
 type CubePlayButtonProps = {
   level: Level;
   clickBuy: () => void;
+  tooltipBot?: boolean;
 };
 
-const CubePlayButton: React.FC<CubePlayButtonProps> = ({ level, clickBuy }) => {
+const LightTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: "#2dd5c4",
+    color: "white",
+    boxShadow: theme.shadows[1],
+    fontSize: 11,
+  },
+}))(Tooltip);
+
+const CubePlayButton: React.FC<CubePlayButtonProps> = ({
+  level,
+  clickBuy,
+  tooltipBot = false,
+}) => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const history = useHistory();
@@ -54,33 +77,41 @@ const CubePlayButton: React.FC<CubePlayButtonProps> = ({ level, clickBuy }) => {
   };
 
   return (
-    <Button
-      className={clsx(
-        classes.root,
-        (level.status === LEVEL_STATUS.LOCKED ||
-          level.status === LEVEL_STATUS.COMING_SOON) &&
-          classes.locked
-      )}
-      onClick={handleClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      disabled={
-        level.status !== LEVEL_STATUS.UNLOCKED &&
-        level.status !== LEVEL_STATUS.LOCKED
-      }
+    <LightTooltip
+      title={level.description}
+      // classes={{ popper: classes.tooltip }}
+      placement={tooltipBot ? "bottom" : "top"}
     >
-      {level.status === LEVEL_STATUS.LOCKED &&
-        (hovered ? (
-          <LockOpenIcon className={classes.locker} />
+      <Button
+        className={clsx(
+          classes.root,
+          (level.status === LEVEL_STATUS.LOCKED ||
+            level.status === LEVEL_STATUS.COMING_SOON) &&
+            classes.locked
+        )}
+        onClick={handleClick}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        disabled={
+          level.status !== LEVEL_STATUS.UNLOCKED &&
+          level.status !== LEVEL_STATUS.LOCKED
+        }
+      >
+        {level.status === LEVEL_STATUS.LOCKED &&
+          (hovered ? (
+            <LockOpenIcon className={classes.locker} />
+          ) : (
+            <LockIcon className={classes.locker} />
+          ))}
+        {level.status !== LEVEL_STATUS.COMING_SOON ? (
+          <Typography variant={"h6"}>{level.level}</Typography>
         ) : (
-          <LockIcon className={classes.locker} />
-        ))}
-      {level.status !== LEVEL_STATUS.COMING_SOON ? (
-        <Typography variant={"h6"}>{level.level}</Typography>
-      ) : (
-        <Typography variant={"caption"}>{level.level} Coming Soon!</Typography>
-      )}
-    </Button>
+          <Typography variant={"caption"}>
+            {level.level} Coming Soon!
+          </Typography>
+        )}
+      </Button>
+    </LightTooltip>
   );
 };
 

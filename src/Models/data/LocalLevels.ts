@@ -105,26 +105,68 @@ export const LocalLevels: Level[] = [
   {
     level: 17,
     levelId: "LVL_17",
-    description: "Frosty",
+    description: "Spark",
     status: LEVEL_STATUS.COMING_SOON,
   },
   {
     level: 18,
     levelId: "LVL_18",
-    description: "Flamy",
+    description: "Frosty",
     status: LEVEL_STATUS.COMING_SOON,
   },
   {
     level: 19,
     levelId: "LVL_19",
-    description: "Marathon.v03",
+    description: "Dragonfly",
     status: LEVEL_STATUS.COMING_SOON,
   },
   {
     level: 20,
     levelId: "LVL_20",
-    description: "Final BOss",
+    description: "Voidborn",
     status: LEVEL_STATUS.COMING_SOON,
+  },
+  {
+    level: 21,
+    levelId: "LVL_21",
+    description: "Cybernetic",
+    status: LEVEL_STATUS.COMING_SOON,
+  },
+  {
+    level: 22,
+    levelId: "LVL_22",
+    description: "Scorpion",
+    status: LEVEL_STATUS.COMING_SOON,
+  },
+  {
+    level: 23,
+    levelId: "LVL_23",
+    description: "Marathon V.3",
+    status: LEVEL_STATUS.COMING_SOON,
+  },
+  {
+    level: 24,
+    levelId: "LVL_24",
+    description: "Marathon V.4",
+    status: LEVEL_STATUS.COMING_SOON,
+  },
+  {
+    level: 25,
+    levelId: "LVL_25",
+    description: "Symmetra",
+    status: LEVEL_STATUS.LOCKED,
+  },
+  {
+    level: 26,
+    levelId: "LVL_26",
+    description: "Viper",
+    status: LEVEL_STATUS.LOCKED,
+  },
+  {
+    level: 27,
+    levelId: "LVL_27",
+    description: "Anubis",
+    status: LEVEL_STATUS.LOCKED,
   },
 ];
 

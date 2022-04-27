@@ -19,6 +19,7 @@ import { ReactComponent as StarIcon } from "../assets/svg/diamond.svg";
 import clsx from "clsx";
 import { Level } from "../Models/level";
 import UnlockLevelModal from "../components/UnlockLevelModal";
+import ChaosPlayButton from "../components/ChaosPlayButton";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -86,9 +87,11 @@ const useStyles = makeStyles((theme) => ({
 
 const Selection: React.FC<unknown> = () => {
   const MAX_PAGE_SIZE = 12;
+  const MAX_CHAOS_SIZE = 3;
+
   const classes = useStyles();
   const history = useHistory();
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(3);
   const [buyLevel, setBuyLevel] = useState<null | Level>(null);
 
   const levels = useSelector((state: RootState) => state.gameSlice.levels);
@@ -97,7 +100,16 @@ const Selection: React.FC<unknown> = () => {
   );
 
   const getPageLevels = () => {
-    return levels.slice((page - 1) * MAX_PAGE_SIZE, page * MAX_PAGE_SIZE);
+    // return levels.slice((page - 1) * MAX_PAGE_SIZE, page * MAX_PAGE_SIZE);
+    if (page <= 2) {
+      return levels.slice((page - 1) * MAX_PAGE_SIZE, page * MAX_PAGE_SIZE);
+    } else {
+      const previousNormalLevels = MAX_PAGE_SIZE * 2;
+      return levels.slice(
+        previousNormalLevels,
+        previousNormalLevels + (page - 2) * MAX_CHAOS_SIZE
+      );
+    }
   };
 
   const isFirstPage = () => {
@@ -105,7 +117,8 @@ const Selection: React.FC<unknown> = () => {
   };
 
   const isLastPage = () => {
-    return levels.length <= page * MAX_PAGE_SIZE;
+    // return levels.length <= page * MAX_PAGE_SIZE;
+    return page === 3;
   };
 
   const nextPage = () => {
@@ -168,17 +181,34 @@ const Selection: React.FC<unknown> = () => {
             </Box>
           </Grid>
         </Grid>
-        <Grid container className={classes.container} item>
+        <Grid
+          container
+          className={classes.container}
+          item
+          justify={"flex-start"}
+          alignItems={"flex-start"}
+        >
           {getPageLevels().map((item, key) => (
             <Grid
               item
-              xs={2}
-              container
-              justify={"center"}
-              style={{ marginBottom: 32 }}
+              style={{
+                margin: item.level <= 24 ? "8px 36px" : "8px 19px",
+                flex: 0,
+              }}
               key={"level" + key + item.level}
             >
-              <CubePlayButton level={item} clickBuy={() => setBuyLevel(item)} />
+              {item.level <= 24 ? (
+                <CubePlayButton
+                  level={item}
+                  tooltipBot={item.level > (page - 1 + 0.5) * MAX_PAGE_SIZE}
+                  clickBuy={() => setBuyLevel(item)}
+                />
+              ) : (
+                <ChaosPlayButton
+                  level={item}
+                  clickBuy={() => setBuyLevel(item)}
+                />
+              )}
             </Grid>
           ))}
         </Grid>
