@@ -4,7 +4,12 @@ import GameObject from "./gameObject";
 import Game from "./game";
 import { Rectangle } from "../types/Rectangle";
 import store from "../../redux/store";
-import { setGameState, setHP, setPoisoned } from "../../redux/slices/gameSlice";
+import {
+  setGameState,
+  setHP,
+  setPoisoned,
+  setSelectedRelic,
+} from "../../redux/slices/gameSlice";
 import Trail from "./trail";
 import {
   playAnimation,
@@ -39,8 +44,15 @@ export default class Player extends GameObject {
   magneticY: number;
   magneticX: number;
   darkness: number;
+  darknessTimer: number;
   relic: RelicType | null;
   relic_available_uses: number;
+  relic_immune: boolean;
+  relic_regeneration: number;
+  relic_poison_consumed: number;
+  relic_fear: number;
+  relic_berserk: boolean;
+  relic_lastBerserkDate: number;
 
   constructor({ game }: PlayerProps) {
     super({
@@ -70,8 +82,15 @@ export default class Player extends GameObject {
     this.magneticY = 0;
     this.magneticX = 0;
     this.darkness = 0;
+    this.darknessTimer = 0;
     this.relic = null;
     this.relic_available_uses = 0;
+    this.relic_immune = false;
+    this.relic_regeneration = 0;
+    this.relic_poison_consumed = 0;
+    this.relic_fear = -1;
+    this.relic_berserk = false;
+    this.relic_lastBerserkDate = Date.now();
 
     this.gameObject.position = {
       x: game.canvas.canvasWidth / 2 - this.gameObject.width / 2,
@@ -117,12 +136,14 @@ export default class Player extends GameObject {
     this.milestone = false;
     this.poisoned = false;
     this.darkness = 0;
+    this.darknessTimer = 0;
 
-    if (this.relic) {
-      this.relic_available_uses = this.relic.max_uses;
-    } else {
-      this.relic_available_uses = 0;
-    }
+    this.assignRelic(this.relic);
+    this.relic_immune = false;
+    this.relic_regeneration = 0;
+    this.relic_poison_consumed = 0;
+    this.relic_fear = -1;
+    this.relic_berserk = false;
   }
 
   getBounds() {
@@ -135,6 +156,10 @@ export default class Player extends GameObject {
     return rectange;
   }
 
+  fear() {
+    // DO nothing
+  }
+
   collision(rectangle: Rectangle) {
     // collision detected!
     if (
@@ -142,6 +167,20 @@ export default class Player extends GameObject {
       this.gameObject.position.x + this.gameObject.width > rectangle.x &&
       this.gameObject.position.y < rectangle.y + rectangle.height &&
       this.gameObject.position.y + this.gameObject.height > rectangle.y
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  fearCollision(rectangle: Rectangle) {
+    // collision detected!
+    if (
+      this.gameObject.position.x - 250 < rectangle.x + rectangle.width &&
+      this.gameObject.position.x + this.gameObject.width + 250 > rectangle.x &&
+      this.gameObject.position.y - 250 < rectangle.y + rectangle.height &&
+      this.gameObject.position.y + this.gameObject.height + 250 > rectangle.y
     ) {
       return true;
     } else {
@@ -162,9 +201,39 @@ export default class Player extends GameObject {
 
   defeatConditionCheck() {
     if (this.health <= this.death_thresholder && !this.developerMode) {
-      store.dispatch(setGameState(GAME_STATE.PAGE_DEFEAT));
-      this.game.close();
-      return true;
+      // Berserk Relic
+      const relic = this.relic;
+      if (
+        relic &&
+        relic.name === RELICS_NAME.BERSERK &&
+        this.relic_available_uses > 0
+      ) {
+        this.health = 100;
+        this.relic_berserk = true;
+        this.relic_lastBerserkDate = Date.now() + 500;
+        this.relic_available_uses--;
+        this.updateRelic();
+        this.applyFear();
+        return false;
+      }
+      //Guardian Angel Relic
+      else if (
+        relic &&
+        relic.name === RELICS_NAME.GUARDIAN_ANGEL &&
+        this.relic_available_uses > 0
+      ) {
+        this.health = 10;
+        this.recently_damaged = -1500;
+        this.relic_immune = true;
+        store.dispatch(playAnimation(VFX.PULSE_GOLD));
+        this.relic_available_uses--;
+        this.updateRelic();
+        return false;
+      } else {
+        store.dispatch(setGameState(GAME_STATE.PAGE_DEFEAT));
+        this.game.close();
+        return true;
+      }
     } else {
       return false;
     }
@@ -174,18 +243,59 @@ export default class Player extends GameObject {
     this.relic = relic;
     if (relic) {
       this.relic_available_uses = relic.max_uses;
+      this.updateRelic();
     } else {
       this.relic_available_uses = 0;
+    }
+  }
+
+  updateRelic() {
+    if (this.relic) {
+      store.dispatch(
+        setSelectedRelic({
+          relic: this.relic,
+          relic_available_uses: this.relic_available_uses,
+        })
+      );
     }
   }
 
   useActiveRelic() {
     if (this.relic && this.relic_available_uses > 0) {
       this.relic_available_uses--;
+      this.updateRelic();
+      if (this.relic.name === RELICS_NAME.HEAL) {
+        this.health += 25;
+        store.dispatch(playAnimation(VFX.PULSE_GREEN));
+      }
       if (this.relic.name === RELICS_NAME.IMMUNITY) {
-        this.recently_damaged = -40;
+        this.recently_damaged = -2000;
+        this.relic_immune = true;
+        store.dispatch(playAnimation(VFX.PULSE_GOLD));
+      }
+      if (this.relic.name === RELICS_NAME.POISON_CURE) {
+        this.health += this.relic_poison_consumed + 5;
+        this.relic_poison_consumed = 0;
+        this.poisoned = false;
+        store.dispatch(setPoisoned(false));
+        store.dispatch(playAnimation(VFX.PULSE_GREEN));
+      }
+      if (this.relic.name === RELICS_NAME.FEAR) {
+        this.applyFear();
       }
     }
+  }
+
+  applyFear() {
+    this.relic_fear = 0;
+    this.game.gameObjects.forEach((object: GameObject) => {
+      if (this.fearCollision(object.getBounds())) {
+        object.fear(
+          this.gameObject.position.x + 12,
+          this.gameObject.position.y + 12
+        );
+      }
+    });
   }
 
   draw(context: any) {
@@ -196,6 +306,42 @@ export default class Player extends GameObject {
       this.gameObject.width,
       this.gameObject.height
     );
+    if (this.relic_immune) {
+      context.strokeStyle = COLOR.GOLD;
+      context.globalAlpha = 0.4;
+      context.lineWidth = 2;
+      context.beginPath();
+      context.arc(
+        this.gameObject.position.x + this.gameObject.width / 2,
+        this.gameObject.position.y + this.gameObject.height / 2,
+        25,
+        0,
+        2 * Math.PI
+      );
+      context.stroke();
+      context.globalAlpha = 1;
+      context.strokeRect(
+        this.gameObject.position.x - 4,
+        this.gameObject.position.y - 4,
+        this.gameObject.width + 8,
+        this.gameObject.height + 8
+      );
+      context.lineWidth = 1;
+    }
+    if (this.relic_fear > -1) {
+      context.strokeStyle = COLOR.RED;
+      context.globalAlpha = Math.min(1, 1 - this.relic_fear / 300);
+      context.beginPath();
+      context.arc(
+        this.gameObject.position.x + this.gameObject.width / 2,
+        this.gameObject.position.y + this.gameObject.height / 2,
+        this.relic_fear / Math.sqrt(2),
+        0,
+        2 * Math.PI
+      );
+      context.stroke();
+      context.globalAlpha = 1;
+    }
   }
 
   update(deltaTime: number) {
@@ -232,24 +378,49 @@ export default class Player extends GameObject {
       })
     );
 
+    // Buffer all the dmg that you take into one value and use it at the end of calculations
+    let buffered_dmg = 0;
+
     // Keeping track of when it was last time damaged, by default it start with 0 when the game start
     this.recently_damaged += deltaTime;
+    this.darknessTimer += deltaTime;
+    this.relic_regeneration += deltaTime;
+    if (this.relic_fear > -1) this.relic_fear += 8;
+
+    // Disable fear animation
+    if (this.relic_fear >= 300) this.relic_fear = -1;
+
+    // Disable Relic IMMUNITY
+    if (this.recently_damaged > this.IMMUNITY_IN_MILISEC) {
+      this.relic_immune = false;
+    }
+
+    // Regen if enabled
+    if (
+      this.relic?.name === RELICS_NAME.REGENERATION &&
+      this.relic_regeneration >= 1000
+    ) {
+      this.relic_regeneration = 0;
+      this.health += 2;
+    }
 
     if (this.poisoned) {
       const freshPoison = Date.now();
       if (freshPoison - this.lastPoisonedDate > 1000) {
         store.dispatch(setPoisoned(true));
         this.lastPoisonedDate = freshPoison;
+        this.relic_poison_consumed += 3;
         this.health -= 3;
       }
     }
 
-    if (this.darkness > 0) {
-      this.darkness -= 0.01;
-      if (this.darkness < 0) {
-        this.darkness = 0;
+    if (this.relic_berserk) {
+      const freshPoison = Date.now();
+      if (freshPoison - this.relic_lastBerserkDate > 1000) {
+        // store.dispatch(setPoisoned(true));
+        this.relic_lastBerserkDate = freshPoison;
+        this.health -= 10;
       }
-      store.dispatch(setDarkness(this.darkness));
     }
 
     this.game.gameObjects.forEach((object: GameObject) => {
@@ -285,7 +456,8 @@ export default class Player extends GameObject {
           // And reset the recently_damaged
           if (this.recently_damaged > this.IMMUNITY_IN_MILISEC) {
             store.dispatch(playAnimation(VFX.PULSE_RED));
-            this.health -= 25;
+            // this.health -= 25;
+            buffered_dmg += 25;
             this.recently_damaged = 0;
           }
         }
@@ -296,7 +468,8 @@ export default class Player extends GameObject {
         ) {
           if (this.recently_damaged > this.IMMUNITY_IN_MILISEC) {
             store.dispatch(playAnimation(VFX.PULSE_RED));
-            this.health -= 30;
+            // this.health -= 30;
+            buffered_dmg += 30;
             this.recently_damaged = 0;
           }
         }
@@ -310,7 +483,8 @@ export default class Player extends GameObject {
         if (object.gameObject.id === ENTITY_ID.BULLET) {
           if (this.recently_damaged > this.IMMUNITY_IN_MILISEC) {
             store.dispatch(playAnimation(VFX.PULSE_RED));
-            this.health -= 10;
+            // this.health -= 10;
+            buffered_dmg += 10;
             this.recently_damaged = 0;
             this.game.gameObjects.splice(
               this.game.gameObjects.indexOf(object),
@@ -329,7 +503,8 @@ export default class Player extends GameObject {
               store.dispatch(playText(["POISONED"]));
             }
             store.dispatch(playAnimation(VFX.PULSE_PURPLE));
-            this.health -= 15;
+            // this.health -= 15;
+            buffered_dmg += 15;
             this.recently_damaged = 0;
           }
         }
@@ -344,7 +519,8 @@ export default class Player extends GameObject {
               store.dispatch(playText(["POISONED"]));
             }
             store.dispatch(playAnimation(VFX.PULSE_PURPLE));
-            this.health -= 10;
+            // this.health -= 10;
+            buffered_dmg += 10;
             this.recently_damaged = 0;
             this.game.gameObjects.splice(
               this.game.gameObjects.indexOf(object),
@@ -355,11 +531,14 @@ export default class Player extends GameObject {
 
         if (object.gameObject.id === ENTITY_ID.SHADOW_AURA) {
           this.getHitByBodyAura(object, 25);
-          this.darkness += 0.02;
-          if (this.darkness > 1) {
-            this.darkness = 1;
+          if (this.darknessTimer > 100) {
+            this.darknessTimer = 0;
+            this.darkness += 0.05;
+            if (this.darkness > 1) {
+              this.darkness = 1;
+            }
+            store.dispatch(setDarkness(this.darkness));
           }
-          store.dispatch(setDarkness(this.darkness));
         }
 
         if (object.gameObject.id === ENTITY_ID.MAGNET_AURA_PLUS) {
@@ -378,15 +557,52 @@ export default class Player extends GameObject {
       }
     }); //End of checking for collision with the gameObjects
 
-    // Reseting health if above 100
+    // Remove darkness if was not hit by Darkness Aura
+    if (this.darknessTimer > 100) {
+      this.darknessTimer = 0;
+      if (this.darkness > 0) {
+        this.darkness -= 0.1;
+        if (this.darkness < 0) {
+          this.darkness = 0;
+        }
+        store.dispatch(setDarkness(this.darkness));
+      }
+    }
+
+    // Resetting health if above 100
     if (this.health > 100) this.health = 100;
 
-    // Player Collision with left wall
-    if (this.gameObject.position.x < 0) this.gameObject.position.x = 0;
+    //Take the buffered dmg
+    if (buffered_dmg > 0) {
+      if (this.relic?.name === RELICS_NAME.STABILIZER) {
+        this.health -= (buffered_dmg * 4) / 5; // 20% dmg reduction
+      } else if (this.relic_berserk) {
+        this.health -= buffered_dmg / 2; // 50% dmg reduction
+      } else {
+        this.health -= buffered_dmg;
+      }
+    }
 
-    // Player Collision with right wall
-    if (this.gameObject.position.x + this.gameObject.width > this.gameWidth) {
-      this.gameObject.position.x = this.gameWidth - this.gameObject.width;
+    //Portal Enabled
+    if (this.relic?.name === RELICS_NAME.PORTAL) {
+      // Player Collision with left wall
+      if (this.gameObject.position.x < 0) {
+        store.dispatch(playAnimation(VFX.PULSE_PORTAL));
+        this.gameObject.position.x = this.gameWidth - this.gameObject.width;
+      }
+      // Player Collision with right wall
+      if (this.gameObject.position.x + this.gameObject.width > this.gameWidth) {
+        store.dispatch(playAnimation(VFX.PULSE_PORTAL));
+        this.gameObject.position.x = 0;
+      }
+    } else {
+      // Player Collision with left wall
+      if (this.gameObject.position.x < 0) this.gameObject.position.x = 0;
+
+      // Player Collision with right wall
+      if (this.gameObject.position.x + this.gameObject.width > this.gameWidth) {
+        this.gameObject.position.x = this.gameWidth - this.gameObject.width;
+      }
     }
 
     // Player Collision with top wall

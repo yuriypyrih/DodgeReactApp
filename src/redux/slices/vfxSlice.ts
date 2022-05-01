@@ -6,6 +6,7 @@ type vfxSliceType = {
   animation_counter: number;
   text_message: string[];
   darkness: number;
+  nightVision: boolean;
   play_text: boolean;
 };
 
@@ -14,6 +15,7 @@ const initialState: vfxSliceType = {
   text_message: ["Dodge", "Game"],
   play_text: false,
   darkness: 0,
+  nightVision: false,
   animation_counter: 0,
 };
 
@@ -36,10 +38,18 @@ const vfxSlice = createSlice({
     setDarkness: (state, action) => {
       state.darkness = action.payload;
     },
+    setNightVision: (state, action) => {
+      state.nightVision = action.payload;
+    },
   },
 });
 
-export const { playAnimation, playText, finishedTextAnimation, setDarkness } =
-  vfxSlice.actions;
+export const {
+  playAnimation,
+  playText,
+  finishedTextAnimation,
+  setDarkness,
+  setNightVision,
+} = vfxSlice.actions;
 
 export default vfxSlice.reducer;

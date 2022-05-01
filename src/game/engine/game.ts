@@ -50,7 +50,7 @@ export default class Game {
     this.hud = new Hud({ game: this });
     this.player = new Player({ game: this });
 
-    this.selectedRelic = relics[0];
+    this.selectedRelic = relics[6];
 
     // TESTING
     // this.menu.playGame(this.level);

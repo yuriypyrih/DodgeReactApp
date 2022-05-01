@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { fade, makeStyles } from "@material-ui/core";
+import { CircularProgress, fade, makeStyles } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { VFX } from "../game/enum/vfx";
-import { finishedTextAnimation, setDarkness } from "../redux/slices/vfxSlice";
+import {
+  finishedTextAnimation,
+  setDarkness,
+  setNightVision,
+} from "../redux/slices/vfxSlice";
 import { setPoisoned } from "../redux/slices/gameSlice";
 import Game from "../game/engine/game";
 import { GAME_STATE } from "../game/enum/game_state";
-// import { RELICS_NAME } from "../game/enum/relics_name";
 import HealIcon from "@material-ui/icons/Favorite";
-// import ImmunityIcon from "@material-ui/icons/Security";
-// import { LocalRelics } from "../Models/data/LocalRelics";
-import DefaultIcon from "@material-ui/icons/Description";
+import { RELIC_TYPE } from "../game/enum/relic_type";
+import { COLOR } from "../game/enum/colors";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -222,6 +224,7 @@ const Hud: React.FC<HudProps> = ({ game, reset }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
+  const [localReset, setLocalReset] = useState<boolean>(reset);
   const { max_stars, total_stars_collected, star_timers } = useSelector(
     (state: RootState) => state.gameSlice.progress
   );
@@ -254,19 +257,25 @@ const Hud: React.FC<HudProps> = ({ game, reset }) => {
       setPaused(false);
     }
     console.log("HUD: GAME_STATE");
-  }, [game]);
+  }, [game, game?.gameState]);
 
   useEffect(() => {
     //RESET VARIOUS VFX
     if (vfxObject.darkness !== 0) {
       dispatch(setDarkness(0));
-      console.log("HUD: DARKNESS RESET");
+      dispatch(setNightVision(false));
+      console.log("HUD: DARKNESS/VISION RESET");
     }
     // eslint-disable-next-line
   }, [reset]);
 
+  // useEffect(()=>{
+  //
+  // },[reset])
+
   useEffect(() => {
-    if (total_stars_collected !== prevCollectedStars) {
+    if (total_stars_collected !== prevCollectedStars || localReset !== reset) {
+      setLocalReset(reset);
       setPrevCollectedStars(total_stars_collected);
       setReloadProgress(!reloadProgress);
     }
@@ -278,7 +287,6 @@ const Hud: React.FC<HudProps> = ({ game, reset }) => {
           star_timers[total_stars_collected - 1]
       );
     }
-    console.log("HUD: Star Progress");
     // eslint-disable-next-line
   }, [total_stars_collected, max_stars, star_timers, reset]);
 
@@ -308,10 +316,39 @@ const Hud: React.FC<HudProps> = ({ game, reset }) => {
 
   const getRelic = () => {
     let Icon = HealIcon;
-    // LocalRelics.forEach((r) => {
-    //   if (r.name === relic.name) Icon = r.Icon;
-    // });
-    return <Icon />;
+    let wasted = false;
+    let variant: "indeterminate" | "static" | "determinate" = "indeterminate";
+    let value = 100;
+    if (relic) {
+      wasted = relic.relic_available_uses <= 0;
+      if (relic.relic.type === RELIC_TYPE.ACTIVE) {
+        variant = "determinate";
+        if (relic.relic_available_uses !== Infinity) {
+          value = Math.min(
+            100,
+            (relic.relic_available_uses / relic.relic.max_uses) * 100
+          );
+        }
+      } else {
+        // IT's PASSIVE and it' already perfect
+      }
+    }
+
+    return (
+      <>
+        {!wasted && (
+          <CircularProgress
+            variant={variant}
+            disableShrink
+            size={38}
+            thickness={2}
+            value={value}
+            style={{ position: "absolute" }}
+          />
+        )}
+        <Icon style={{ opacity: wasted ? 0.2 : 1 }} />
+      </>
+    );
   };
 
   return (
@@ -330,7 +367,11 @@ const Hud: React.FC<HudProps> = ({ game, reset }) => {
             />
             <div
               className={`${classes.healthInner} ${hpClass}`}
-              style={{ width: `${getHPMeter()}%` }}
+              style={{
+                width: `${getHPMeter()}%`,
+                backgroundColor:
+                  game && game.player.relic_berserk ? COLOR.ORANGE : undefined,
+              }}
             />
           </div>
           {reloadProgress ? (

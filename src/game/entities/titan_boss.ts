@@ -50,6 +50,10 @@ export default class TitanBoss extends GameObject {
     return rectange;
   }
 
+  fear() {
+    // DO nothing
+  }
+
   awakenFunction() {
     if (!this.awaken && this.gameObject.position.y >= 10) {
       this.awaken = true;

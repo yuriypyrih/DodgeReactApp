@@ -38,6 +38,18 @@ export default class ShadowBullet extends GameObject {
     return rectange;
   }
 
+  fear(x: number, y: number) {
+    const size = this.gameObject.height / 2;
+    if (this.gameObject.position.x + size <= x && this.gameObject.velX > 0)
+      this.gameObject.velX *= -1;
+    else if (this.gameObject.position.x + size > x && this.gameObject.velX < 0)
+      this.gameObject.velX *= -1;
+    if (this.gameObject.position.y + size <= y && this.gameObject.velY > 0)
+      this.gameObject.velY *= -1;
+    else if (this.gameObject.position.y + size > y && this.gameObject.velY < 0)
+      this.gameObject.velY *= -1;
+  }
+
   draw(context: any) {
     context.fillStyle = COLOR.BLACK;
     context.fillRect(

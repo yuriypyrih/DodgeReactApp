@@ -1,11 +1,8 @@
 import { ENTITY_ID } from "../enum/entitiy_id";
 import { COLOR } from "../enum/colors";
-//import Trail from "../engine/trail";
 import GameObject from "../engine/gameObject";
 import { Rectangle } from "../types/Rectangle";
-import Trail from "../engine/trail";
 import Game from "../engine/game";
-import BasicBullet from "./basic_bullet";
 import BomberBullet from "./bomber_bullet";
 
 type BomberBossProps = {
@@ -47,6 +44,10 @@ export default class BomberBoss extends GameObject {
       height: this.gameObject.height,
     };
     return rectange;
+  }
+
+  fear() {
+    // DO nothing
   }
 
   awakenFunction() {

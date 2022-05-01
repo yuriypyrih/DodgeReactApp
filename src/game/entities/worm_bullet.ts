@@ -17,6 +17,7 @@ export default class WormBullet extends GameObject {
   game: Game;
   switchTimer: number;
   toggleDirection: boolean;
+  feared: boolean;
 
   constructor({ game, position, velX = 5, velY = 5 }: WormBulletProps) {
     super({
@@ -31,6 +32,7 @@ export default class WormBullet extends GameObject {
     this.game = game;
     this.switchTimer = 0;
     this.toggleDirection = true;
+    this.feared = false;
   }
 
   getBounds() {
@@ -41,6 +43,10 @@ export default class WormBullet extends GameObject {
       height: this.gameObject.height,
     };
     return rectange;
+  }
+
+  fear() {
+    this.feared = true;
   }
 
   draw(context: any) {
@@ -68,7 +74,7 @@ export default class WormBullet extends GameObject {
         this.toggleDirection = !this.toggleDirection;
       } else {
         this.gameObject.velX = 0;
-        this.gameObject.velY = 5;
+        this.gameObject.velY = this.feared ? -5 : 5;
       }
     }
 

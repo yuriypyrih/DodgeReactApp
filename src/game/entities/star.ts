@@ -28,6 +28,10 @@ export default class Star extends GameObject {
     this.MAX_PULSE = 60;
   }
 
+  fear() {
+    // DO nothing
+  }
+
   getBounds() {
     const rectange: Rectangle = {
       x: this.gameObject.position.x,
@@ -40,6 +44,7 @@ export default class Star extends GameObject {
 
   draw(context: any) {
     context.fillStyle = COLOR.GOLD;
+    context.strokeStyle = COLOR.GOLD;
     context.beginPath();
     context.moveTo(
       this.gameObject.position.x + this.gameObject.width / 2,

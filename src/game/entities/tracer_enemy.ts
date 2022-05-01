@@ -16,6 +16,7 @@ type TracerEnemyProps = {
 export default class TracerEnemy extends GameObject {
   game: Game;
   maxSpeed: number;
+  feared_timer: number;
 
   constructor({ game, position, velX = 0, velY = 0 }: TracerEnemyProps) {
     super({
@@ -29,6 +30,7 @@ export default class TracerEnemy extends GameObject {
 
     this.game = game;
     this.maxSpeed = 3;
+    this.feared_timer = -1;
   }
 
   getBounds() {
@@ -50,11 +52,20 @@ export default class TracerEnemy extends GameObject {
       this.gameObject.height
     );
   }
+  fear() {
+    this.feared_timer = 0;
+  }
 
   update(deltaTime: number) {
+    // Fear calculation
+    if (this.feared_timer > -1) this.feared_timer += deltaTime;
+    if (this.feared_timer >= 1500) this.feared_timer = -1;
+
     // Updating the entity's position based on its velocity (if it has one)
-    this.gameObject.position.x += this.gameObject.velX;
-    this.gameObject.position.y += this.gameObject.velY;
+    this.gameObject.position.x +=
+      this.feared_timer > -1 ? -this.gameObject.velX : this.gameObject.velX;
+    this.gameObject.position.y +=
+      this.feared_timer > -1 ? -this.gameObject.velY : this.gameObject.velY;
 
     // Creating a Trail particle and add it to the list
 

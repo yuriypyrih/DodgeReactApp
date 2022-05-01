@@ -23,6 +23,7 @@ export default abstract class GameObject {
     };
   }
 
+  abstract fear(x?: number, y?: number): void;
   abstract update(deltaTime: number): void;
   abstract draw(g: any): void;
   abstract getBounds(): Rectangle;

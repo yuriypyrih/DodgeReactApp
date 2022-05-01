@@ -3,15 +3,18 @@ import Game from "../../game/engine/game";
 import { GAME_STATE } from "../../game/enum/game_state";
 import { Level } from "../../Models/level";
 import { LocalLevels } from "../../Models/data/LocalLevels";
-import { Relic } from "../../Models/relic";
-import { LocalRelics } from "../../Models/data/LocalRelics";
+import { RelicType } from "../../game/types/RelicType";
+import { relics } from "../../game/engine/relics/relics_collection";
 
 type gameSliceType = {
   game: Game | null;
   level: Level;
   levels: Level[];
-  relics: Relic[];
-  selectedRelic: Relic | null;
+  relics: RelicType[];
+  selectedRelic: {
+    relic: RelicType;
+    relic_available_uses: number;
+  } | null;
   hp: number;
   gameState: GAME_STATE;
   poisoned: boolean;
@@ -26,7 +29,7 @@ const initialState: gameSliceType = {
   game: null,
   level: LocalLevels[0],
   levels: LocalLevels,
-  relics: LocalRelics,
+  relics: relics,
   selectedRelic: null,
   hp: 0,
   gameState: GAME_STATE.PLAYING,
@@ -54,6 +57,9 @@ const gameSlice = createSlice({
     },
     setLevels: (state, action) => {
       state.levels = action.payload;
+    },
+    setSelectedRelic: (state, action) => {
+      state.selectedRelic = action.payload;
     },
     setLevel: (state, action) => {
       state.level = action.payload;
@@ -86,6 +92,7 @@ const gameSlice = createSlice({
 
 export const {
   setHP,
+  setSelectedRelic,
   setPoisoned,
   setLevel,
   setLevels,

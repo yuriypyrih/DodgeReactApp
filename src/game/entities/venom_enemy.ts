@@ -51,6 +51,30 @@ export default class VenomEnemy extends GameObject {
     return rectange;
   }
 
+  fear(x: number, y: number) {
+    const size = this.gameObject.height / 2;
+    if (this.gameObject.position.x + size <= x && this.gameObject.velX > 0) {
+      this.velX_max *= -1;
+      this.velX_min *= -1;
+    } else if (
+      this.gameObject.position.x + size > x &&
+      this.gameObject.velX < 0
+    ) {
+      this.velX_max *= -1;
+      this.velX_min *= -1;
+    }
+    if (this.gameObject.position.y + size <= y && this.gameObject.velY > 0) {
+      this.velY_max *= -1;
+      this.velY_min *= -1;
+    } else if (
+      this.gameObject.position.y + size > y &&
+      this.gameObject.velY < 0
+    ) {
+      this.velY_max *= -1;
+      this.velY_min *= -1;
+    }
+  }
+
   draw(context: any) {
     context.fillStyle = COLOR.PURPLE;
     context.fillRect(

@@ -15,7 +15,7 @@ type MagnetEnemyProps = {
 
 export default class MagnetEnemy extends GameObject {
   game: Game;
-  readonly ΜΑΧ_AURA_RADIUS: number;
+  readonly MAX_AURA_RADIUS: number;
   aura_radius_1: number;
   aura_radius_2: number;
   type: "plus" | "minus";
@@ -32,21 +32,33 @@ export default class MagnetEnemy extends GameObject {
       velY,
       velX,
     });
-    this.ΜΑΧ_AURA_RADIUS = 300;
-    this.aura_radius_1 = type === "minus" ? 0 : this.ΜΑΧ_AURA_RADIUS;
-    this.aura_radius_2 = this.ΜΑΧ_AURA_RADIUS / 2;
+    this.MAX_AURA_RADIUS = 300;
+    this.aura_radius_1 = type === "minus" ? 0 : this.MAX_AURA_RADIUS;
+    this.aura_radius_2 = this.MAX_AURA_RADIUS / 2;
     this.game = game;
     this.type = type;
   }
 
   getBounds() {
     const rectange: Rectangle = {
-      x: this.gameObject.position.x - this.ΜΑΧ_AURA_RADIUS / 2 - 20,
-      y: this.gameObject.position.y - this.ΜΑΧ_AURA_RADIUS / 2 - 20,
-      width: this.gameObject.width + this.ΜΑΧ_AURA_RADIUS + 40,
-      height: this.gameObject.height + this.ΜΑΧ_AURA_RADIUS + 40,
+      x: this.gameObject.position.x - this.MAX_AURA_RADIUS / 2 - 20,
+      y: this.gameObject.position.y - this.MAX_AURA_RADIUS / 2 - 20,
+      width: this.gameObject.width + this.MAX_AURA_RADIUS + 40,
+      height: this.gameObject.height + this.MAX_AURA_RADIUS + 40,
     };
     return rectange;
+  }
+
+  fear(x: number, y: number) {
+    const size = this.gameObject.height / 2;
+    if (this.gameObject.position.x + size <= x && this.gameObject.velX > 0)
+      this.gameObject.velX *= -1;
+    else if (this.gameObject.position.x + size > x && this.gameObject.velX < 0)
+      this.gameObject.velX *= -1;
+    if (this.gameObject.position.y + size <= y && this.gameObject.velY > 0)
+      this.gameObject.velY *= -1;
+    else if (this.gameObject.position.y + size > y && this.gameObject.velY < 0)
+      this.gameObject.velY *= -1;
   }
 
   draw(context: any) {
@@ -71,13 +83,13 @@ export default class MagnetEnemy extends GameObject {
     context.arc(
       this.gameObject.position.x + this.gameObject.width / 2,
       this.gameObject.position.y + this.gameObject.height / 2,
-      this.ΜΑΧ_AURA_RADIUS / Math.sqrt(2),
+      this.MAX_AURA_RADIUS / Math.sqrt(2),
       0,
       2 * Math.PI
     );
     context.stroke();
     const multiplier_1 = Math.min(
-      (this.ΜΑΧ_AURA_RADIUS - this.aura_radius_1) / this.ΜΑΧ_AURA_RADIUS,
+      (this.MAX_AURA_RADIUS - this.aura_radius_1) / this.MAX_AURA_RADIUS,
       1
     );
     context.globalAlpha =
@@ -92,7 +104,7 @@ export default class MagnetEnemy extends GameObject {
     );
     context.stroke();
     const multiplier_2 = Math.min(
-      (this.ΜΑΧ_AURA_RADIUS - this.aura_radius_2) / this.ΜΑΧ_AURA_RADIUS,
+      (this.MAX_AURA_RADIUS - this.aura_radius_2) / this.MAX_AURA_RADIUS,
       1
     );
     context.globalAlpha =
@@ -117,13 +129,13 @@ export default class MagnetEnemy extends GameObject {
     if (this.type === "plus") {
       this.aura_radius_1 += 4;
       this.aura_radius_2 += 4;
-      if (this.aura_radius_1 >= this.ΜΑΧ_AURA_RADIUS) this.aura_radius_1 = 0;
-      if (this.aura_radius_2 >= this.ΜΑΧ_AURA_RADIUS) this.aura_radius_2 = 0;
+      if (this.aura_radius_1 >= this.MAX_AURA_RADIUS) this.aura_radius_1 = 0;
+      if (this.aura_radius_2 >= this.MAX_AURA_RADIUS) this.aura_radius_2 = 0;
     } else {
       this.aura_radius_1 -= 4;
       this.aura_radius_2 -= 4;
-      if (this.aura_radius_1 <= 0) this.aura_radius_1 = this.ΜΑΧ_AURA_RADIUS;
-      if (this.aura_radius_2 <= 0) this.aura_radius_2 = this.ΜΑΧ_AURA_RADIUS;
+      if (this.aura_radius_1 <= 0) this.aura_radius_1 = this.MAX_AURA_RADIUS;
+      if (this.aura_radius_2 <= 0) this.aura_radius_2 = this.MAX_AURA_RADIUS;
     }
 
     // Creating a Trail particle and add it to the list

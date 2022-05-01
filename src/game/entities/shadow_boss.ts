@@ -3,7 +3,6 @@ import { COLOR } from "../enum/colors";
 import GameObject from "../engine/gameObject";
 import { Rectangle } from "../types/Rectangle";
 import Game from "../engine/game";
-import BasicBullet from "./basic_bullet";
 import ShadowBullet from "./shadow_bullet";
 import ShadowEnemy from "./shadow_enemy";
 
@@ -39,24 +38,30 @@ export default class ShadowBoss extends GameObject {
     game.gameObjects.push(
       new ShadowEnemy({
         game,
-        position: { x: 10, y: game.canvas.canvasHeight - 30 },
+        position: { x: -10, y: game.canvas.canvasHeight + 30 },
         velX: 0,
         velY: 0,
         maxRadius: 550,
+        disableWallCollision: true,
       })
     );
     game.gameObjects.push(
       new ShadowEnemy({
         game,
         position: {
-          x: game.canvas.canvasWidth - 30,
-          y: game.canvas.canvasHeight - 30,
+          x: game.canvas.canvasWidth,
+          y: game.canvas.canvasHeight + 30,
         },
         velX: 0,
         velY: 0,
         maxRadius: 550,
+        disableWallCollision: true,
       })
     );
+  }
+
+  fear() {
+    // DO nothing
   }
 
   getBounds() {

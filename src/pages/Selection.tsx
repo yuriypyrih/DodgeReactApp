@@ -91,7 +91,7 @@ const Selection: React.FC<unknown> = () => {
 
   const classes = useStyles();
   const history = useHistory();
-  const [page, setPage] = useState<number>(3);
+  const [page, setPage] = useState<number>(1);
   const [buyLevel, setBuyLevel] = useState<null | Level>(null);
 
   const levels = useSelector((state: RootState) => state.gameSlice.levels);

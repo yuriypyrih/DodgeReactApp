@@ -6,6 +6,7 @@ import Game from "../game";
 import Star from "../../entities/star";
 import ShadowEnemy from "../../entities/shadow_enemy";
 import ShadowBoss from "../../entities/shadow_boss";
+import WormEnemy from "../../entities/worm_enemy";
 
 export const level11Stars: Stars = [7, 35, 52];
 
@@ -18,22 +19,24 @@ export const getLevel11 = (game: Game): null => {
       game.gameObjects.push(
         new ShadowEnemy({
           game,
-          position: { x: 10, y: game.canvas.canvasHeight - 30 },
+          position: { x: -10, y: game.canvas.canvasHeight + 30 },
           velX: 0,
           velY: 0,
           maxRadius: 550,
+          disableWallCollision: true,
         })
       );
       game.gameObjects.push(
         new ShadowEnemy({
           game,
           position: {
-            x: game.canvas.canvasWidth - 30,
-            y: game.canvas.canvasHeight - 30,
+            x: game.canvas.canvasWidth,
+            y: game.canvas.canvasHeight + 30,
           },
           velX: 0,
           velY: 0,
           maxRadius: 550,
+          disableWallCollision: true,
         })
       );
     } else if (game.spawner.roundTimer === sec(1.5)) {
@@ -56,6 +59,7 @@ export const getLevel11 = (game: Game): null => {
       game.gameObjects.push(
         new ShadowEnemy({ game, position: { x: 40, y: 10 } })
       );
+      game.gameObjects.push(new WormEnemy({ game, position: { x: 1, y: 1 } }));
     } else if (game.spawner.roundTimer === sec(levelStars[0] + 3)) {
       game.gameObjects.push(
         new ShadowEnemy({ game, position: { x: 1, y: 100 } })

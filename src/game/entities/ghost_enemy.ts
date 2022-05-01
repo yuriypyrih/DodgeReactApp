@@ -5,6 +5,7 @@ import GameObject from "../engine/gameObject";
 import { Rectangle } from "../types/Rectangle";
 import Trail from "../engine/trail";
 import Game from "../engine/game";
+import { RELICS_NAME } from "../enum/relics_name";
 
 type GhostEnemyProps = {
   game: Game;
@@ -45,6 +46,18 @@ export default class GhostEnemy extends GameObject {
     return rectange;
   }
 
+  fear(x: number, y: number) {
+    const size = this.gameObject.height / 2;
+    if (this.gameObject.position.x + size <= x && this.gameObject.velX > 0)
+      this.gameObject.velX *= -1;
+    else if (this.gameObject.position.x + size > x && this.gameObject.velX < 0)
+      this.gameObject.velX *= -1;
+    if (this.gameObject.position.y + size <= y && this.gameObject.velY > 0)
+      this.gameObject.velY *= -1;
+    else if (this.gameObject.position.y + size > y && this.gameObject.velY < 0)
+      this.gameObject.velY *= -1;
+  }
+
   draw(context: any) {
     context.fillStyle = COLOR.LIGHT_GREY;
     context.globalAlpha = this.shadowAlpha;
@@ -65,14 +78,19 @@ export default class GhostEnemy extends GameObject {
 
     this.stealthTimer++;
 
-    if (this.goStealth && this.stealthTimer > 10) {
+    let minShadowAlpha = 0;
+    if (this.game.player.relic?.name === RELICS_NAME.NIGHT_VISION) {
+      minShadowAlpha = 0.2;
+    }
+
+    if (this.goStealth && this.stealthTimer > 20) {
       this.shadowAlpha -= 0.01;
-      if (this.shadowAlpha < 0) {
-        this.shadowAlpha = 0;
+      if (this.shadowAlpha < minShadowAlpha) {
+        this.shadowAlpha = minShadowAlpha;
         this.stealthTimer = 0;
         this.goStealth = false;
       }
-    } else if (!this.goStealth && this.stealthTimer > 10) {
+    } else if (!this.goStealth && this.stealthTimer > 20) {
       this.shadowAlpha += 0.01;
       if (this.shadowAlpha > 1) {
         this.shadowAlpha = 1;

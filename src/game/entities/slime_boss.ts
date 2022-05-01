@@ -4,8 +4,6 @@ import Trail from "../engine/trail";
 import GameObject from "../engine/gameObject";
 import { Rectangle } from "../types/Rectangle";
 import Game from "../engine/game";
-import BasicBullet from "./basic_bullet";
-import SpeederBullet from "./speeder_bullet";
 import SlimeBullet from "./slime_bullet";
 
 type SlimeBossProps = {
@@ -35,6 +33,10 @@ export default class SlimeBoss extends GameObject {
     this.game = game;
     this.awaken = false;
     this.bullet_timer = 0;
+  }
+
+  fear() {
+    // DO nothing
   }
 
   getBounds() {

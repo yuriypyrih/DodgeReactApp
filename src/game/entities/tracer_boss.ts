@@ -75,6 +75,10 @@ export default class TracerBoss extends GameObject {
     }
   }
 
+  fear() {
+    // DO nothing
+  }
+
   draw(context: any) {
     context.fillStyle = COLOR.YELLOW;
     context.fillRect(

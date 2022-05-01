@@ -4,7 +4,6 @@ import Trail from "../engine/trail";
 import GameObject from "../engine/gameObject";
 import { Rectangle } from "../types/Rectangle";
 import Game from "../engine/game";
-import BasicBullet from "./basic_bullet";
 import SpeederBullet from "./speeder_bullet";
 
 type SpeederBossProps = {
@@ -40,6 +39,9 @@ export default class SpeederBoss extends GameObject {
     this.MAX_SPEED = 25;
   }
 
+  fear() {
+    // DO nothing
+  }
   getBounds() {
     const rectange: Rectangle = {
       x: this.gameObject.position.x,

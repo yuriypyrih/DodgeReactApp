@@ -31,6 +31,9 @@ export default class TitanBullet extends GameObject {
     this.game = game;
     this.maxSpeed = 3;
   }
+  fear() {
+    // DO nothing
+  }
 
   getBounds() {
     const rectange: Rectangle = {

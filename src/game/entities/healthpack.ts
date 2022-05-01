@@ -1,9 +1,7 @@
 import { ENTITY_ID } from "../enum/entitiy_id";
 import { COLOR } from "../enum/colors";
-//import Trail from "../engine/trail";
 import GameObject from "../engine/gameObject";
 import { Rectangle } from "../types/Rectangle";
-import Trail from "../engine/trail";
 import Game from "../engine/game";
 
 type HealthpackProps = {
@@ -35,6 +33,10 @@ export default class Healthpack extends GameObject {
       height: this.gameObject.height,
     };
     return rectange;
+  }
+
+  fear() {
+    // DO nothing
   }
 
   draw(context: any) {

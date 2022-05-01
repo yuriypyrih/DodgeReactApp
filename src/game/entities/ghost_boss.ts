@@ -3,7 +3,6 @@ import { COLOR } from "../enum/colors";
 import GameObject from "../engine/gameObject";
 import { Rectangle } from "../types/Rectangle";
 import Game from "../engine/game";
-import BasicBullet from "./basic_bullet";
 import GhostBullet from "./ghost_bullet";
 
 type GhostBossProps = {
@@ -45,6 +44,10 @@ export default class GhostBoss extends GameObject {
       height: this.gameObject.height,
     };
     return rectange;
+  }
+
+  fear() {
+    // DO nothing
   }
 
   awakenFunction() {

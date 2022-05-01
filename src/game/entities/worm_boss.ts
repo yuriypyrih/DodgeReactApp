@@ -3,7 +3,6 @@ import { COLOR } from "../enum/colors";
 import GameObject from "../engine/gameObject";
 import { Rectangle } from "../types/Rectangle";
 import Game from "../engine/game";
-import TracerBullet from "./tracer_bullet";
 import WormBullet from "./worm_bullet";
 import Trail from "../engine/trail";
 
@@ -38,6 +37,10 @@ export default class WormBoss extends GameObject {
     this.awakening_timer = 0;
     this.bullet_timer = 0;
     this.MAX_SPEED = 14;
+  }
+
+  fear() {
+    // DO nothing
   }
 
   getBounds() {

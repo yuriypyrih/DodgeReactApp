@@ -15,7 +15,7 @@ import { Level } from "../Models/level";
 import LockIcon from "@material-ui/icons/Lock";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     // padding: theme.spacing(2),
     width: 72,
@@ -78,8 +78,9 @@ const CubePlayButton: React.FC<CubePlayButtonProps> = ({
 
   return (
     <LightTooltip
+      enterDelay={500}
+      id={level.description}
       title={level.description}
-      // classes={{ popper: classes.tooltip }}
       placement={tooltipBot ? "bottom" : "top"}
     >
       <Button
