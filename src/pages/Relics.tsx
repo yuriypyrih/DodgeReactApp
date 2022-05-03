@@ -9,16 +9,10 @@ import {
   Typography,
 } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
-import { getMe, login } from "../redux/slices/authSlice";
 import { RootState } from "../redux/store";
-import ImportContactsIcon from "@material-ui/icons/ImportContacts";
-import { ReactComponent as StarIcon } from "../../public/diamond.svg";
-import CubePlayButton from "../components/CubePlayButton";
-import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
-import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
-import DefaultIcon from "@material-ui/icons/Description";
-import { LocalRelics } from "../Models/data/LocalRelics";
+import { ReactComponent as StarIcon } from "../assets/svg/diamond.svg";
 import CubeRelicButton from "../components/CubeRelicButton";
+import { relics } from "../game/engine/relics/relics_collection";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -90,16 +84,6 @@ const Relics: React.FC = () => {
     (state: RootState) => state.authSlice.user
   );
 
-  const relics = useSelector((state: RootState) => state.gameSlice.relics);
-
-  // const getRelic = () => {
-  //   let Icon = DefaultIcon;
-  //   LocalRelics.forEach((r) => {
-  //     if (r.name === selectedRelic) Icon = r.Icon;
-  //   });
-  //   return <Icon />;
-  // };
-
   return (
     <Box className={classes.root}>
       <Grid container style={{ height: "100%" }} alignContent={"space-between"}>
@@ -116,7 +100,7 @@ const Relics: React.FC = () => {
             <Box className={classes.starsBtn}>
               <Grid container wrap={"nowrap"} alignItems={"center"}>
                 <Grid item>
-                  <Typography>{`Stars: ${stars}`}</Typography>
+                  <Typography>{`Stars ${stars}`}</Typography>
                 </Grid>
                 <StarIcon
                   style={{
@@ -139,13 +123,16 @@ const Relics: React.FC = () => {
           {relics.map((item, key) => (
             <Grid
               item
-              xs={2}
+              xs={3}
               container
               justify={"center"}
               style={{ marginBottom: 32 }}
               key={"level" + key}
             >
-              {/*<CubeRelicButton relic={item} />*/}
+              <CubeRelicButton
+                relic={item}
+                selected={selectedRelic === item.id}
+              />
             </Grid>
           ))}
         </Grid>

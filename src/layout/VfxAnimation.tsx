@@ -93,8 +93,6 @@ const useStyles = makeStyles({
     animation: "$pulsePortalBlue 0.5s ease-out",
   },
   nightVisionEffect: {
-    width: "100%",
-    height: "100%",
     background: "radial-gradient(#2E790150 0%, #01230100 60%, #01230100  100%)",
   },
 });
@@ -120,24 +118,28 @@ const VfxAnimation: React.FC<VfxAnimationProps> = ({ children }) => {
       }, 700);
     }
     if (vfxObject.run_animation === VFX.PULSE_GREEN) {
+      console.log("PULSE_GREEN", vfxObject);
       setContainerClass(classes.PULSE_GREEN_ANIMATION);
       setTimeout(() => {
         setContainerClass("");
       }, 700);
     }
     if (vfxObject.run_animation === VFX.PULSE_GOLD) {
+      console.log("PULSE_GOLD", vfxObject);
       setContainerClass(classes.PULSE_GOLD_ANIMATION);
       setTimeout(() => {
         setContainerClass("");
       }, 3000);
     }
     if (vfxObject.run_animation === VFX.PULSE_PURPLE) {
+      console.log("PULSE_PURPLE", vfxObject);
       setContainerClass(classes.PULSE_PURPLE_ANIMATION);
       setTimeout(() => {
         setContainerClass("");
       }, 3000);
     }
     if (vfxObject.run_animation === VFX.PULSE_PORTAL) {
+      console.log("PULSE_PORTAL", vfxObject);
       setInnercontainerClassA(classes.PULSE_PORTAL_ORANGE);
       setInnercontainerClassB(classes.PULSE_PORTAL_BLUE);
       setTimeout(() => {
@@ -149,8 +151,8 @@ const VfxAnimation: React.FC<VfxAnimationProps> = ({ children }) => {
   }, [vfxObject.animation_counter]);
 
   const getDarkness = () => {
-    if (selectedRelic?.relic.name === RELICS_NAME.NIGHT_VISION) {
-      return Math.min(0.4, vfxObject.darkness);
+    if (selectedRelic?.relic === RELICS_NAME.NIGHT_VISION) {
+      return Math.min(0.75, vfxObject.darkness);
     } else return vfxObject.darkness;
   };
 
@@ -160,8 +162,9 @@ const VfxAnimation: React.FC<VfxAnimationProps> = ({ children }) => {
       style={{ background: fade("#000", getDarkness()) }}
     >
       <div
+        style={{ width: "100%", height: "100%" }}
         className={clsx(
-          selectedRelic?.relic.name === RELICS_NAME.NIGHT_VISION &&
+          selectedRelic?.relic === RELICS_NAME.NIGHT_VISION &&
             classes.nightVisionEffect
         )}
       >

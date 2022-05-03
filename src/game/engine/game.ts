@@ -27,10 +27,14 @@ export default class Game {
   player: Player;
   spawner: Spawner;
   hud: Hud;
+  inputHandler: InputHandler;
   selectedRelic: RelicType | null;
+  birthday: number;
 
   constructor({ canvasHeight, canvasWidth }: GameProps) {
+    console.log("⚽️ GAME CREATED");
     this.canvas = { canvasHeight, canvasWidth };
+    this.birthday = Date.now();
     // experimental level;
 
     this.level = 1;
@@ -55,13 +59,16 @@ export default class Game {
     // TESTING
     // this.menu.playGame(this.level);
 
-    new InputHandler({ game: this });
+    this.inputHandler = new InputHandler({ game: this });
+    this.inputHandler.initEvents();
   }
 
   //This function runs once per reload of the page
-  start(level: number) {
+  start(level: number, relic: RelicType | null) {
+    console.log("⛳️ LEVEL STARTED");
     this.level = level;
-    this.player.assignRelic(this.selectedRelic);
+    this.selectedRelic = relic;
+    this.player.assignRelic(relic);
     this.spawner.startLevel(this.level);
   }
 
@@ -91,12 +98,13 @@ export default class Game {
         i--;
       }
     }
+  }
 
-    // this.gameObjects.forEach(object => {
-    //     if (object.id === ENTITY_ID.BASIC_ENEMY) {
-    //         this.gameObjects.splice(this.gameObjects.indexOf(object), 1);
-    //     }
-    // });
+  terminate() {
+    console.log("🎬 GAME TERMINATED");
+    this.gameObjects = [];
+    this.particleObjects = [];
+    this.inputHandler.terminate();
   }
 
   togglePause(optionalState?: GAME_STATE) {

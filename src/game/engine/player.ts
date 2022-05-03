@@ -205,7 +205,7 @@ export default class Player extends GameObject {
       const relic = this.relic;
       if (
         relic &&
-        relic.name === RELICS_NAME.BERSERK &&
+        relic.id === RELICS_NAME.BERSERK &&
         this.relic_available_uses > 0
       ) {
         this.health = 100;
@@ -219,10 +219,10 @@ export default class Player extends GameObject {
       //Guardian Angel Relic
       else if (
         relic &&
-        relic.name === RELICS_NAME.GUARDIAN_ANGEL &&
+        relic.id === RELICS_NAME.GUARDIAN_ANGEL &&
         this.relic_available_uses > 0
       ) {
-        this.health = 10;
+        this.health = 15;
         this.recently_damaged = -1500;
         this.relic_immune = true;
         store.dispatch(playAnimation(VFX.PULSE_GOLD));
@@ -253,7 +253,7 @@ export default class Player extends GameObject {
     if (this.relic) {
       store.dispatch(
         setSelectedRelic({
-          relic: this.relic,
+          relic: this.relic.id,
           relic_available_uses: this.relic_available_uses,
         })
       );
@@ -261,26 +261,27 @@ export default class Player extends GameObject {
   }
 
   useActiveRelic() {
+    console.log("useActiveRelic ,", this.game.birthday);
     if (this.relic && this.relic_available_uses > 0) {
       this.relic_available_uses--;
       this.updateRelic();
-      if (this.relic.name === RELICS_NAME.HEAL) {
+      if (this.relic.id === RELICS_NAME.HEAL) {
         this.health += 25;
         store.dispatch(playAnimation(VFX.PULSE_GREEN));
       }
-      if (this.relic.name === RELICS_NAME.IMMUNITY) {
+      if (this.relic.id === RELICS_NAME.IMMUNITY) {
         this.recently_damaged = -2000;
         this.relic_immune = true;
         store.dispatch(playAnimation(VFX.PULSE_GOLD));
       }
-      if (this.relic.name === RELICS_NAME.POISON_CURE) {
+      if (this.relic.id === RELICS_NAME.POISON_CURE) {
         this.health += this.relic_poison_consumed + 5;
         this.relic_poison_consumed = 0;
         this.poisoned = false;
         store.dispatch(setPoisoned(false));
         store.dispatch(playAnimation(VFX.PULSE_GREEN));
       }
-      if (this.relic.name === RELICS_NAME.FEAR) {
+      if (this.relic.id === RELICS_NAME.FEAR) {
         this.applyFear();
       }
     }
@@ -346,7 +347,6 @@ export default class Player extends GameObject {
 
   update(deltaTime: number) {
     store.dispatch(setHP(this.health));
-
     if (this.victoryConditionCheck()) return null;
     if (this.defeatConditionCheck()) return null;
 
@@ -397,7 +397,7 @@ export default class Player extends GameObject {
 
     // Regen if enabled
     if (
-      this.relic?.name === RELICS_NAME.REGENERATION &&
+      this.relic?.id === RELICS_NAME.REGENERATION &&
       this.relic_regeneration >= 1000
     ) {
       this.relic_regeneration = 0;
@@ -469,7 +469,7 @@ export default class Player extends GameObject {
           if (this.recently_damaged > this.IMMUNITY_IN_MILISEC) {
             store.dispatch(playAnimation(VFX.PULSE_RED));
             // this.health -= 30;
-            buffered_dmg += 30;
+            buffered_dmg += 40;
             this.recently_damaged = 0;
           }
         }
@@ -574,7 +574,7 @@ export default class Player extends GameObject {
 
     //Take the buffered dmg
     if (buffered_dmg > 0) {
-      if (this.relic?.name === RELICS_NAME.STABILIZER) {
+      if (this.relic?.id === RELICS_NAME.STABILIZER) {
         this.health -= (buffered_dmg * 4) / 5; // 20% dmg reduction
       } else if (this.relic_berserk) {
         this.health -= buffered_dmg / 2; // 50% dmg reduction
@@ -584,7 +584,7 @@ export default class Player extends GameObject {
     }
 
     //Portal Enabled
-    if (this.relic?.name === RELICS_NAME.PORTAL) {
+    if (this.relic?.id === RELICS_NAME.PORTAL) {
       // Player Collision with left wall
       if (this.gameObject.position.x < 0) {
         store.dispatch(playAnimation(VFX.PULSE_PORTAL));

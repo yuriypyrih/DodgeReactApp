@@ -20,11 +20,11 @@ import clsx from "clsx";
 import { Level } from "../Models/level";
 import UnlockLevelModal from "../components/UnlockLevelModal";
 import ChaosPlayButton from "../components/ChaosPlayButton";
+import { relics } from "../game/engine/relics/relics_collection";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
-
     height: "100%",
     background: "#2b2b2c",
     position: "relative",
@@ -40,10 +40,10 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
   },
   relicBtn: {
-    padding: theme.spacing(1),
+    padding: theme.spacing(1, 2),
     background: "#00AFA3",
     border: "2px solid #2DD5C4",
-    borderRadius: "99px 4px 4px 99px",
+    borderRadius: "4px",
     color: "white",
   },
   disabledBtn: {
@@ -71,10 +71,10 @@ const useStyles = makeStyles((theme) => ({
     height: 30,
   },
   relicIcon: {
-    width: 34,
-    height: 34,
-    padding: "6px",
-    background: "#2b2b2c",
+    width: 32,
+    height: 32,
+    // padding: "6px",
+    // background: "#2b2b2c",
     // border: "1px solid #2DD5C4",
     borderRadius: 99,
     marginRight: "8px",
@@ -131,10 +131,16 @@ const Selection: React.FC<unknown> = () => {
 
   const getRelic = () => {
     let Icon = DefaultIcon;
-    // LocalRelics.forEach((r) => {
-    //   if (r.name === selectedRelic) Icon = r.Icon;
-    // });
-    return <Icon className={classes.relicIcon} />;
+    const foundRelic = relics.find((r) => r.id === selectedRelic);
+    if (foundRelic) Icon = foundRelic.Icon;
+    return (
+      <>
+        <Icon className={classes.relicIcon} />
+        <Typography variant={"h6"}>
+          {foundRelic ? foundRelic.name : "Relic"}
+        </Typography>
+      </>
+    );
   };
 
   return (
@@ -143,11 +149,10 @@ const Selection: React.FC<unknown> = () => {
         <Grid item xs={12} container justify={"space-between"}>
           <Grid item>
             <Button
-              className={clsx(classes.relicBtn, classes.disabledBtn)}
-              disabled
+              className={clsx(classes.relicBtn)}
+              onClick={() => history.push("/Relics")}
             >
               {getRelic()}
-              <Typography variant={"h6"}>Relic</Typography>
             </Button>
           </Grid>
           <Grid item>
@@ -156,14 +161,14 @@ const Selection: React.FC<unknown> = () => {
               onClick={() => history.push("/Wiki")}
             >
               <ImportContactsIcon style={{ marginRight: 8 }} />
-              <Typography variant={"h5"}>Wiki</Typography>
+              <Typography variant={"h5"}>Game Info</Typography>
             </Button>
           </Grid>
           <Grid item>
             <Box className={classes.starsBtn}>
               <Grid container wrap={"nowrap"} alignItems={"center"}>
                 <Grid item>
-                  <Typography>{`Stars: ${stars}`}</Typography>
+                  <Typography>{`Stars ${stars}`}</Typography>
                 </Grid>
                 <StarIcon
                   style={{

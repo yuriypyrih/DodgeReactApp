@@ -14,6 +14,7 @@ import { GAME_STATE } from "../game/enum/game_state";
 import HealIcon from "@material-ui/icons/Favorite";
 import { RELIC_TYPE } from "../game/enum/relic_type";
 import { COLOR } from "../game/enum/colors";
+import { relics } from "../game/engine/relics/relics_collection";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -236,7 +237,7 @@ const Hud: React.FC<HudProps> = ({ game, reset }) => {
   const [hpClass, setHpClass] = useState<string>("");
   const vfxObject = useSelector((state: RootState) => state.vfxSlice);
   const poisoned = useSelector((state: RootState) => state.gameSlice.poisoned);
-  const relic = useSelector(
+  const selectedRelic = useSelector(
     (state: RootState) => state.gameSlice.selectedRelic
   );
   const [paused, setPaused] = useState<boolean>(false);
@@ -316,21 +317,28 @@ const Hud: React.FC<HudProps> = ({ game, reset }) => {
 
   const getRelic = () => {
     let Icon = HealIcon;
-    let wasted = false;
+    let wasted = true;
     let variant: "indeterminate" | "static" | "determinate" = "indeterminate";
     let value = 100;
-    if (relic) {
-      wasted = relic.relic_available_uses <= 0;
-      if (relic.relic.type === RELIC_TYPE.ACTIVE) {
-        variant = "determinate";
-        if (relic.relic_available_uses !== Infinity) {
-          value = Math.min(
-            100,
-            (relic.relic_available_uses / relic.relic.max_uses) * 100
-          );
+    if (selectedRelic) {
+      wasted = selectedRelic.relic_available_uses <= 0;
+      const foundRelic = relics.find((r) => r.id === selectedRelic.relic);
+      if (foundRelic) {
+        Icon = foundRelic.Icon;
+        if (foundRelic.type === RELIC_TYPE.ACTIVE) {
+          variant = "determinate";
+          if (selectedRelic.relic_available_uses !== Infinity) {
+            value = Math.min(
+              100,
+              (selectedRelic.relic_available_uses / foundRelic.max_uses) * 100
+            );
+          }
+        } else {
+          // IT's PASSIVE and it' already perfect
         }
       } else {
-        // IT's PASSIVE and it' already perfect
+        variant = "determinate";
+        value = 100;
       }
     }
 
@@ -339,14 +347,14 @@ const Hud: React.FC<HudProps> = ({ game, reset }) => {
         {!wasted && (
           <CircularProgress
             variant={variant}
-            disableShrink
+            disableShrink={variant === "indeterminate"}
             size={38}
             thickness={2}
             value={value}
             style={{ position: "absolute" }}
           />
         )}
-        <Icon style={{ opacity: wasted ? 0.2 : 1 }} />
+        <Icon style={{ opacity: wasted ? 0.2 : 1, width: 25, height: 25 }} />
       </>
     );
   };

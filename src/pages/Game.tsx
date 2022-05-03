@@ -9,6 +9,7 @@ import Engine from "../game/engine/game";
 import startEngine from "../game";
 import { beatLevel } from "../redux/slices/authSlice";
 import { dispatch } from "../index";
+import { relics } from "../game/engine/relics/relics_collection";
 
 const Game: React.FC = () => {
   const history = useHistory();
@@ -23,13 +24,31 @@ const Game: React.FC = () => {
   );
 
   const level = useSelector((state: RootState) => state.gameSlice.level);
+  const selectedRelic = useSelector(
+    (state: RootState) => state.gameSlice.selectedRelic
+  );
 
   useEffect(() => {
-    const lvl = window.location.pathname.split("/")[2];
-    const engine = startEngine();
-    engine.start(Number(lvl));
-    setGame(engine);
-  }, []);
+    if (game === null && selectedRelic !== null) {
+      console.log("RUN");
+      const lvl = window.location.pathname.split("/")[2];
+      const foundRelic = relics.find((r) => r.id === selectedRelic.relic);
+      const engine = startEngine();
+      engine.start(Number(lvl), foundRelic || null);
+      setGame(engine);
+      handleResetToggle();
+    }
+    // eslint-disable-next-line
+  }, [game, selectedRelic]);
+
+  useEffect(() => {
+    // Component will unmount
+    if (game) {
+      return () => {
+        game.terminate();
+      };
+    }
+  }, [game]);
 
   useEffect(() => {
     const lvl = window.location.pathname.split("/")[2];
@@ -56,7 +75,9 @@ const Game: React.FC = () => {
 
   return (
     <div
-      style={{ cursor: gameState === GAME_STATE.PLAYING ? "none" : undefined }}
+      style={{
+        cursor: gameState === GAME_STATE.PLAYING ? "none" : undefined,
+      }}
     >
       <canvas id={"gameScreen-canvas"} width="900" height="500" />
       <Hud game={game} reset={resetToggle} />

@@ -227,6 +227,9 @@ const authSlice = createSlice({
     setToken(state, action: PayloadAction<string | null>) {
       state.accessToken = action.payload;
     },
+    setAuthSelectedRelic(state, action) {
+      state.user.selectedRelic = action.payload;
+    },
     setUser(state, action: PayloadAction<User>) {
       state.user = action.payload;
     },
@@ -263,5 +266,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { setToken, setStatusMsg, setUser } = authSlice.actions;
+export const { setToken, setStatusMsg, setUser, setAuthSelectedRelic } =
+  authSlice.actions;
 export default authSlice.reducer;

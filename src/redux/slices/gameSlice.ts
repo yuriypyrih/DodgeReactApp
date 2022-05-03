@@ -3,16 +3,14 @@ import Game from "../../game/engine/game";
 import { GAME_STATE } from "../../game/enum/game_state";
 import { Level } from "../../Models/level";
 import { LocalLevels } from "../../Models/data/LocalLevels";
-import { RelicType } from "../../game/types/RelicType";
-import { relics } from "../../game/engine/relics/relics_collection";
+import { RELICS_NAME } from "../../game/enum/relics_name";
 
 type gameSliceType = {
   game: Game | null;
   level: Level;
   levels: Level[];
-  relics: RelicType[];
   selectedRelic: {
-    relic: RelicType;
+    relic: RELICS_NAME;
     relic_available_uses: number;
   } | null;
   hp: number;
@@ -29,7 +27,6 @@ const initialState: gameSliceType = {
   game: null,
   level: LocalLevels[0],
   levels: LocalLevels,
-  relics: relics,
   selectedRelic: null,
   hp: 0,
   gameState: GAME_STATE.PLAYING,

@@ -79,7 +79,7 @@ export default class GhostEnemy extends GameObject {
     this.stealthTimer++;
 
     let minShadowAlpha = 0;
-    if (this.game.player.relic?.name === RELICS_NAME.NIGHT_VISION) {
+    if (this.game.player.relic?.id === RELICS_NAME.NIGHT_VISION) {
       minShadowAlpha = 0.2;
     }
 

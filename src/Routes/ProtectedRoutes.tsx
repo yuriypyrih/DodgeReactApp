@@ -9,6 +9,7 @@ import Wiki from "../pages/Wiki";
 import Patches from "../pages/Patches";
 import { getMe } from "../redux/slices/authSlice";
 import { useDispatch } from "react-redux";
+import Relics from "../pages/Relics";
 
 const ProtectedRoutes: React.FC<unknown> = () => {
   const dispatch = useDispatch();
@@ -24,6 +25,7 @@ const ProtectedRoutes: React.FC<unknown> = () => {
       <Route exact path="/Game/:level" component={Game} />
       <Route exact path="/Victory/:level" component={Victory} />
       <Route exact path="/Defeat/:level" component={Defeat} />
+      <Route exact path="/Relics" component={Relics} />
       <Route exact path="/Patches" component={Patches} />
       <Route exact path="/Wiki" component={Wiki} />
       <Route path="/">

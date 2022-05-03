@@ -1,6 +1,6 @@
 import { LocalLevels } from "../Models/data/LocalLevels";
 import { LEVEL_STATUS } from "../Models/enum/LEVEL_STATUS";
-import { setLevels } from "../redux/slices/gameSlice";
+import { setLevels, setSelectedRelic } from "../redux/slices/gameSlice";
 import { setUser } from "../redux/slices/authSlice";
 import { dispatch } from "../index";
 
@@ -15,6 +15,12 @@ export const utilSetUser = (user: any) => {
         } else return l;
       } else return l;
     });
+    dispatch(
+      setSelectedRelic({
+        relic: user.selectedRelic || null,
+        relic_available_uses: 0,
+      })
+    );
     dispatch(setLevels(newLevels));
   }
 };
