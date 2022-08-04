@@ -9,6 +9,7 @@ import {
 } from "@material-ui/core";
 import Game from "../game/engine/game";
 import { useHistory } from "react-router-dom";
+import { GAME_STATE } from "../game/enum/game_state";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,7 +54,7 @@ const Pause: React.FC<PauseProps> = ({ game, toggleReset }) => {
   const history = useHistory();
 
   const handleResume = () => {
-    if (game) game.togglePause();
+    if (game) game.togglePause(GAME_STATE.PLAYING);
   };
 
   const handleReset = () => {

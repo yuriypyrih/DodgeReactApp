@@ -5,15 +5,18 @@ import Pause from "../layout/Pause";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { GAME_STATE } from "../game/enum/game_state";
-import Engine from "../game/engine/game";
-import startEngine from "../game";
 import { beatLevel } from "../redux/slices/authSlice";
 import { dispatch } from "../index";
 import { relics } from "../game/engine/relics/relics_collection";
+import { game } from "../App";
+import { setContext } from "../game";
+import { RELICS_NAME } from "../game/enum/relics_name";
+import { setGameState } from "../redux/slices/gameSlice";
 
 const Game: React.FC = () => {
   const history = useHistory();
-  const [game, setGame] = useState<Engine | null>(null);
+  // const [game, setGame] = useState<Engine | null>(null);
+  const [localRelic, setLocalRelic] = useState<RELICS_NAME | null>(null);
   const [resetToggle, setResetToggle] = useState<boolean>(false);
   const { total_stars_collected } = useSelector(
     (state: RootState) => state.gameSlice.progress
@@ -29,26 +32,37 @@ const Game: React.FC = () => {
   );
 
   useEffect(() => {
-    if (game === null && selectedRelic !== null) {
-      console.log("RUN");
-      const lvl = window.location.pathname.split("/")[2];
-      const foundRelic = relics.find((r) => r.id === selectedRelic.relic);
-      const engine = startEngine();
-      engine.start(Number(lvl), foundRelic || null);
-      setGame(engine);
-      handleResetToggle();
-    }
-    // eslint-disable-next-line
-  }, [game, selectedRelic]);
+    const canvas = document.getElementById("gameScreen-canvas");
+    // @ts-ignore
+    if (canvas) setContext(canvas.getContext("2d"));
+    return () => {
+      // @ts-ignore
+      setContext(null);
+    };
+  }, []);
 
   useEffect(() => {
-    // Component will unmount
-    if (game) {
-      return () => {
-        game.terminate();
-      };
+    return () => {
+      if (game) {
+        game.gameState = GAME_STATE.CLOSED;
+        dispatch(setGameState(GAME_STATE.CLOSED));
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (game !== null && selectedRelic?.relic !== localRelic) {
+      console.log("RUN");
+      const lvl = window.location.pathname.split("/")[2];
+      const foundRelic = relics.find((r) => r.id === selectedRelic?.relic);
+      game.start(Number(lvl), foundRelic || null);
+      setLocalRelic(foundRelic?.id || null);
+      handleResetToggle();
     }
-  }, [game]);
+    //eslint-disable-next-line
+  }, [game, selectedRelic]);
+
+  // console.log("Hello");
 
   useEffect(() => {
     const lvl = window.location.pathname.split("/")[2];
@@ -70,7 +84,7 @@ const Game: React.FC = () => {
   }, [gameState, history, level, total_stars_collected]);
 
   const handleResetToggle = () => {
-    setResetToggle(!resetToggle);
+    setResetToggle((prev) => !prev);
   };
 
   return (

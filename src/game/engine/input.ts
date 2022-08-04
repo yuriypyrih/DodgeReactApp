@@ -80,7 +80,7 @@ export default class InputHandler {
   // };
 
   initEvents() {
-    console.log("EVENTS?");
+    console.log("EVENTS INIT");
     document.addEventListener("keydown", (event) =>
       keyDownEvents(event, this.game)
     );

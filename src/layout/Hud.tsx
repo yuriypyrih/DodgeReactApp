@@ -257,7 +257,7 @@ const Hud: React.FC<HudProps> = ({ game, reset }) => {
     } else {
       setPaused(false);
     }
-    console.log("HUD: GAME_STATE");
+    console.log("HUD: GAME_STATE", game?.gameState);
   }, [game, game?.gameState]);
 
   useEffect(() => {

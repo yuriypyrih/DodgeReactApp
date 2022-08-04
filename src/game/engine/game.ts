@@ -47,7 +47,7 @@ export default class Game {
     this.gameObjects = [];
     this.particleObjects = [];
 
-    this.gameState = GAME_STATE.PLAYING;
+    this.gameState = GAME_STATE.CLOSED;
 
     this.spawner = new Spawner({ game: this });
     //this.menu = new Menu(this, this.spawner);
@@ -65,7 +65,8 @@ export default class Game {
 
   //This function runs once per reload of the page
   start(level: number, relic: RelicType | null) {
-    console.log("⛳️ LEVEL STARTED");
+    console.log("⛳️ LEVEL STARTED", level, relic);
+    this.togglePause(GAME_STATE.PLAYING);
     this.level = level;
     this.selectedRelic = relic;
     this.player.assignRelic(relic);
@@ -112,7 +113,7 @@ export default class Game {
       this.gameState = optionalState;
     } else if (this.gameState === GAME_STATE.PAUSED) {
       this.gameState = GAME_STATE.PLAYING;
-    } else {
+    } else if (this.gameState === GAME_STATE.PLAYING) {
       this.gameState = GAME_STATE.PAUSED;
     }
     store.dispatch(setGameState(this.gameState));
