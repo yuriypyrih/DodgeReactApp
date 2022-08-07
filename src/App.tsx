@@ -25,7 +25,7 @@ const useStyles = makeStyles({
 });
 
 initialize();
-
+// init
 let game: Game | null = null;
 export { game };
 
