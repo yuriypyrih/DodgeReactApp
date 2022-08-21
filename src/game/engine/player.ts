@@ -5,7 +5,6 @@ import Game from "./game";
 import { Rectangle } from "../types/Rectangle";
 import store from "../../redux/store";
 import {
-  setGameState,
   setHP,
   setPoisoned,
   setSelectedRelic,
@@ -17,7 +16,6 @@ import {
   setDarkness,
 } from "../../redux/slices/vfxSlice";
 import { VFX } from "../enum/vfx";
-import { GAME_STATE } from "../enum/game_state";
 import { RELICS_NAME } from "../enum/relics_name";
 import { RelicType } from "../types/RelicType";
 
@@ -53,6 +51,7 @@ export default class Player extends GameObject {
   relic_fear: number;
   relic_berserk: boolean;
   relic_lastBerserkDate: number;
+  relic_beaconObject: { x: number; y: number } | null;
 
   constructor({ game }: PlayerProps) {
     super({
@@ -77,7 +76,7 @@ export default class Player extends GameObject {
     this.stars = 0;
     this.milestone = false;
     this.poisoned = false;
-    this.developerMode = false;
+    this.developerMode = true;
     this.lastPoisonedDate = Date.now();
     this.magneticY = 0;
     this.magneticX = 0;
@@ -91,6 +90,7 @@ export default class Player extends GameObject {
     this.relic_fear = -1;
     this.relic_berserk = false;
     this.relic_lastBerserkDate = Date.now();
+    this.relic_beaconObject = null;
 
     this.gameObject.position = {
       x: game.canvas.canvasWidth / 2 - this.gameObject.width / 2,
@@ -284,6 +284,18 @@ export default class Player extends GameObject {
       if (this.relic.id === RELICS_NAME.FEAR) {
         this.applyFear();
       }
+      if (this.relic.id === RELICS_NAME.RECALL_BEACON) {
+        if (this.relic_beaconObject === null) {
+          this.relic_beaconObject = {
+            x: this.gameObject.position.x + 8,
+            y: this.gameObject.position.y + 8,
+          };
+        } else {
+          this.gameObject.position.x = this.relic_beaconObject.x - 8;
+          this.gameObject.position.y = this.relic_beaconObject.y - 8;
+          this.relic_beaconObject = null;
+        }
+      }
     }
   }
 
@@ -342,6 +354,29 @@ export default class Player extends GameObject {
       );
       context.stroke();
       context.globalAlpha = 1;
+    }
+    if (this.relic?.id === RELICS_NAME.STABILIZER) {
+      context.strokeStyle = COLOR.PRIMARY;
+      context.beginPath();
+      context.rect(
+        this.gameObject.position.x - 4,
+        this.gameObject.position.y - 4,
+        this.gameObject.width + 8,
+        this.gameObject.height + 8
+      );
+      context.stroke();
+    }
+    if (
+      this.relic?.id === RELICS_NAME.RECALL_BEACON &&
+      this.relic_beaconObject
+    ) {
+      context.fillStyle = COLOR.WHITE;
+      context.fillRect(
+        this.relic_beaconObject.x,
+        this.relic_beaconObject.y,
+        10,
+        10
+      );
     }
   }
 
@@ -442,7 +477,6 @@ export default class Player extends GameObject {
           //IMPORTANT: First update the stars and then the hudProgress
           this.game.spawner.updateHudProgress();
           //store.dispatch(collectStar());
-          //Animation.pulseGold();
           this.game.gameObjects.splice(
             this.game.gameObjects.indexOf(object),
             1
@@ -541,10 +575,16 @@ export default class Player extends GameObject {
           }
         }
 
-        if (object.gameObject.id === ENTITY_ID.MAGNET_AURA_PLUS) {
+        if (
+          object.gameObject.id === ENTITY_ID.MAGNET_AURA_PLUS &&
+          this.relic?.id !== RELICS_NAME.STABILIZER
+        ) {
           this.applyMagneticForce(object, "plus");
         }
-        if (object.gameObject.id === ENTITY_ID.MAGNET_AURA_MINUS) {
+        if (
+          object.gameObject.id === ENTITY_ID.MAGNET_AURA_MINUS &&
+          this.relic?.id !== RELICS_NAME.STABILIZER
+        ) {
           this.applyMagneticForce(object, "minus");
         }
 

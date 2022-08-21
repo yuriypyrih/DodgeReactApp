@@ -12,6 +12,7 @@ import { ReactComponent as PortalIcon } from "../../../assets/svg/relic_portal.s
 import { ReactComponent as BerserkIcon } from "../../../assets/svg/relic_berserk.svg";
 import { ReactComponent as AngelIcon } from "../../../assets/svg/relic_angel.svg";
 import { ReactComponent as StabilizerIcon } from "../../../assets/svg/relic_stabilizer.svg";
+import CenterFocusWeakIcon from "@material-ui/icons/CenterFocusWeak";
 
 export const relics: RelicType[] = [
   {
@@ -99,9 +100,18 @@ export const relics: RelicType[] = [
     id: RELICS_NAME.STABILIZER,
     name: "Stabilizer",
     type: RELIC_TYPE.PASSIVE,
-    state: LEVEL_STATUS.LOCKED,
+    state: LEVEL_STATUS.UNLOCKED,
     max_uses: Number.POSITIVE_INFINITY,
     cost: 5,
     Icon: StabilizerIcon,
+  },
+  {
+    id: RELICS_NAME.RECALL_BEACON,
+    name: "Recall Beacon",
+    type: RELIC_TYPE.ACTIVE,
+    state: LEVEL_STATUS.UNLOCKED,
+    max_uses: Number.POSITIVE_INFINITY,
+    cost: 5,
+    Icon: CenterFocusWeakIcon,
   },
 ];

@@ -1,14 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useHistory } from "react-router-dom";
-import {
-  Box,
-  Button,
-  Grid,
-  IconButton,
-  makeStyles,
-  Typography,
-} from "@material-ui/core";
-import { useDispatch, useSelector } from "react-redux";
+import { Box, Button, Grid, makeStyles, Typography } from "@material-ui/core";
+import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { ReactComponent as StarIcon } from "../assets/svg/diamond.svg";
 import CubeRelicButton from "../components/CubeRelicButton";

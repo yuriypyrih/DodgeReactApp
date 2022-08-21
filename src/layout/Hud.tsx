@@ -261,7 +261,7 @@ const Hud: React.FC<HudProps> = ({ game, reset }) => {
   }, [game, game?.gameState]);
 
   useEffect(() => {
-    //RESET VARIOUS VFX
+    //Remove Darkness oon reset
     if (vfxObject.darkness !== 0) {
       dispatch(setDarkness(0));
       dispatch(setNightVision(false));
@@ -270,9 +270,11 @@ const Hud: React.FC<HudProps> = ({ game, reset }) => {
     // eslint-disable-next-line
   }, [reset]);
 
-  // useEffect(()=>{
-  //
-  // },[reset])
+  useEffect(() => {
+    // Remove poison on reset
+    dispatch(setPoisoned(false));
+    // console.log("HUD: POISONED");
+  }, [dispatch, reset]);
 
   useEffect(() => {
     if (total_stars_collected !== prevCollectedStars || localReset !== reset) {
@@ -290,11 +292,6 @@ const Hud: React.FC<HudProps> = ({ game, reset }) => {
     }
     // eslint-disable-next-line
   }, [total_stars_collected, max_stars, star_timers, reset]);
-
-  useEffect(() => {
-    dispatch(setPoisoned(false));
-    console.log("HUD: POISONED");
-  }, [dispatch, reset]);
 
   useEffect(() => {
     if (vfxObject.run_animation === VFX.PULSE_GREEN) {

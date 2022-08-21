@@ -21,6 +21,7 @@ import { ReactComponent as BerserkIcon } from "../assets/svg/relic_berserk.svg";
 import { ReactComponent as AngelIcon } from "../assets/svg/relic_angel.svg";
 import { ReactComponent as StabilizerIcon } from "../assets/svg/relic_stabilizer.svg";
 import { ReactComponent as SkullIcon } from "../assets/svg/skull.svg";
+import CenterFocusWeakIcon from "@material-ui/icons/CenterFocusWeak";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -226,6 +227,13 @@ const relicsContent: ContentType[] = [
       "You are immune to immobilizing effects and take 20% less damage",
       "- Immobilizing is any magnetic or slowing effect",
       `- Damage reduction doesn't apply on Poison, Explosion and Burn effects`,
+    ],
+  },
+  {
+    Icon: CenterFocusWeakIcon,
+    description: [
+      "Recall Beacon (Active ∞)",
+      "Press once to place a beacon. Press again to recall back to it.",
     ],
   },
 ];
