@@ -32,7 +32,7 @@ export default class Game {
   birthday: number;
 
   constructor({ canvasHeight, canvasWidth }: GameProps) {
-    console.log("⚽️ GAME CREATED");
+    console.log("⚽️ GAME ENGINE CREATED");
     this.canvas = { canvasHeight, canvasWidth };
     this.birthday = Date.now();
     // experimental level;
@@ -65,6 +65,8 @@ export default class Game {
 
   //This function runs once per reload of the page
   start(level: number, relic: RelicType | null) {
+    // Cleaning up any leftovers
+    this.emptyReset();
     console.log("⛳️ LEVEL STARTED", level, relic);
     this.togglePause(GAME_STATE.PLAYING);
     this.level = level;
@@ -73,19 +75,31 @@ export default class Game {
     this.spawner.startLevel(this.level);
   }
 
+  setGameState(gameState: GAME_STATE) {
+    this.gameState = gameState;
+    store.dispatch(setGameState(this.gameState));
+  }
+
   close() {
-    this.gameState = GAME_STATE.CLOSED;
     this.gameObjects = [];
     this.particleObjects = [];
+    // this.gameState = GAME_STATE.CLOSED;
+    this.setGameState(GAME_STATE.CLOSED);
   }
 
   reset() {
+    //This is the reset/replay button
+    this.emptyReset();
+    this.togglePause(GAME_STATE.PLAYING);
+    this.spawner.startLevel(this.level);
+  }
+
+  emptyReset() {
+    // Resting all the variables
     this.gameObjects = [];
     this.particleObjects = [];
     this.player.reset();
-    this.togglePause(GAME_STATE.PLAYING);
     this.spawner.reset();
-    this.spawner.startLevel(this.level);
   }
 
   clearEnemies() {
@@ -101,11 +115,24 @@ export default class Game {
     }
   }
 
-  terminate() {
-    console.log("🎬 GAME TERMINATED");
-    this.gameObjects = [];
-    this.particleObjects = [];
-    this.inputHandler.terminate();
+  // terminate() {
+  //   console.log("🎬 GAME TERMINATED");
+  //   this.gameObjects = [];
+  //   this.particleObjects = [];
+  //   this.inputHandler.terminate();
+  // }
+
+  dispatchGameState(gameState: GAME_STATE) {
+    this.gameState = gameState;
+    store.dispatch(setGameState(this.gameState));
+  }
+
+  dispatchVictory(stars: number) {
+    this.setGameState(GAME_STATE.PAGE_VICTORY);
+  }
+
+  dispatchDefeat(stars: number) {
+    this.setGameState(GAME_STATE.PAGE_DEFEAT);
   }
 
   togglePause(optionalState?: GAME_STATE) {

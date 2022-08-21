@@ -24,18 +24,19 @@ const useStyles = makeStyles({
   },
 });
 
+// Init tokens
 initialize();
-// init
-let game: Game | null = null;
+console.log("INITIALIZE ENGINE");
+const game: Game = startEngine();
 export { game };
 
 function App() {
   const classes = useStyles();
 
-  useEffect(() => {
-    console.log("INITIALIZE ENGINE");
-    game = startEngine();
-  }, []);
+  // useEffect(() => {
+  //   console.log("INITIALIZE ENGINE");
+  //   game = startEngine();
+  // }, []);
 
   return (
     <div className={classes.app}>

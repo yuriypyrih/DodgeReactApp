@@ -190,9 +190,8 @@ export default class Player extends GameObject {
 
   victoryConditionCheck() {
     const maxStars = this.game.spawner.levelStars[this.game.level - 1];
-    if (this.stars >= maxStars.length && !this.developerMode) {
-      store.dispatch(setGameState(GAME_STATE.PAGE_VICTORY));
-      this.game.close();
+    if (this.stars >= maxStars.length) {
+      this.game.dispatchVictory(this.stars);
       return true;
     } else {
       return false;
@@ -230,8 +229,9 @@ export default class Player extends GameObject {
         this.updateRelic();
         return false;
       } else {
-        store.dispatch(setGameState(GAME_STATE.PAGE_DEFEAT));
-        this.game.close();
+        // store.dispatch(setGameState(GAME_STATE.PAGE_DEFEAT));
+        // this.game.close();
+        this.game.dispatchDefeat(this.stars);
         return true;
       }
     } else {

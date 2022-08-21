@@ -5,8 +5,10 @@ import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { LEVEL_STATUS } from "../Models/enum/LEVEL_STATUS";
 import { Level } from "../Models/level";
-import { setLevel } from "../redux/slices/gameSlice";
+import { setGameState, setLevel } from "../redux/slices/gameSlice";
 import { dispatch } from "../index";
+import { game } from "../App";
+import { GAME_STATE } from "../game/enum/game_state";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,8 +49,10 @@ const Victory: React.FC<unknown> = () => {
   }, [levels]);
 
   const handleNext = () => {
-    if (nextLevel) {
+    if (nextLevel && game) {
       dispatch(setLevel(nextLevel));
+      game.gameState = GAME_STATE.PLAYING;
+      dispatch(setGameState(GAME_STATE.PLAYING));
       history.replace(`/Game/${nextLevel.level}`);
     }
   };

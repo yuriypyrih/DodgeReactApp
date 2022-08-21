@@ -15,7 +15,6 @@ import { setGameState } from "../redux/slices/gameSlice";
 
 const Game: React.FC = () => {
   const history = useHistory();
-  // const [game, setGame] = useState<Engine | null>(null);
   const [localRelic, setLocalRelic] = useState<RELICS_NAME | null>(null);
   const [resetToggle, setResetToggle] = useState<boolean>(false);
   const { total_stars_collected } = useSelector(
@@ -32,6 +31,7 @@ const Game: React.FC = () => {
   );
 
   useEffect(() => {
+    // Get hold of the canvas context
     const canvas = document.getElementById("gameScreen-canvas");
     // @ts-ignore
     if (canvas) setContext(canvas.getContext("2d"));
@@ -42,17 +42,9 @@ const Game: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    return () => {
-      if (game) {
-        game.gameState = GAME_STATE.CLOSED;
-        dispatch(setGameState(GAME_STATE.CLOSED));
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    if (game !== null && selectedRelic?.relic !== localRelic) {
-      console.log("RUN");
+    // Start the Level
+    if (selectedRelic?.relic !== localRelic) {
+      console.log("RUN game.start()");
       const lvl = window.location.pathname.split("/")[2];
       const foundRelic = relics.find((r) => r.id === selectedRelic?.relic);
       game.start(Number(lvl), foundRelic || null);
@@ -62,16 +54,21 @@ const Game: React.FC = () => {
     //eslint-disable-next-line
   }, [game, selectedRelic]);
 
-  // console.log("Hello");
-
   useEffect(() => {
+    // Go to Defeat/Victory
     const lvl = window.location.pathname.split("/")[2];
     if (gameState === GAME_STATE.PAGE_DEFEAT) {
+      console.log("Proceed to Defeat screen");
+      // Prevent from re-entering this state
+      dispatch(setGameState(GAME_STATE.CLOSED));
       dispatch(
         beatLevel({ level: level.levelId, stars: total_stars_collected })
       );
       history.push(`/Defeat/${lvl}`);
     } else if (gameState === GAME_STATE.PAGE_VICTORY) {
+      console.log("Proceed to Victory screen");
+      // Prevent from re-entering this state
+      dispatch(setGameState(GAME_STATE.CLOSED));
       dispatch(
         beatLevel({
           level: level.levelId,
