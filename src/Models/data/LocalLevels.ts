@@ -51,7 +51,7 @@ export const LocalLevels: Level[] = [
   {
     level: 8,
     levelId: "LVL_8",
-    description: "Marathon.v01",
+    description: "Marathon V1",
     status: LEVEL_STATUS.LOCKED,
   },
   {
@@ -75,14 +75,14 @@ export const LocalLevels: Level[] = [
   {
     level: 12,
     levelId: "LVL_12",
-    description: "Mimic",
-    status: LEVEL_STATUS.COMING_SOON,
+    description: "Glitch",
+    status: LEVEL_STATUS.UNLOCKED,
   },
   {
     level: 13,
     levelId: "LVL_13",
-    description: "Marathon.v02",
-    status: LEVEL_STATUS.COMING_SOON,
+    description: "Marathon V2",
+    status: LEVEL_STATUS.UNLOCKED,
   },
   {
     level: 14,
@@ -141,13 +141,13 @@ export const LocalLevels: Level[] = [
   {
     level: 23,
     levelId: "LVL_23",
-    description: "Marathon V.3",
+    description: "Marathon V3",
     status: LEVEL_STATUS.COMING_SOON,
   },
   {
     level: 24,
     levelId: "LVL_24",
-    description: "Marathon V.4",
+    description: "Marathon V4",
     status: LEVEL_STATUS.COMING_SOON,
   },
   {

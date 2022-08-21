@@ -14,6 +14,8 @@ import { getLevel9, level9Stars } from "./levels/getLevel9";
 import { getLevel10, level10Stars } from "./levels/getLevel10";
 import { getLevel0, level0Stars } from "./levels/getLevel0";
 import { getLevel11, level11Stars } from "./levels/getLevel11";
+import { getLevel12, level12Stars } from "./levels/getLevel12";
+import { getLevel13, level13Stars } from "./levels/getLevel13";
 
 type SpawnerProps = {
   game: Game;
@@ -41,6 +43,8 @@ export default class Spawner {
       level9Stars,
       level10Stars,
       level11Stars,
+      level12Stars,
+      level13Stars,
     ];
   }
 
@@ -123,6 +127,10 @@ export default class Spawner {
       getLevel10(this.game);
     } else if (this.game.level === 11) {
       getLevel11(this.game);
+    } else if (this.game.level === 12) {
+      getLevel12(this.game);
+    } else if (this.game.level === 13) {
+      getLevel13(this.game);
     }
   }
 }

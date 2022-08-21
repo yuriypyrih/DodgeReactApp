@@ -84,13 +84,18 @@ export default class SlimeEnemy extends GameObject {
 
     this.gameObject.velY += 0.14;
 
-    //TODO put barrier on top Y < 0
     if (
-      this.gameObject.position.y <= 0 ||
       this.gameObject.position.y >=
-        this.game.canvas.canvasHeight - this.gameObject.height
-    )
+      this.game.canvas.canvasHeight - this.gameObject.height
+    ) {
       this.gameObject.velY = -11;
+    }
+
+    if (this.gameObject.position.y <= 0) {
+      this.gameObject.position.y = 2;
+      this.gameObject.velY = 5;
+    }
+
     if (
       this.gameObject.position.x <= 0 ||
       this.gameObject.position.x >=

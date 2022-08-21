@@ -10,6 +10,7 @@ type TracerBossProps = {
   position?: { x: number; y: number };
   velX?: number;
   velY?: number;
+  skipAwakening?: boolean;
 };
 
 export default class TracerBoss extends GameObject {
@@ -18,8 +19,15 @@ export default class TracerBoss extends GameObject {
   bullet_timer: number;
   awakening_timer: number;
   MAX_SPEED: number;
+  skipAwakening: boolean;
 
-  constructor({ game, position, velX = 0, velY = 0.3 }: TracerBossProps) {
+  constructor({
+    game,
+    position,
+    velX = 0,
+    velY = 0.3,
+    skipAwakening = false,
+  }: TracerBossProps) {
     super({
       id: ENTITY_ID.BOSS,
       width: 50,
@@ -36,6 +44,7 @@ export default class TracerBoss extends GameObject {
     this.awakening_timer = 0;
     this.bullet_timer = 0;
     this.MAX_SPEED = 25;
+    this.skipAwakening = skipAwakening;
   }
 
   getBounds() {
@@ -68,7 +77,9 @@ export default class TracerBoss extends GameObject {
   }
 
   awakenFunction() {
-    if (!this.awaken && this.gameObject.position.y >= 10) {
+    if (!this.awaken && this.skipAwakening) {
+      this.awaken = true;
+    } else if (!this.awaken && this.gameObject.position.y >= 10) {
       this.awaken = true;
       this.gameObject.velY = 0;
       this.gameObject.velX = 5;

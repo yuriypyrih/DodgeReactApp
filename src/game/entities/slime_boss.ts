@@ -11,14 +11,22 @@ type SlimeBossProps = {
   position?: { x: number; y: number };
   velX?: number;
   velY?: number;
+  skipAwakening?: boolean;
 };
 
 export default class SlimeBoss extends GameObject {
   game: Game;
   awaken: boolean;
   bullet_timer: number;
+  skipAwakening: boolean;
 
-  constructor({ game, position, velX = 0, velY = 0.3 }: SlimeBossProps) {
+  constructor({
+    game,
+    position,
+    velX = 0,
+    velY = 0.3,
+    skipAwakening = false,
+  }: SlimeBossProps) {
     super({
       id: ENTITY_ID.BOSS,
       width: 50,
@@ -33,6 +41,7 @@ export default class SlimeBoss extends GameObject {
     this.game = game;
     this.awaken = false;
     this.bullet_timer = 0;
+    this.skipAwakening = skipAwakening;
   }
 
   fear() {
@@ -50,6 +59,9 @@ export default class SlimeBoss extends GameObject {
   }
 
   awakenFunction() {
+    if (!this.awaken && this.skipAwakening) {
+      this.awaken = true;
+    }
     if (!this.awaken && this.gameObject.position.y >= 10) {
       this.awaken = true;
       this.gameObject.velY = 0;

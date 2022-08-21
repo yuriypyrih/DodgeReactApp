@@ -17,7 +17,7 @@ const levelStars = level8Stars;
 export const getLevel8 = (game: Game): null => {
   if (game.spawner.executionSequence === 0) {
     if (game.spawner.roundTimer === sec(0.1)) {
-      store.dispatch(playText(["LEVEL 8", "Marathon", "V0.1"]));
+      store.dispatch(playText(["LEVEL 8", "Marathon", "V1"]));
     } else if (game.spawner.roundTimer === sec(2)) {
       game.gameObjects.push(new BasicEnemy({ game, position: { x: 0, y: 0 } }));
       game.gameObjects.push(

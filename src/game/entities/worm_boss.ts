@@ -11,6 +11,7 @@ type WormBossProps = {
   position?: { x: number; y: number };
   velX?: number;
   velY?: number;
+  skipAwakening?: boolean;
 };
 
 export default class WormBoss extends GameObject {
@@ -19,8 +20,15 @@ export default class WormBoss extends GameObject {
   bullet_timer: number;
   awakening_timer: number;
   MAX_SPEED: number;
+  skipAwakening: boolean;
 
-  constructor({ game, position, velX = 0, velY = 0.3 }: WormBossProps) {
+  constructor({
+    game,
+    position,
+    velX = 0,
+    velY = 0.3,
+    skipAwakening = false,
+  }: WormBossProps) {
     super({
       id: ENTITY_ID.BOSS,
       width: 50,
@@ -37,6 +45,7 @@ export default class WormBoss extends GameObject {
     this.awakening_timer = 0;
     this.bullet_timer = 0;
     this.MAX_SPEED = 14;
+    this.skipAwakening = skipAwakening;
   }
 
   fear() {
@@ -83,7 +92,9 @@ export default class WormBoss extends GameObject {
   }
 
   update(deltaTime: number) {
-    if (!this.awaken && this.gameObject.position.y >= 10) {
+    if (!this.awaken && this.skipAwakening) {
+      this.awaken = true;
+    } else if (!this.awaken && this.gameObject.position.y >= 10) {
       this.awaken = true;
       this.gameObject.velY = 0;
       this.gameObject.velX = 5;

@@ -10,6 +10,7 @@ type BasicBossProps = {
   position?: { x: number; y: number };
   velX?: number;
   velY?: number;
+  skipAwakening?: boolean;
 };
 
 export default class BasicBoss extends GameObject {
@@ -17,8 +18,15 @@ export default class BasicBoss extends GameObject {
   awaken: boolean;
   bullet_timer: number;
   awakening_timer: number;
+  skipAwakening: boolean;
 
-  constructor({ game, position, velX = 0, velY = 0.3 }: BasicBossProps) {
+  constructor({
+    game,
+    position,
+    velX = 0,
+    velY = 0.3,
+    skipAwakening = false,
+  }: BasicBossProps) {
     super({
       id: ENTITY_ID.BOSS,
       width: 50,
@@ -34,6 +42,7 @@ export default class BasicBoss extends GameObject {
     this.awaken = false;
     this.awakening_timer = 0;
     this.bullet_timer = 0;
+    this.skipAwakening = skipAwakening;
   }
 
   getBounds() {
@@ -51,7 +60,9 @@ export default class BasicBoss extends GameObject {
   }
 
   awakenFunction() {
-    if (!this.awaken && this.gameObject.position.y >= 10) {
+    if (!this.awaken && this.skipAwakening) {
+      this.awaken = true;
+    } else if (!this.awaken && this.gameObject.position.y >= 10) {
       this.awaken = true;
       this.gameObject.velY = 0;
       this.gameObject.velX = 5;
