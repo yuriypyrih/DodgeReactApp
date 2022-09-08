@@ -193,7 +193,6 @@ type User = {
 
 type authSliceType = {
   accessToken: string | null;
-  // refreshToken: string | null;
   user: User;
   meta: {
     loading: boolean;
@@ -204,7 +203,6 @@ type authSliceType = {
 
 const initialState: authSliceType = {
   accessToken: null,
-  // refreshToken: null,
   user: {
     email: "",
     name: "",
